@@ -26,11 +26,16 @@
     </nav>
 {% endblock %}
 
-<html>
-    <head>
-        <title>Toxicity Analysis</title>
-    </head>
-    <body>
-        {% block content %}{% endblock %}
-    </body>
-</html>
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}

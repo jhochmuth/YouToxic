@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from toxicity_analysis.app.context import app
 from toxicity_analysis.app.forms import EnterTextForm
@@ -14,6 +14,8 @@ def index():
 def enter_text():
     form = EnterTextForm()
     if form.validate_on_submit():
+        if len(form.text.data.split()) < 3:
+            flash('Warning: predicted accuracy is low for text with low word count.')
         return redirect(url_for("results", text=form.text.data))
     return render_template("enter_text.html", title="Enter Text", form=form)
 

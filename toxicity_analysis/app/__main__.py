@@ -5,6 +5,7 @@ import click
 
 from flask_bootstrap import Bootstrap
 
+import toxicity_analysis.app.context as ctx
 from toxicity_analysis.config import Config
 
 from waitress import serve
@@ -44,12 +45,9 @@ def main():
     help="The number of bytes to send to socket.send",
 )
 def runserver(debug, host, port, threads, send_bytes):
-    import toxicity_analysis.app.context as ctx
-
     app = ctx.create_app()
     app.config.from_object(Config)
     app.config["DEBUG"] = debug
-
     bootstrap = Bootstrap(app)
 
     init_logging()
@@ -57,15 +55,12 @@ def runserver(debug, host, port, threads, send_bytes):
 
     from toxicity_analysis.app import routes # noqa
 
-    # app.config.from_object(Config)
-
     # db = SQLAlchemy(toxicity_analysis)
     # migrate = Migrate(toxicity_analysis, db)
 
     if debug:
         logger.info(f"Starting {__name__} in debug mode")
         app.run(host=host, port=port)
-
     else:
         serve(
             app,
