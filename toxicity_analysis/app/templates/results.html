@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Results of Analysis:</h1>
+    <h1>Results of Analysis</h1>
     <br>
-    <p>{{ result }}
+    <p>Text analyzed: {{ text }}</p>
+    <p>Prediction: {{ prediction }}</p>
+    <br>
+    <a href="{{ url_for('enter_text') }}">Analyze Another Comment</a>
 {% endblock %}
