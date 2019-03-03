@@ -1,8 +1,5 @@
 import click
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_bootstrap import Bootstrap
+
 from waitress import serve
 
 # from config import Config
@@ -39,9 +36,8 @@ def runserver(debug, host, port, threads, send_bytes):
     app = ctx.create_app()
     app.config["DEBUG"] = debug
 
-    from toxicity_analysis.app import routes
+    from toxicity_analysis.app import routes # noqa
 
-    bootstrap = Bootstrap(app)
     # app.config.from_object(Config)
 
     # db = SQLAlchemy(toxicity_analysis)
@@ -51,7 +47,12 @@ def runserver(debug, host, port, threads, send_bytes):
         app.run(host=host, port=port)
 
     else:
-        serve(app, listen=f"{host}:{port}", threads=threads, send_bytes=send_bytes)
+        serve(
+            app,
+            listen=f"{host}:{port}",
+            threads=threads,
+            send_bytes=send_bytes
+        )
 
 
 if __name__ == "__main__":

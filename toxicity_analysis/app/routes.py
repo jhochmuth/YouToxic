@@ -1,7 +1,7 @@
-from flask import render_template, redirect, url_for
+from flask import redirect, render_template, url_for
 
-from toxicity_analysis.app.forms import EnterTextForm
 from toxicity_analysis.app.context import app
+from toxicity_analysis.app.forms import EnterTextForm
 
 
 @app.route("/", methods=["GET"])
