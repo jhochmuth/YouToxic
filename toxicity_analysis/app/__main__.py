@@ -4,7 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 from waitress import serve
-#from config import Config
+
+# from config import Config
 
 
 @click.group()
@@ -13,23 +14,38 @@ def main():
 
 
 @main.command()
-@click.option("--debug", envvar="DEBUG", default=False, help="Enable/disable debug mode")
-@click.option("--host", envvar="HOST", default="127.0.0.1", help="Host to run server on")
+@click.option(
+    "--debug", envvar="DEBUG", default=False, help="Enable/disable debug mode"
+)
+@click.option(
+    "--host", envvar="HOST", default="127.0.0.1", help="Host to run server on"
+)
 @click.option("--port", envvar="PORT", default=8080, help="Port to list on")
-@click.option("--threads", envvar="THREADS", default=5, help="The number of threads used to process application logic")
-@click.option("--send_bytes", envvar="SEND_BYTES", default=18000, help="The number of bytes to send to socket.send")
+@click.option(
+    "--threads",
+    envvar="THREADS",
+    default=5,
+    help="The number of threads used to process application logic",
+)
+@click.option(
+    "--send_bytes",
+    envvar="SEND_BYTES",
+    default=18000,
+    help="The number of bytes to send to socket.send",
+)
 def runserver(debug, host, port, threads, send_bytes):
     import toxicity_analysis.app.context as ctx
+
     app = ctx.create_app()
     app.config["DEBUG"] = debug
 
     from toxicity_analysis.app import routes
 
     bootstrap = Bootstrap(app)
-    #app.config.from_object(Config)
+    # app.config.from_object(Config)
 
-    #db = SQLAlchemy(toxicity_analysis)
-    #migrate = Migrate(toxicity_analysis, db)
+    # db = SQLAlchemy(toxicity_analysis)
+    # migrate = Migrate(toxicity_analysis, db)
 
     if debug:
         app.run(host=host, port=port)
@@ -38,5 +54,5 @@ def runserver(debug, host, port, threads, send_bytes):
         serve(app, listen=f"{host}:{port}", threads=threads, send_bytes=send_bytes)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
