@@ -3,6 +3,10 @@ from logging.config import dictConfig
 
 import click
 
+from flask_bootstrap import Bootstrap
+
+from toxicity_analysis.config import Config
+
 from waitress import serve
 
 import yaml
@@ -12,7 +16,6 @@ def init_logging():
     with open("log-config.yml", "r") as f:
         log_config = yaml.safe_load(f)
         dictConfig(log_config)
-
 
 
 @click.group()
@@ -44,7 +47,10 @@ def runserver(debug, host, port, threads, send_bytes):
     import toxicity_analysis.app.context as ctx
 
     app = ctx.create_app()
+    app.config.from_object(Config)
     app.config["DEBUG"] = debug
+
+    bootstrap = Bootstrap(app)
 
     init_logging()
     logger = getLogger(__name__)

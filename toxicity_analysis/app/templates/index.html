@@ -1,3 +1,8 @@
-<h1>Toxicity Analysis</h1>
+{% extends 'base.html' %}
 
-<p><a href="{{ url_for('enter_text') }}"Analyze Comment></a></p>
+{% block content %}
+    <h1>Analyze Text for Toxicity</h1>
+    <div>
+        <a href="{{ url_for('enter_text') }}">Basic Analysis</a>
+    </div>
+{% endblock %}
