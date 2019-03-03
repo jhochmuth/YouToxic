@@ -1,8 +1,18 @@
+from logging import getLogger
+from logging.config import dictConfig
+
 import click
 
 from waitress import serve
 
-# from config import Config
+import yaml
+
+
+def init_logging():
+    with open("log-config.yml", "r") as f:
+        log_config = yaml.safe_load(f)
+        dictConfig(log_config)
+
 
 
 @click.group()
@@ -36,6 +46,9 @@ def runserver(debug, host, port, threads, send_bytes):
     app = ctx.create_app()
     app.config["DEBUG"] = debug
 
+    init_logging()
+    logger = getLogger(__name__)
+
     from toxicity_analysis.app import routes # noqa
 
     # app.config.from_object(Config)
@@ -44,6 +57,7 @@ def runserver(debug, host, port, threads, send_bytes):
     # migrate = Migrate(toxicity_analysis, db)
 
     if debug:
+        logger.info(f"Starting {__name__} in debug mode")
         app.run(host=host, port=port)
 
     else:
