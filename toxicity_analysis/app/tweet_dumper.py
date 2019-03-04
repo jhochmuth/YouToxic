@@ -3,8 +3,8 @@ import tweepy
 
 
 # Twitter API credentials
-consumer_key = ""
-consumer_secret = ""
+consumer_key = "JM45L46VIzcoqg4edXBq3DkyW"
+consumer_secret = "o86joGGf4Lff6DwhTBj0N8vk7Meoex3gY8qswAftxv1X8SBzWa"
 access_key = ""
 access_secret = ""
 
