@@ -1,4 +1,4 @@
-import csv
+import pandas as pd
 import tweepy
 
 
@@ -22,7 +22,7 @@ def validate_username(screen_name):
         return True
 
 
-def get_all_tweets(screen_name):
+def get_all_tweets(screen_name, max_tweets=3240):
     # Twitter only allows access to a users most recent 3240 tweets with this method
 
     # authorize twitter, initialize tweepy
@@ -34,7 +34,7 @@ def get_all_tweets(screen_name):
     alltweets = []
 
     # make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name=screen_name, count=200, tweet_mode='extended')
+    new_tweets = api.user_timeline(screen_name=screen_name, count=min(200, max_tweets), tweet_mode='extended')
 
     # save most recent tweets
     alltweets.extend(new_tweets)
@@ -43,12 +43,10 @@ def get_all_tweets(screen_name):
     oldest = alltweets[-1].id - 1
 
     # keep grabbing tweets until there are no tweets left to grab
-    """
-    while len(new_tweets) > 0:
-        print
-        "getting tweets before %s" % (oldest)
 
+    while len(new_tweets) > 0 and len(alltweets) < max_tweets:
         # all subsequent requests use the max_id param to prevent duplicates
+        ##### Fix number of tweets returned
         new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest, tweet_mode='extended')
 
         # save most recent tweets
@@ -57,11 +55,8 @@ def get_all_tweets(screen_name):
         # update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
 
-        print
-        "...%s tweets downloaded so far" % (len(alltweets))
-    """
     # transform the tweepy tweets into a 2D array that will populate the csv
-    outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text.encode("utf-8")] for tweet in alltweets]
+    outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text] for tweet in alltweets]
 
     return outtweets
     """

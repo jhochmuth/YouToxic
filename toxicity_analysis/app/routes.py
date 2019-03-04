@@ -3,7 +3,6 @@ from flask import flash, redirect, render_template, url_for
 from toxicity_analysis.app.context import app
 from toxicity_analysis.app.forms import EnterTextForm, TwitterAccountForm
 from toxicity_analysis.app.predict_toxicity import predict_toxicity
-
 from toxicity_analysis.app.tweet_dumper import get_all_tweets, validate_username
 
 
@@ -42,5 +41,6 @@ def results(text):
 
 @app.route('/return_tweets/<username>')
 def return_tweets(username):
-    tweets = get_all_tweets(username)
-    return render_template('return_tweets.html', title='Tweets Posted By <username>', tweets=tweets)
+    tweets = get_all_tweets(username, max_tweets=10)
+    tweet_texts = [row[2] for row in tweets]
+    return render_template('return_tweets.html', title='Tweets Posted by ' + username, tweet_texts=tweet_texts)
