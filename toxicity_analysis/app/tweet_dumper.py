@@ -5,8 +5,8 @@ import tweepy
 # Twitter API credentials
 consumer_key = "JM45L46VIzcoqg4edXBq3DkyW"
 consumer_secret = "o86joGGf4Lff6DwhTBj0N8vk7Meoex3gY8qswAftxv1X8SBzWa"
-access_key = ""
-access_secret = ""
+access_key = "1102640453143285760-f4o2aFzCgU0zKIBwTjtlG74mz0R9GR"
+access_secret = "CnrVUv1hvDKmJdDuPil16DJK6Wzh3vK6bghcEUqMQ8CsM"
 
 
 def validate_username(screen_name):
@@ -34,7 +34,7 @@ def get_all_tweets(screen_name):
     alltweets = []
 
     # make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name=screen_name, count=200)
+    new_tweets = api.user_timeline(screen_name=screen_name, count=200, tweet_mode='extended')
 
     # save most recent tweets
     alltweets.extend(new_tweets)
@@ -43,12 +43,13 @@ def get_all_tweets(screen_name):
     oldest = alltweets[-1].id - 1
 
     # keep grabbing tweets until there are no tweets left to grab
+    """
     while len(new_tweets) > 0:
         print
         "getting tweets before %s" % (oldest)
 
         # all subsequent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest)
+        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest, tweet_mode='extended')
 
         # save most recent tweets
         alltweets.extend(new_tweets)
@@ -58,9 +59,9 @@ def get_all_tweets(screen_name):
 
         print
         "...%s tweets downloaded so far" % (len(alltweets))
-
+    """
     # transform the tweepy tweets into a 2D array that will populate the csv
-    outtweets = [[tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")] for tweet in alltweets]
+    outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text.encode("utf-8")] for tweet in alltweets]
 
     return outtweets
     """
