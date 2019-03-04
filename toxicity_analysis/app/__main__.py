@@ -1,9 +1,9 @@
-from logging import getLogger
-from logging.config import dictConfig
-
 import click
 
 from flask_bootstrap import Bootstrap
+
+from logging import getLogger
+from logging.config import dictConfig
 
 import toxicity_analysis.app.context as ctx
 from toxicity_analysis.config import Config
@@ -49,14 +49,13 @@ def runserver(debug, host, port, threads, send_bytes):
     app.config.from_object(Config)
     app.config["DEBUG"] = debug
     bootstrap = Bootstrap(app)
+    #db = SQLAlchemy(app)
+    #migrate = Migrate(app, db)
 
     init_logging()
     logger = getLogger(__name__)
 
     from toxicity_analysis.app import routes # noqa
-
-    # db = SQLAlchemy(toxicity_analysis)
-    # migrate = Migrate(toxicity_analysis, db)
 
     if debug:
         logger.info(f"Starting {__name__} in debug mode")

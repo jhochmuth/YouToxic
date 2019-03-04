@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block app_content %}
-    <h1>YouToxic - Analyze Text for Toxicity</h1>
+    <h1>YouToxic - Predict Toxicity in Text</h1>
     <br>
     <div>
-        <a href="{{ url_for('enter_text') }}">Basic Analysis</a>
+        <a href="{{ url_for('enter_text') }}">Basic Prediction - Enter Text</a>
+        <br>
+        <a href="{{ url_for('enter_twitter_username') }}">Search for Twitter Posts</a>
     </div>
 {% endblock %}
