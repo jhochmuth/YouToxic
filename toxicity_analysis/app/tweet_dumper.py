@@ -9,6 +9,19 @@ access_key = ""
 access_secret = ""
 
 
+def validate_username(screen_name):
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_key, access_secret)
+    api = tweepy.API(auth)
+
+    try:
+        user = api.get_user(screen_name)
+    except tweepy.TweepError:
+        return False
+    else:
+        return True
+
+
 def get_all_tweets(screen_name):
     # Twitter only allows access to a users most recent 3240 tweets with this method
 
@@ -34,7 +47,7 @@ def get_all_tweets(screen_name):
         print
         "getting tweets before %s" % (oldest)
 
-        # all subsiquent requests use the max_id param to prevent duplicates
+        # all subsequent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest)
 
         # save most recent tweets
@@ -49,6 +62,8 @@ def get_all_tweets(screen_name):
     # transform the tweepy tweets into a 2D array that will populate the csv
     outtweets = [[tweet.id_str, tweet.created_at, tweet.text.encode("utf-8")] for tweet in alltweets]
 
+    return outtweets
+    """
     # write the csv
     with open('%s_tweets.csv' % screen_name, 'wb') as f:
         writer = csv.writer(f)
@@ -56,3 +71,4 @@ def get_all_tweets(screen_name):
         writer.writerows(outtweets)
 
     pass
+    """
