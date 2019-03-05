@@ -25,8 +25,8 @@ def enter_text():
 def enter_twitter_username():
     form = TwitterAccountForm()
     if form.validate_on_submit():
-        if validate_username(form.text.data):
-            return redirect(url_for('return_tweets', username=form.text.data))
+        if validate_username(form.user.data):
+            return redirect(url_for('return_tweets', username=form.user.data, num_tweets=form.num_tweets.data))
         else:
             flash('Error: twitter account not found with specified username.')
             return redirect(url_for('enter_twitter_username'))
@@ -39,18 +39,18 @@ def results(text):
     return render_template('results.html', title='Results', text=text, prediction=prediction)
 
 
-@app.route('/results_tweets/<username>')
-def results_tweets(username):
-    tweets = get_all_tweets(username, max_tweets=10)
+@app.route('/results_tweets/<username>/<num_tweets>')
+def results_tweets(username, num_tweets):
+    tweets = get_all_tweets(username, num_tweets=int(num_tweets))
     texts = [row[2] for row in tweets]
     predictions = predict_toxicities(texts)
     for tweet, prediction in zip(tweets, predictions):
         tweet.append(prediction)
-    print(tweets)
     return render_template('results_tweets.html', title='Results', tweets=tweets)
 
 
-@app.route('/return_tweets/<username>')
-def return_tweets(username):
-    tweets = get_all_tweets(username, max_tweets=10)
-    return render_template('return_tweets.html', title='Tweets Posted by ' + username, tweets=tweets, username=username)
+@app.route('/return_tweets/<username>/<num_tweets>')
+def return_tweets(username, num_tweets):
+    tweets = get_all_tweets(username, num_tweets=int(num_tweets))
+    return render_template('return_tweets.html', title='Tweets Posted by ' + username,
+                           tweets=tweets, username=username, num_tweets=num_tweets)

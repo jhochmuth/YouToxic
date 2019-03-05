@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import IntegerField, StringField, SubmitField
+from wtforms.validators import DataRequired, NumberRange, Length
 
 
 class EnterTextForm(FlaskForm):
@@ -10,5 +10,6 @@ class EnterTextForm(FlaskForm):
 
 
 class TwitterAccountForm(FlaskForm):
-    text = StringField('Enter Twitter Username', validators=[DataRequired()])
+    user = StringField('Enter Twitter Username', validators=[DataRequired()])
+    num_tweets = IntegerField('Enter Number of Tweets to Classify', validators=[NumberRange(min=1, max=3240)])
     submit = SubmitField('Collect tweets')
