@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 
 
@@ -15,11 +16,40 @@ def create_model():
                 outfile.write(infile.read())
 
 
+def create_embeddings():
+    files = list()
+    files.append('embedding_matrix_1.npy')
+    files.append('embedding_matrix_2.npy')
+    files.append('embedding_matrix_3.npy')
+    files.append('embedding_matrix_4.npy')
+    files.append('embedding_matrix_5.npy')
+    files.append('embedding_matrix_6.npy')
+    files.append('embedding_matrix_7.npy')
+    files.append('embedding_matrix_8.npy')
+    files.append('embedding_matrix_9.npy')
+    files.append('embedding_matrix_10.npy')
+
+    with open('embedding_matrix/embedding_matrix.npy', 'wb') as outfile:
+        for file in files:
+            with open(file, 'rb') as infile:
+                outfile.write(infile.read())
+
+
 def predict_toxicity(text):
-    create_model()
-    torch.load('model/model.pt')
-    prediction = 0
-    return prediction
+    try:
+        model = torch.load('model/model.pt')
+    except FileNotFoundError:
+        create_model()
+        model = torch.load('model/model.pt')
+
+    try:
+        embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
+    except FileNotFoundError:
+        create_embeddings()
+        embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
+
+    model.eval()
+    return 0
 
 
 def predict_toxicities(texts):
