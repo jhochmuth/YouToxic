@@ -2,7 +2,12 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    {% for tweet in tweet_texts %}
-        {{ tweet }}<br>
-    {% endfor %}
+    <table overflow="">
+        {% for id, time, text in tweets %}
+            <tr>
+                <td>{{ time }}</td>
+                <td>{{ text }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

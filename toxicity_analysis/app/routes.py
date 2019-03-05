@@ -42,5 +42,4 @@ def results(text):
 @app.route('/return_tweets/<username>')
 def return_tweets(username):
     tweets = get_all_tweets(username, max_tweets=10)
-    tweet_texts = [row[2] for row in tweets]
-    return render_template('return_tweets.html', title='Tweets Posted by ' + username, tweet_texts=tweet_texts)
+    return render_template('return_tweets.html', title='Tweets Posted by ' + username, tweets=tweets)
