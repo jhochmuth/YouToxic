@@ -2,12 +2,12 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <a href="{{ url_for('results_tweets', username=username) }}">Confirm</a>
     <table border="1">
-        {% for id, time, text in tweets %}
+        {% for id, time, text, prediction in tweets %}
             <tr>
                 <td>{{ time }}</td>
                 <td>{{ text }}</td>
+                <td width="50px" align="center">{{ prediction }}</td>
             </tr>
         {% endfor %}
     </table>
