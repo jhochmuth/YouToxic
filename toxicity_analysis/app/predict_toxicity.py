@@ -1,5 +1,8 @@
+import torch
+
 
 def predict_toxicity(text):
+    torch.load('model.pt')
     prediction = 0
     return prediction
 
