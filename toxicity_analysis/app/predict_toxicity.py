@@ -1,4 +1,6 @@
+#from keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import pickle
 import torch
 
 
@@ -18,21 +20,27 @@ def create_model():
 
 def create_embeddings():
     files = list()
-    files.append('embedding_matrix_1.npy')
-    files.append('embedding_matrix_2.npy')
-    files.append('embedding_matrix_3.npy')
-    files.append('embedding_matrix_4.npy')
-    files.append('embedding_matrix_5.npy')
-    files.append('embedding_matrix_6.npy')
-    files.append('embedding_matrix_7.npy')
-    files.append('embedding_matrix_8.npy')
-    files.append('embedding_matrix_9.npy')
-    files.append('embedding_matrix_10.npy')
+    files.append('embedding_matrix/embedding_matrix_1.npy')
+    files.append('embedding_matrix/embedding_matrix_2.npy')
+    files.append('embedding_matrix/embedding_matrix_3.npy')
+    files.append('embedding_matrix/embedding_matrix_4.npy')
+    files.append('embedding_matrix/embedding_matrix_5.npy')
+    files.append('embedding_matrix/embedding_matrix_6.npy')
+    files.append('embedding_matrix/embedding_matrix_7.npy')
+    files.append('embedding_matrix/embedding_matrix_8.npy')
+    files.append('embedding_matrix/embedding_matrix_9.npy')
+    files.append('embedding_matrix/embedding_matrix_10.npy')
 
     with open('embedding_matrix/embedding_matrix.npy', 'wb') as outfile:
         for file in files:
             with open(file, 'rb') as infile:
                 outfile.write(infile.read())
+
+
+def create_tokenizer():
+    with open('tokenizer.pkl', 'rb') as handle:
+        tokenizer = pickle.load(handle)
+    return tokenizer
 
 
 def predict_toxicity(text):
@@ -49,6 +57,13 @@ def predict_toxicity(text):
         embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
 
     model.eval()
+
+    tokenizer = create_tokenizer()
+    x = tokenizer.texts_to_sequences(text)
+    x = torch.tensor(x)
+    caps_vs_length = 0
+    words_vs_unique = 0
+    print(model(x))
     return 0
 
 

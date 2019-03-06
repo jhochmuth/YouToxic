@@ -11,6 +11,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import toxicity_analysis.app.context as ctx
+from toxicity_analysis.app.predict_toxicity import create_embeddings
 from toxicity_analysis.config import Config
 
 from waitress import serve
@@ -20,6 +21,7 @@ import yaml
 
 embedding_dim = 300
 use_pretrained_embedding = True
+embedding_matrix = create_embeddings()
 
 hidden_size = 60
 gru_len = hidden_size
@@ -191,12 +193,12 @@ class NeuralNet(nn.Module):
         fc_layer = 16
         fc_layer1 = 16
 
-        self.embedding = nn.Embedding(max_features, embed_size)
+        self.embedding = nn.Embedding(max_features, embedding_dim)
         self.embedding.weight = nn.Parameter(torch.tensor(embedding_matrix, dtype=torch.float32))
         self.embedding.weight.requires_grad = False
 
         self.embedding_dropout = nn.Dropout2d(0.0)
-        self.lstm = nn.LSTM(embed_size, hidden_size, bidirectional=True, batch_first=True)
+        self.lstm = nn.LSTM(embedding_dim, hidden_size, bidirectional=True, batch_first=True)
         self.gru = nn.GRU(hidden_size * 2, hidden_size, bidirectional=True, batch_first=True)
 
         self.lstm2 = nn.LSTM(hidden_size * 2, hidden_size, bidirectional=True, batch_first=True)
@@ -236,7 +238,7 @@ class NeuralNet(nn.Module):
         # Global max pooling
         max_pool, _ = torch.max(h_gru, 1)
 
-        f = torch.tensor(x[1], dtype=torch.float).cuda()
+        f = torch.tensor(x[1], dtype=torch.float)
 
         conc = torch.cat((h_lstm_atten, h_gru_atten, content3, avg_pool, max_pool, f), 1)
         conc = self.relu(self.linear(conc))
