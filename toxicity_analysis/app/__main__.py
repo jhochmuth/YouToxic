@@ -5,8 +5,9 @@ from flask_bootstrap import Bootstrap
 from logging import getLogger
 from logging.config import dictConfig
 
+import numpy as np
+
 import torch
-import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -21,7 +22,7 @@ import yaml
 
 embedding_dim = 300
 use_pretrained_embedding = True
-embedding_matrix = create_embeddings()
+embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
 
 hidden_size = 60
 gru_len = hidden_size
@@ -44,7 +45,7 @@ class Embed_Layer(nn.Module):
         super(Embed_Layer, self).__init__()
         self.encoder = nn.Embedding(vocab_size + 1, embedding_dim)
         if use_pretrained_embedding:
-            self.encoder.weight.data.copy_(t.from_numpy(embedding_matrix))
+            self.encoder.weight.data.copy_(torch.from_numpy(embedding_matrix))
 
     def forward(self, x, dropout_p=0.25):
         return nn.Dropout(p=dropout_p)(self.encoder(x))
@@ -90,15 +91,14 @@ class Caps_Layer(nn.Module):
 
         if self.share_weights:
             self.W = nn.Parameter(
-                nn.init.xavier_normal_(t.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
+                nn.init.xavier_normal_(torch.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
         else:
             self.W = nn.Parameter(
-                t.randn(BATCH_SIZE, input_dim_capsule, self.num_capsule * self.dim_capsule))
+                torch.randn(BATCH_SIZE, input_dim_capsule, self.num_capsule * self.dim_capsule))
 
     def forward(self, x):
-
         if self.share_weights:
-            u_hat_vecs = t.matmul(x, self.W)
+            u_hat_vecs = torch.matmul(x, self.W)
         else:
             print('add later')
 
@@ -107,23 +107,21 @@ class Caps_Layer(nn.Module):
         u_hat_vecs = u_hat_vecs.view((batch_size, input_num_capsule,
                                       self.num_capsule, self.dim_capsule))
         u_hat_vecs = u_hat_vecs.permute(0, 2, 1, 3)
-        b = t.zeros_like(u_hat_vecs[:, :, :, 0])
+        b = torch.zeros_like(u_hat_vecs[:, :, :, 0])
 
         for i in range(self.routings):
             b = b.permute(0, 2, 1)
             c = F.softmax(b, dim=2)
             c = c.permute(0, 2, 1)
             b = b.permute(0, 2, 1)
-            outputs = self.activation(t.einsum('bij,bijk->bik', (c, u_hat_vecs)))  # batch matrix multiplication
-            # outputs shape (batch_size, num_capsule, dim_capsule)
+            outputs = self.activation(torch.einsum('bij,bijk->bik', (c, u_hat_vecs)))
             if i < self.routings - 1:
-                b = t.einsum('bik,bijk->bij', (outputs, u_hat_vecs))  # batch matrix multiplication
-        return outputs  # (batch_size, num_capsule, dim_capsule)
+                b = torch.einsum('bik,bijk->bij', (outputs, u_hat_vecs))
+        return outputs
 
-    # text version of squash, slight different from original one
     def squash(self, x, axis=-1):
         s_squared_norm = (x ** 2).sum(axis, keepdim=True)
-        scale = t.sqrt(s_squared_norm + T_epsilon)
+        scale = torch.sqrt(s_squared_norm + T_epsilon)
         return x / scale
 
 
@@ -134,7 +132,7 @@ class Capsule_Main(nn.Module):
         self.gru_layer = GRU_Layer()
         self.gru_layer.init_weights()
         self.caps_layer = Caps_Layer()
-        self.dense_layer = t.Dense_Layer()
+        self.dense_layer = torch.Dense_Layer()
 
     def forward(self, content):
         content1 = self.embed_layer(content)
@@ -200,8 +198,6 @@ class NeuralNet(nn.Module):
         self.embedding_dropout = nn.Dropout2d(0.0)
         self.lstm = nn.LSTM(embedding_dim, hidden_size, bidirectional=True, batch_first=True)
         self.gru = nn.GRU(hidden_size * 2, hidden_size, bidirectional=True, batch_first=True)
-
-        self.lstm2 = nn.LSTM(hidden_size * 2, hidden_size, bidirectional=True, batch_first=True)
 
         self.lstm_attention = Attention(hidden_size * 2, maxlen)
         self.gru_attention = Attention(hidden_size * 2, maxlen)

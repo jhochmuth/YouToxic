@@ -1,4 +1,4 @@
-#from keras.preprocessing.sequence import pad_sequences
+from keras_preprocessing.sequence import pad_sequences
 import numpy as np
 import pickle
 import torch
@@ -43,6 +43,10 @@ def create_tokenizer():
     return tokenizer
 
 
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
 def predict_toxicity(text):
     try:
         model = torch.load('model/model.pt')
@@ -50,21 +54,24 @@ def predict_toxicity(text):
         create_model()
         model = torch.load('model/model.pt')
 
-    try:
-        embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
-    except FileNotFoundError:
-        create_embeddings()
-        embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
-
     model.eval()
 
     tokenizer = create_tokenizer()
-    x = tokenizer.texts_to_sequences(text)
-    x = torch.tensor(x)
-    caps_vs_length = 0
-    words_vs_unique = 0
-    print(model(x))
-    return 0
+    texts = list()
+    for _ in range(2):
+        texts.append(text)
+    x = tokenizer.texts_to_sequences(texts)
+    x = pad_sequences(x, maxlen=70)
+    x = torch.tensor([x], dtype=torch.long)
+
+    caps_vs_length = .2
+    words_vs_unique = .5
+    features = list()
+    for _ in range(2):
+        features.append([caps_vs_length, words_vs_unique])
+    pred = model([x, features]).detach()
+    result = sigmoid(pred.numpy())
+    return result[0]
 
 
 def predict_toxicities(texts):
