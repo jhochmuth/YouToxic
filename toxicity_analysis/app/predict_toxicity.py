@@ -38,13 +38,23 @@ def create_embeddings():
 
 
 def create_tokenizer():
-    with open('tokenizer.pkl', 'rb') as handle:
+    with open('tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
     return tokenizer
 
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+
+
+def get_features(text):
+    length = len(text)
+    capitals = sum(1 for c in text if c.isupper())
+    caps_vs_length = capitals / length
+    num_words = len(text.split())
+    num_unique_words = len(set(text.lower().split()))
+    words_vs_unique = num_unique_words / num_words
+    return [caps_vs_length, words_vs_unique]
 
 
 def predict_toxicity(text):
@@ -64,14 +74,14 @@ def predict_toxicity(text):
     x = pad_sequences(x, maxlen=70)
     x = torch.tensor([x], dtype=torch.long)
 
-    caps_vs_length = .2
-    words_vs_unique = .5
-    features = list()
+    features = get_features(text)
+    features_list = list()
     for _ in range(2):
-        features.append([caps_vs_length, words_vs_unique])
-    pred = model([x, features]).detach()
+        features_list.append(features)
+
+    pred = model([x, features_list]).detach()
     result = sigmoid(pred.numpy())
-    return result[0]
+    return result[0][0]
 
 
 def predict_toxicities(texts):
