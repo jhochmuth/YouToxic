@@ -16,8 +16,8 @@ def enter_text():
     form = EnterTextForm()
     if form.validate_on_submit():
         if len(form.text.data.split()) < 3:
-            flash('Warning: accuracy of predictions is low for text with few words.')
-        return redirect(url_for('results', text=form.text.data))
+            flash('Warning: accuracy of predictions is low for texts with few words.')
+        return redirect(url_for('result', text=form.text.data))
     return render_template('enter_text.html', title='Enter Text', form=form)
 
 
@@ -33,19 +33,19 @@ def enter_twitter_username():
     return render_template('enter_twitter_username.html', title='Enter Twitter Username', form=form)
 
 
-@app.route('/results/<text>')
-def results(text):
-    prediction = predict_toxicity(text)
-    return render_template('results.html', title='Results', text=text, prediction=prediction)
+@app.route('/result/<text>')
+def result(text):
+    pred, classification = predict_toxicity(text)
+    return render_template('result.html', title='Results', text=text, pred=pred, classification=classification)
 
 
 @app.route('/results_tweets/<username>/<num_tweets>')
 def results_tweets(username, num_tweets):
     tweets = get_all_tweets(username, num_tweets=int(num_tweets))
     texts = [row[2] for row in tweets]
-    predictions = predict_toxicities(texts)
-    for tweet, prediction in zip(tweets, predictions):
-        tweet.append(prediction)
+    preds, classifications = predict_toxicities(texts)
+    for tweet, pred, classification in zip(tweets, preds, classifications):
+        tweet.extend([pred, classification])
     return render_template('results_tweets.html', title='Results', tweets=tweets)
 
 

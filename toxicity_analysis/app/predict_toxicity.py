@@ -47,14 +47,26 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-def get_features(text):
-    length = len(text)
-    capitals = sum(1 for c in text if c.isupper())
-    caps_vs_length = capitals / length
-    num_words = len(text.split())
-    num_unique_words = len(set(text.lower().split()))
-    words_vs_unique = num_unique_words / num_words
-    return [caps_vs_length, words_vs_unique]
+# Note: model was trained when caps_vs_length feature was always 0.
+def get_features(texts):
+    features = list()
+    for text in texts:
+        text = text.lower()
+        length = len(text)
+        capitals = sum(1 for c in text if c.isupper())
+        caps_vs_length = capitals / length
+        num_words = len(text.split())
+        num_unique_words = len(set(text.lower().split()))
+        words_vs_unique = num_unique_words / num_words
+        features.append([caps_vs_length, words_vs_unique])
+    return features
+
+
+def standardize_features(features):
+    with open('scalar.pickle', 'rb') as handle:
+        ss = pickle.load(handle)
+    features = ss.transform(features)
+    return features
 
 
 def predict_toxicity(text):
@@ -72,18 +84,36 @@ def predict_toxicity(text):
         texts.append(text)
     x = tokenizer.texts_to_sequences(texts)
     x = pad_sequences(x, maxlen=70)
-    x = torch.tensor([x], dtype=torch.long)
+    x = torch.tensor(x, dtype=torch.long)
 
-    features = get_features(text)
-    features_list = list()
-    for _ in range(2):
-        features_list.append(features)
+    features = get_features(texts)
+    features = standardize_features(features)
 
-    pred = model([x, features_list]).detach()
+    pred = model([x, features]).detach()
     result = sigmoid(pred.numpy())
-    return result[0][0]
+    return result[0][0], result[0][0] > .4
 
 
 def predict_toxicities(texts):
-    predictions = [0 for text in range(len(texts))]
-    return predictions
+    try:
+        model = torch.load('model/model.pt')
+    except FileNotFoundError:
+        create_model()
+        model = torch.load('model/model.pt')
+
+    model.eval()
+
+    tokenizer = create_tokenizer()
+
+    x = tokenizer.texts_to_sequences(texts)
+    x = pad_sequences(x, maxlen=70)
+    x = torch.tensor(x, dtype=torch.long)
+
+    features = get_features(texts)
+    features = standardize_features(features)
+
+    preds = model([x, features]).detach()
+    preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
+    classifications = [pred > .4 for pred in preds]
+
+    return preds, classifications

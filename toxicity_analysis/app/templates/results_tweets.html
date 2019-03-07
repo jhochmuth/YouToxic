@@ -3,11 +3,12 @@
 
 {% block app_content %}
     <table border="1">
-        {% for id, time, text, prediction in tweets %}
+        {% for id, time, text, pred, classification in tweets %}
             <tr>
                 <td>{{ time }}</td>
                 <td>{{ text }}</td>
-                <td width="50px" align="center">{{ prediction }}</td>
+                <td width="100px" align="center">{{ 'Toxic' if classification == 1 else 'Not Toxic' }}</td>
+                <td width="50px" align="center">{{ pred }}</td>
             </tr>
         {% endfor %}
     </table>
