@@ -12,7 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import toxicity_analysis.app.context as ctx
-from toxicity_analysis.app.predict_toxicity import create_embeddings
+# from toxicity_analysis.app.predict_toxicity import create_embeddings
 from toxicity_analysis.config import Config
 
 from waitress import serve

@@ -1,11 +1,13 @@
 from flask_wtf import FlaskForm
 
-from wtforms import IntegerField, StringField, SubmitField
+from wtforms import IntegerField, SelectMultipleField, StringField, SubmitField
 from wtforms.validators import DataRequired, NumberRange, Length
 
 
 class EnterTextForm(FlaskForm):
-    text = StringField('Enter Text', validators=[Length(min=2)])
+    text = StringField('Enter text', validators=[Length(min=2)])
+    types = SelectMultipleField('Select classes of toxicity to predict',
+                                choices=[('toxic', 'Toxic'), ('identity', 'Identity hate')])
     submit = SubmitField('Calculate predicted toxicity')
 
 

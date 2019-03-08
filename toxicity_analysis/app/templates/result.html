@@ -4,8 +4,11 @@
     <h1>Results of Analysis</h1>
     <br>
     <p>Text analyzed: {{ text }}</p>
-    <p>Classification: {{ 'Toxic' if classification == 1 else 'Not Toxic' }}</p>
-    <p>Prediction: {{ pred }}</p>
     <br>
-    <a href="{{ url_for('enter_text') }}">Analyze Another Comment</a>
+    {% for type in types %}
+        <p>{{ type }} classification: {{ classes[type] }}</p>
+        <p>{{ type }} prediction: {{ preds[type] }}</p>
+        <br>
+    {% endfor %}
+    <a href="{{ url_for('enter_text') }}">Analyze another comment</a>
 {% endblock %}
