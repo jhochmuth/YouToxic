@@ -9,10 +9,17 @@ pipeline = None
 
 def create_app():
     global app
-    app = Flask(__name__)
+
+    if app is None:
+        app = Flask(__name__)
+
     return app
 
 
 def create_pipeline():
     global pipeline
-    pipeline = Pipeline()
+
+    if pipeline is None:
+        pipeline = Pipeline()
+
+    return pipeline
