@@ -1,6 +1,6 @@
 from flask import Flask
 
-from youtoxic.app.pipeline import Pipeline
+from youtoxic.app.services.pipeline import Pipeline
 
 
 app = None

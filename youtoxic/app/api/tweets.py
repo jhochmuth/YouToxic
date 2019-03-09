@@ -2,7 +2,7 @@ from flask import redirect, render_template, session, url_for
 
 from youtoxic.app.context import app
 from youtoxic.app.forms import ReturnTweetsForm
-from youtoxic.app.tweet_dumper import get_all_tweets
+from youtoxic.app.services.tweet_dumper import get_all_tweets
 
 
 @app.route('/tweets', methods=['GET'])

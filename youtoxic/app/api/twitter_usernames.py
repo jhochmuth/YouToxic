@@ -2,7 +2,7 @@ from flask import flash, redirect, render_template, session, url_for
 
 from youtoxic.app.context import app
 from youtoxic.app.forms import TwitterAccountForm
-from youtoxic.app.tweet_dumper import validate_username
+from youtoxic.app.services.tweet_dumper import validate_username
 
 
 @app.route('/twitter-usernames', methods=['GET'])

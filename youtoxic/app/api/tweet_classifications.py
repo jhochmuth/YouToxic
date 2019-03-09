@@ -1,6 +1,6 @@
 from flask import render_template, session
 from youtoxic.app.context import app, pipeline
-from youtoxic.app.tweet_dumper import get_all_tweets
+from youtoxic.app.services.tweet_dumper import get_all_tweets
 
 
 @app.route('/tweet-classifications', methods=['GET'])
