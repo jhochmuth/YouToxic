@@ -1,7 +1,7 @@
 from flask import flash, redirect, render_template, session, url_for
 
 from youtoxic.app.context import app
-from youtoxic.app.forms import TwitterAccountForm
+from youtoxic.app.api.forms import TwitterAccountForm
 from youtoxic.app.services.tweet_dumper import validate_username
 
 
