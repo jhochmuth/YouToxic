@@ -11,8 +11,8 @@ class Pipeline:
     embeddings = None
 
     def __init__(self):
-        self.toxicity_model = torch.load('models/toxicity_model.pt')
-        self.identity_model = torch.load('models/identity_model.pt')
+        self.toxicity_model = torch.load('youtoxic/app/models/toxicity_model.pt')
+        self.identity_model = torch.load('youtoxic/app/models/identity_model.pt')
         self.toxicity_model.eval()
         self.identity_model.eval()
 

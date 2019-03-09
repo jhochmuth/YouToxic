@@ -13,7 +13,7 @@ import torch.nn.functional as F
 
 embedding_dim = 300
 use_pretrained_embedding = True
-embedding_matrix = np.load('embedding_matrix/embedding_matrix.npy')
+embedding_matrix = np.load('youtoxic/app/models/embedding_matrix/embedding_matrix.npy')
 
 hidden_size = 60
 gru_len = hidden_size
