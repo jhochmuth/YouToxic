@@ -16,7 +16,7 @@ class Pipeline:
         self.toxicity_model.eval()
         self.identity_model.eval()
 
-        with open('tokenizer.pickle', 'rb') as handle:
+        with open('youtoxic/app/utils/tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
 
     # Note: models were trained when caps_vs_length feature was always 0.
@@ -36,7 +36,7 @@ class Pipeline:
 
     @staticmethod
     def standardize_features(features):
-        with open('scalar.pickle', 'rb') as handle:
+        with open('youtoxic/app/utils/scalar.pickle', 'rb') as handle:
             ss = pickle.load(handle)
         features = ss.transform(features)
         return features
