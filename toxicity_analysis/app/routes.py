@@ -1,7 +1,7 @@
 from flask import flash, redirect, render_template, session, url_for
 
 from toxicity_analysis.app.context import app, pipeline
-from toxicity_analysis.app.forms import EnterTextForm, TwitterAccountForm
+from toxicity_analysis.app.forms import EnterTextForm, ReturnTweetsForm, TwitterAccountForm
 from toxicity_analysis.app.tweet_dumper import get_all_tweets, validate_username
 
 
@@ -61,9 +61,11 @@ def results_tweets():
     pred_types = list()
     username = session['username']
     num_tweets = session['num_tweets']
+    display = session['display']
     session.pop('username', None)
     session.pop('num_tweets', None)
-    tweets = get_all_tweets(username, num_tweets=int(num_tweets))
+    session.pop('display', None)
+    tweets = get_all_tweets(username, num_tweets=num_tweets)
     texts = [row[2] for row in tweets]
     if 'toxic' in session['types']:
         preds['Toxicity'], classes['Toxicity'] = pipeline.predict_toxicity_multiple(texts)
@@ -72,13 +74,17 @@ def results_tweets():
         preds['Identity hate'], classes['Identity hate'] = pipeline.predict_identity_hate_multiple(texts)
         pred_types.append('Identity hate')
     return render_template('results_tweets.html', title='Results', tweets=tweets,
-                           preds=preds, classes=classes, pred_types=pred_types)
+                           preds=preds, classes=classes, pred_types=pred_types, display=display)
 
 
-@app.route('/return_tweets')
+@app.route('/return_tweets', methods=['GET', 'POST'])
 def return_tweets():
+    form = ReturnTweetsForm()
     username = session['username']
     num_tweets = session['num_tweets']
     tweets = get_all_tweets(username, num_tweets=num_tweets)
+    if form.validate_on_submit():
+        session['display'] = form.display.data
+        return redirect(url_for('results_tweets'))
     return render_template('return_tweets.html', title='Tweets Posted by '+username,
-                           tweets=tweets, username=username, num_tweets=num_tweets)
+                           form=form, tweets=tweets, username=username, num_tweets=num_tweets)

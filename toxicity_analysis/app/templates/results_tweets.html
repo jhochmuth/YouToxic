@@ -13,14 +13,26 @@
         </tr>
         {% for id, time, text in tweets %}
             {% set outer_loop = loop.index-1 %}
-            <tr>
-            <td align="center">{{ time }}</td>
-            <td>{{ text }}</td>
-            {% for type in pred_types %}
-                <td width="100px" align="center">{{ classes[type][outer_loop] }}</td>
-                <td width="50px" align="center">{{ preds[type][outer_loop] }}</td>
-            {% endfor %}
-            </tr>
+            {% set any_toxic = [] %}
+            {% if display == 'toxic' %}
+                {% for type in pred_types %}
+                    {% if preds[type][outer_loop] > 0.4 %}
+                        {% do any_toxic.append(1) %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% do any_toxic.append(1) %}
+            {% endif %}
+            {% if any_toxic %}
+                <tr>
+                <td align="center">{{ time }}</td>
+                <td>{{ text }}</td>
+                {% for type in pred_types %}
+                    <td width="100px" align="center">{{ classes[type][outer_loop] }}</td>
+                    <td width="50px" align="center">{{ preds[type][outer_loop] }}</td>
+                {% endfor %}
+                </tr>
+            {% endif %}
         {% endfor %}
     </table>
 {% endblock %}
