@@ -1,12 +1,12 @@
-import pandas as pd
+from toxicity_analysis.config import Config
 import tweepy
 
 
 # Twitter API credentials
-consumer_key = "JM45L46VIzcoqg4edXBq3DkyW"
-consumer_secret = "o86joGGf4Lff6DwhTBj0N8vk7Meoex3gY8qswAftxv1X8SBzWa"
-access_key = "1102640453143285760-f4o2aFzCgU0zKIBwTjtlG74mz0R9GR"
-access_secret = "CnrVUv1hvDKmJdDuPil16DJK6Wzh3vK6bghcEUqMQ8CsM"
+consumer_key = Config.CONSUMER_KEY
+consumer_secret = Config.CONSUMER_SECRET
+access_key = Config.ACCESS_KEY
+access_secret = Config.ACCESS_SECRET
 
 
 def validate_username(screen_name):

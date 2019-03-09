@@ -68,7 +68,7 @@ class Pipeline:
 
         preds = self.identity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = [pred > .4 for pred in preds]
+        classifications = ['Identity hate' if pred > .4 else 'Not identity hate' for pred in preds]
         return preds, classifications
 
     def predict_toxicity(self, text):
@@ -94,5 +94,5 @@ class Pipeline:
 
         preds = self.toxicity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = [pred > .4 for pred in preds]
+        classifications = ['Toxic' if pred > .4 else 'Not toxic' for pred in preds]
         return preds, classifications

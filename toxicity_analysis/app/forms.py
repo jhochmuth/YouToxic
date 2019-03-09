@@ -14,4 +14,6 @@ class EnterTextForm(FlaskForm):
 class TwitterAccountForm(FlaskForm):
     user = StringField('Enter Twitter Username', validators=[DataRequired()])
     num_tweets = IntegerField('Enter Number of Tweets to Classify', validators=[NumberRange(min=1, max=3240)])
+    types = SelectMultipleField('Select classes of toxicity to predict',
+                                choices = [('toxic', 'Toxic'), ('identity', 'Identity hate')])
     submit = SubmitField('Collect tweets')

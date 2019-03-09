@@ -1,7 +1,5 @@
-from keras_preprocessing.sequence import pad_sequences
 import numpy as np
 import pickle
-import torch
 
 
 def create_model():

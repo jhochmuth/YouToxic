@@ -29,6 +29,7 @@ def enter_twitter_username():
         if validate_username(form.user.data):
             session['username'] = form.user.data
             session['num_tweets'] = form.num_tweets.data
+            session['types'] = form.types.data
             return redirect(url_for('return_tweets'))
         else:
             flash('Error: twitter account not found with specified username.')
@@ -46,8 +47,8 @@ def result():
         preds['Toxicity'], classes['Toxicity'] = pipeline.predict_toxicity(text)
         pred_types.append('Toxicity')
     if 'identity' in session['types']:
-        preds['Identity hatred'], classes['Identity hatred'] = pipeline.predict_identity_hate(text)
-        pred_types.append('Identity hatred')
+        preds['Identity hate'], classes['Identity hate'] = pipeline.predict_identity_hate(text)
+        pred_types.append('Identity hate')
     session.pop('text', None)
     session.pop('types', None)
     return render_template('result.html', title='Results', text=text, preds=preds, classes=classes, types=pred_types)
@@ -55,16 +56,23 @@ def result():
 
 @app.route('/results_tweets')
 def results_tweets():
+    preds = dict()
+    classes = dict()
+    pred_types = list()
     username = session['username']
     num_tweets = session['num_tweets']
     session.pop('username', None)
     session.pop('num_tweets', None)
     tweets = get_all_tweets(username, num_tweets=int(num_tweets))
     texts = [row[2] for row in tweets]
-    preds, classifications = pipeline.predict_toxicity_multiple(texts)
-    for tweet, pred, classification in zip(tweets, preds, classifications):
-        tweet.extend([pred, classification])
-    return render_template('results_tweets.html', title='Results', tweets=tweets)
+    if 'toxic' in session['types']:
+        preds['Toxicity'], classes['Toxicity'] = pipeline.predict_toxicity_multiple(texts)
+        pred_types.append('Toxicity')
+    if 'identity' in session['types']:
+        preds['Identity hate'], classes['Identity hate'] = pipeline.predict_identity_hate_multiple(texts)
+        pred_types.append('Identity hate')
+    return render_template('results_tweets.html', title='Results', tweets=tweets,
+                           preds=preds, classes=classes, pred_types=pred_types)
 
 
 @app.route('/return_tweets')

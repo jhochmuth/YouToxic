@@ -3,12 +3,23 @@
 
 {% block app_content %}
     <table border="1">
-        {% for id, time, text, pred, classification in tweets %}
+        <tr>
+            <td align="center">Time Posted</td>
+            <td align="center">Text of Tweet</td>
+            {% for type in pred_types %}
+                <td align="center">{{ type }}</td>
+                <td align="center">{{ type }} prediction </td>
+            {% endfor %}
+        </tr>
+        {% for id, time, text in tweets %}
+            {% set outer_loop = loop.index-1 %}
             <tr>
-                <td>{{ time }}</td>
-                <td>{{ text }}</td>
-                <td width="100px" align="center">{{ 'Toxic' if classification == 1 else 'Not Toxic' }}</td>
-                <td width="50px" align="center">{{ pred }}</td>
+            <td align="center">{{ time }}</td>
+            <td>{{ text }}</td>
+            {% for type in pred_types %}
+                <td width="100px" align="center">{{ classes[type][outer_loop] }}</td>
+                <td width="50px" align="center">{{ preds[type][outer_loop] }}</td>
+            {% endfor %}
             </tr>
         {% endfor %}
     </table>
