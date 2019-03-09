@@ -7,7 +7,6 @@ from logging.config import dictConfig
 
 import youtoxic.app.context as ctx
 from youtoxic.app.neural_net import *
-from youtoxic.app.pipeline import Pipeline
 from youtoxic.config import Config
 
 from waitress import serve
