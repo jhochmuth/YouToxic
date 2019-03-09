@@ -6,7 +6,7 @@ from logging import getLogger
 from logging.config import dictConfig
 
 import youtoxic.app.context as ctx
-from youtoxic.app.neural_net import *
+from youtoxic.app.utils.neural_net import *
 from youtoxic.config import Config
 
 from waitress import serve
@@ -58,7 +58,7 @@ def runserver(debug, host, port, threads, send_bytes):
     init_logging()
     logger = getLogger(__name__)
 
-    from youtoxic.app import routes # noqa
+    from youtoxic.app import routes
 
     if debug:
         logger.info(f"Starting {__name__} in debug mode")
