@@ -41,8 +41,11 @@ def get_all_tweets(screen_name, num_tweets=3240):
     # save most recent tweets
     alltweets.extend(new_tweets)
 
-    # keep grabbing tweets until there are no tweets left to grab
+    # In case all recent tweets were retweets, put placeholder in new_tweets
+    if len(new_tweets) == 0:
+        new_tweets.append(1)
 
+    # keep grabbing tweets until there are no tweets left to grab
     while len(new_tweets) > 0 and len(alltweets) < num_tweets:
         # all subsequent requests use the max_id param to prevent duplicates
         new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest, tweet_mode='extended')

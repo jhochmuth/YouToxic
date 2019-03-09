@@ -2,7 +2,6 @@ from keras_preprocessing.sequence import pad_sequences
 import numpy as np
 import pickle
 import torch
-from toxicity_analysis.app.__main__ import NeuralNet
 
 
 def create_model():
@@ -48,7 +47,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-# Note: models was trained when caps_vs_length feature was always 0.
+# Note: models were trained when caps_vs_length feature was always 0.
 def get_features(texts):
     features = list()
     for text in texts:
@@ -68,81 +67,3 @@ def standardize_features(features):
         ss = pickle.load(handle)
     features = ss.transform(features)
     return features
-
-
-def predict_toxicity(text):
-    try:
-        model = torch.load('models/toxicity_model.pt')
-    except FileNotFoundError:
-        create_model()
-        model = torch.load('models/toxicity_model.pt')
-
-    model.eval()
-
-    tokenizer = create_tokenizer()
-    texts = list()
-    for _ in range(2):
-        texts.append(text)
-    x = tokenizer.texts_to_sequences(texts)
-    x = pad_sequences(x, maxlen=70)
-    x = torch.tensor(x, dtype=torch.long)
-
-    features = get_features(texts)
-    features = standardize_features(features)
-
-    pred = model([x, features]).detach()
-    result = sigmoid(pred.numpy())
-    classification = 'Toxic' if result[0][0] > .4 else 'Not toxic'
-    return result[0][0], classification
-
-
-def predict_identity_hate(text):
-    try:
-        model = torch.load('models/identity_model.pt')
-    except FileNotFoundError:
-        create_model()
-        model = torch.load('models/identity_model.pt')
-
-    model.eval()
-
-    tokenizer = create_tokenizer()
-    texts = list()
-    for _ in range(2):
-        texts.append(text)
-    x = tokenizer.texts_to_sequences(texts)
-    x = pad_sequences(x, maxlen=70)
-    x = torch.tensor(x, dtype=torch.long)
-
-    features = get_features(texts)
-    features = standardize_features(features)
-
-    pred = model([x, features]).detach()
-    result = sigmoid(pred.numpy())
-    classification = 'Identity hate' if result[0][0] > .4 else 'Not identity hate'
-
-    return result[0][0], classification
-
-
-def predict_toxicities(texts):
-    try:
-        model = torch.load('models/toxicity_model.pt')
-    except FileNotFoundError:
-        create_model()
-        model = torch.load('models/toxicity_model.pt')
-
-    model.eval()
-
-    tokenizer = create_tokenizer()
-
-    x = tokenizer.texts_to_sequences(texts)
-    x = pad_sequences(x, maxlen=70)
-    x = torch.tensor(x, dtype=torch.long)
-
-    features = get_features(texts)
-    features = standardize_features(features)
-
-    preds = model([x, features]).detach()
-    preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
-    classifications = [pred > .4 for pred in preds]
-
-    return preds, classifications

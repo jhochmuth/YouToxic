@@ -12,6 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import toxicity_analysis.app.context as ctx
+from toxicity_analysis.app.pipeline import Pipeline
 # from toxicity_analysis.app.predict_toxicity import create_embeddings
 from toxicity_analysis.config import Config
 
@@ -214,6 +215,8 @@ class NeuralNet(nn.Module):
         h_embedding = self.embedding(x[0])
         h_embedding = torch.squeeze(
             self.embedding_dropout(torch.unsqueeze(h_embedding, 0)))
+        if len(list(h_embedding.shape)) < 3:
+            h_embedding = h_embedding.expand(1, -1, -1)
 
         h_lstm, _ = self.lstm(h_embedding)
         h_gru, _ = self.gru(h_lstm)
@@ -282,6 +285,7 @@ def runserver(debug, host, port, threads, send_bytes):
     app.config.from_object(Config)
     app.config["DEBUG"] = debug
     bootstrap = Bootstrap(app)
+    pipeline = ctx.create_pipeline()
     #db = SQLAlchemy(app)
     #migrate = Migrate(app, db)
 

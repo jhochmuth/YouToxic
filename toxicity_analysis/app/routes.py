@@ -1,8 +1,7 @@
 from flask import flash, redirect, render_template, session, url_for
 
-from toxicity_analysis.app.context import app
+from toxicity_analysis.app.context import app, pipeline
 from toxicity_analysis.app.forms import EnterTextForm, TwitterAccountForm
-from toxicity_analysis.app.predict_toxicity import predict_identity_hate, predict_toxicity, predict_toxicities
 from toxicity_analysis.app.tweet_dumper import get_all_tweets, validate_username
 
 
@@ -44,10 +43,10 @@ def result():
     pred_types = list()
     text = session['text']
     if 'toxic' in session['types']:
-        preds['Toxicity'], classes['Toxicity'] = predict_toxicity(text)
+        preds['Toxicity'], classes['Toxicity'] = pipeline.predict_toxicity(text)
         pred_types.append('Toxicity')
     if 'identity' in session['types']:
-        preds['Identity hatred'], classes['Identity hatred'] = predict_identity_hate(text)
+        preds['Identity hatred'], classes['Identity hatred'] = pipeline.predict_identity_hate(text)
         pred_types.append('Identity hatred')
     session.pop('text', None)
     session.pop('types', None)
@@ -62,7 +61,7 @@ def results_tweets():
     session.pop('num_tweets', None)
     tweets = get_all_tweets(username, num_tweets=int(num_tweets))
     texts = [row[2] for row in tweets]
-    preds, classifications = predict_toxicities(texts)
+    preds, classifications = pipeline.predict_toxicity_multiple(texts)
     for tweet, pred, classification in zip(tweets, preds, classifications):
         tweet.extend([pred, classification])
     return render_template('results_tweets.html', title='Results', tweets=tweets)
