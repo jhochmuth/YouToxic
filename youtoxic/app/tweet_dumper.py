@@ -1,4 +1,4 @@
-from toxicity_analysis.config import Config
+from youtoxic.config import Config
 import tweepy
 
 

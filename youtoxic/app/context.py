@@ -1,6 +1,6 @@
 from flask import Flask
 
-from toxicity_analysis.app.pipeline import Pipeline
+from youtoxic.app.pipeline import Pipeline
 
 
 app = None

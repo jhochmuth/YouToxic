@@ -1,4 +1,4 @@
-name: toxicity_analysis
+name: youtoxic
 channels:
   - defaults
 dependencies:
@@ -40,5 +40,5 @@ dependencies:
     - waitress==1.2.1
     - werkzeug==0.14.1
     - wtforms==2.2.1
-prefix: /Users/juliushochmuth/miniconda3/envs/toxicity_analysis
+prefix: /Users/juliushochmuth/miniconda3/envs/youtoxic
 

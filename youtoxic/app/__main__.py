@@ -5,10 +5,10 @@ from flask_bootstrap import Bootstrap
 from logging import getLogger
 from logging.config import dictConfig
 
-import toxicity_analysis.app.context as ctx
-from toxicity_analysis.app.neural_net import *
-from toxicity_analysis.app.pipeline import Pipeline
-from toxicity_analysis.config import Config
+import youtoxic.app.context as ctx
+from youtoxic.app.neural_net import *
+from youtoxic.app.pipeline import Pipeline
+from youtoxic.config import Config
 
 from waitress import serve
 
@@ -59,7 +59,7 @@ def runserver(debug, host, port, threads, send_bytes):
     init_logging()
     logger = getLogger(__name__)
 
-    from toxicity_analysis.app import routes # noqa
+    from youtoxic.app import routes # noqa
 
     if debug:
         logger.info(f"Starting {__name__} in debug mode")

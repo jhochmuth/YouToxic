@@ -4,9 +4,9 @@ from flask import Blueprint
 
 from flask_bootstrap import Bootstrap
 
-import toxicity_analysis.app.context as ctx
-from toxicity_analysis.app.__main__ import Attention, Caps_Layer, NeuralNet
-from toxicity_analysis.config import Config
+import youtoxic.app.context as ctx
+from youtoxic.app.__main__ import Attention, Caps_Layer, NeuralNet
+from youtoxic.config import Config
 
 from unittest.case import TestCase
 

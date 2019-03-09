@@ -1,8 +1,8 @@
 from flask import flash, redirect, render_template, session, url_for
 
-from toxicity_analysis.app.context import app, pipeline
-from toxicity_analysis.app.forms import EnterTextForm, ReturnTweetsForm, TwitterAccountForm
-from toxicity_analysis.app.tweet_dumper import get_all_tweets, validate_username
+from youtoxic.app.context import app, pipeline
+from youtoxic.app.forms import EnterTextForm, ReturnTweetsForm, TwitterAccountForm
+from youtoxic.app.tweet_dumper import get_all_tweets, validate_username
 
 
 @app.route('/')
