@@ -22,8 +22,14 @@ def enter_text():
     return render_template('enter_text.html', title='Enter Text', form=form)
 
 
-@app.route('/enter_twitter_username', methods=['GET', 'POST'])
-def enter_twitter_username():
+@app.route('/twitter-credentials', methods=['GET'])
+def get_twitter_credentials():
+    form = TwitterAccountForm()
+    return render_template('enter_twitter_username.html', title='Enter Twitter Username', form=form)
+
+
+@app.route('/twitter-credentials', methods=['POST'])
+def post_twitter_credentials():
     form = TwitterAccountForm()
     if form.validate_on_submit():
         if validate_username(form.user.data):
@@ -33,8 +39,7 @@ def enter_twitter_username():
             return redirect(url_for('return_tweets'))
         else:
             flash('Error: twitter account not found with specified username.')
-            return redirect(url_for('enter_twitter_username'))
-    return render_template('enter_twitter_username.html', title='Enter Twitter Username', form=form)
+            return redirect(url_for('post_twitter_credentials'))
 
 
 @app.route('/result')
