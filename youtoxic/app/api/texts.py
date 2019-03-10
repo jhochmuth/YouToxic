@@ -1,7 +1,7 @@
 from flask import flash, redirect, render_template, session, url_for
 
-from youtoxic.app.context import app
 from youtoxic.app.api.forms import EnterTextForm
+from youtoxic.app.context import app
 
 
 @app.route("/texts", methods=["GET"])

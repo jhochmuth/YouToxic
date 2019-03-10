@@ -1,14 +1,8 @@
-"""Defines the neural network structure used for trained models.
-
-Do not change any variables as these were the variables used when training occurred.
-"""
-
-
 import numpy as np
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.nn.functional as f
 
 
 embedding_dim = 300
@@ -31,7 +25,7 @@ maxlen = 70
 max_features = 95000
 
 
-class Embed_Layer(nn.Module):
+class Embed_Layer(nn.Module):  # noqa:
     def __init__(self, embedding_matrix=None, vocab_size=None, embedding_dim=300):
         super(Embed_Layer, self).__init__()
         self.encoder = nn.Embedding(vocab_size + 1, embedding_dim)
@@ -42,7 +36,7 @@ class Embed_Layer(nn.Module):
         return nn.Dropout(p=dropout_p)(self.encoder(x))
 
 
-class GRU_Layer(nn.Module):
+class GRU_Layer(nn.Module):  # noqa:
     def __init__(self):
         super(GRU_Layer, self).__init__()
         self.gru = nn.GRU(input_size=300, hidden_size=gru_len, bidirectional=True)
@@ -66,7 +60,7 @@ class GRU_Layer(nn.Module):
         return self.gru(x)
 
 
-class Caps_Layer(nn.Module):
+class Caps_Layer(nn.Module):  # noqa:
     def __init__(
         self,
         input_dim_capsule=gru_len * 2,
@@ -121,7 +115,7 @@ class Caps_Layer(nn.Module):
 
         for i in range(self.routings):
             b = b.permute(0, 2, 1)
-            c = F.softmax(b, dim=2)
+            c = f.softmax(b, dim=2)
             c = c.permute(0, 2, 1)
             b = b.permute(0, 2, 1)
             outputs = self.activation(torch.einsum("bij,bijk->bik", (c, u_hat_vecs)))
@@ -135,7 +129,7 @@ class Caps_Layer(nn.Module):
         return x / scale
 
 
-class Capsule_Main(nn.Module):
+class Capsule_Main(nn.Module):  # noqa:
     def __init__(self, embedding_matrix=None, vocab_size=None):
         super(Capsule_Main, self).__init__()
         self.embed_layer = Embed_Layer(embedding_matrix, vocab_size)

@@ -1,5 +1,6 @@
-from youtoxic.config import Config
 import tweepy
+
+from youtoxic.config import Config
 
 
 # Twitter API credentials
@@ -15,7 +16,7 @@ def validate_username(screen_name):
     api = tweepy.API(auth)
 
     try:
-        user = api.get_user(screen_name)
+        user = api.get_user(screen_name)  # noqa:
     except tweepy.TweepError:
         return False
     else:

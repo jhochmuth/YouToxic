@@ -1,6 +1,9 @@
-from keras_preprocessing.sequence import pad_sequences
-import numpy as np
 import pickle
+
+from keras_preprocessing.sequence import pad_sequences
+
+import numpy as np
+
 import torch
 
 

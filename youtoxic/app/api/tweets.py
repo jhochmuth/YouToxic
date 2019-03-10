@@ -1,7 +1,7 @@
 from flask import redirect, render_template, session, url_for
 
-from youtoxic.app.context import app
 from youtoxic.app.api.forms import ReturnTweetsForm
+from youtoxic.app.context import app
 from youtoxic.app.services.tweet_dumper import get_all_tweets
 
 

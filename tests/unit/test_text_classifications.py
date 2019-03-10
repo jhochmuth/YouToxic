@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 
-from tests.unit.client import client
+from tests.unit.client import client  # noqa:
 
 
-def test_get_text_classifications(client):
+def test_get_text_classifications(client):  # noqa:
     """Unittest for basic text classification."""
     with client.session_transaction() as session:
         session["text"] = "foo bar baz fiz"

@@ -1,17 +1,17 @@
+from logging import getLogger
+from logging.config import dictConfig
+
 import click
 
 from flask_bootstrap import Bootstrap
 
-from logging import getLogger
-from logging.config import dictConfig
-
-import youtoxic.app.context as ctx
-from youtoxic.app.utils.neural_net import *
-from youtoxic.config import Config
-
 from waitress import serve
 
 import yaml
+
+import youtoxic.app.context as ctx
+from youtoxic.app.utils.neural_net import *  # noqa:
+from youtoxic.config import Config
 
 
 def init_logging():
@@ -50,15 +50,15 @@ def runserver(debug, host, port, threads, send_bytes):
     app = ctx.create_app()
     app.config.from_object(Config)
     app.config["DEBUG"] = debug
-    bootstrap = Bootstrap(app)
-    pipeline = ctx.create_pipeline()
+    bootstrap = Bootstrap(app)  # noqa:
+    pipeline = ctx.create_pipeline()  # noqa:
     # db = SQLAlchemy(app)
     # migrate = Migrate(app, db)
 
     init_logging()
     logger = getLogger(__name__)
 
-    from youtoxic.app import routes
+    from youtoxic.app import routes  # noqa:
 
     if debug:
         logger.info(f"Starting {__name__} in debug mode")

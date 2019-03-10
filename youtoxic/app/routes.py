@@ -4,7 +4,7 @@ import youtoxic.app.api.text_classifications
 import youtoxic.app.api.texts
 import youtoxic.app.api.tweet_classifications
 import youtoxic.app.api.tweets
-import youtoxic.app.api.twitter_usernames
+import youtoxic.app.api.twitter_usernames  # noqa:
 from youtoxic.app.context import app
 
 

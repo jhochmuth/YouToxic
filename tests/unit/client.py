@@ -9,12 +9,12 @@ from youtoxic.config import Config
 @pytest.fixture
 def client():
     app = ctx.create_app()
-    pipeline = ctx.create_pipeline()
+    pipeline = ctx.create_pipeline()  # noqa:
     app.config.from_object(Config)
     app.config["TESTING"] = True
     client = app.test_client()
-    bootstrap = Bootstrap(app)
+    bootstrap = Bootstrap(app)  # noqa:
 
-    from youtoxic.app import routes
+    from youtoxic.app import routes  # noqa:
 
     yield client

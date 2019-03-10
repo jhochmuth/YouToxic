@@ -1,4 +1,5 @@
 from flask import render_template, session
+
 from youtoxic.app.context import app, pipeline
 from youtoxic.app.services.tweet_dumper import get_all_tweets
 
