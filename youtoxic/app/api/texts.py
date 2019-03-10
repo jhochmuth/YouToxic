@@ -8,7 +8,7 @@ from youtoxic.app.context import app
 def get_texts():
     """Get methods """
     form = EnterTextForm()
-    return render_template("enter_text.html", title="Enter Text", form=form)
+    return render_template("texts.html", title="Enter Text", form=form)
 
 
 @app.route("/texts", methods=["POST"])

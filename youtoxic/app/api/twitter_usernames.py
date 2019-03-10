@@ -9,7 +9,7 @@ from youtoxic.app.services.tweet_dumper import validate_username
 def get_twitter_usernames():
     form = TwitterAccountForm()
     return render_template(
-        "enter_twitter_username.html", title="Enter Twitter Username", form=form
+        "twitter_usernames.html", title="Enter Twitter Username", form=form
     )
 
 
@@ -26,5 +26,5 @@ def post_twitter_usernames():
             flash("Error: twitter account not found with specified username.")
             return redirect(url_for("post_twitter_credentials"))
     return render_template(
-        "enter_twitter_username.html", title="Enter Twitter Username", form=form
+        "twitter_usernames.html", title="Enter Twitter Username", form=form
     )

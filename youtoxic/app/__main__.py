@@ -15,8 +15,8 @@ from youtoxic.config import Config
 
 
 def init_logging():
-    with open("log-config.yml", "r") as f:
-        log_config = yaml.safe_load(f)
+    with open("log-config.yml", "r") as file:
+        log_config = yaml.safe_load(file)
         dictConfig(log_config)
 
 

@@ -28,7 +28,7 @@ def get_tweet_classifications():
         ] = pipeline.predict_identity_hate_multiple(texts)
         pred_types.append("Identity hate")
     return render_template(
-        "results_tweets.html",
+        "tweet_classifications.html",
         title="Results",
         tweets=tweets,
         preds=preds,

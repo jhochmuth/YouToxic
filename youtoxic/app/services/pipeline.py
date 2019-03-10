@@ -16,8 +16,10 @@ class Pipeline:
     def __init__(self):
         self.toxicity_model = torch.load("youtoxic/app/models/toxicity_model.pt")
         self.identity_model = torch.load("youtoxic/app/models/identity_model.pt")
+        self.obscenity_model = torch.load("youtoxic/app/models/obscenity_model.pt")
         self.toxicity_model.eval()
         self.identity_model.eval()
+        self.obscenity_model.eval()
 
         with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
@@ -75,6 +77,19 @@ class Pipeline:
             "Identity hate" if pred > 0.4 else "Not identity hate" for pred in preds
         ]
         return preds, classifications
+
+    def predict_obscenity(self, text):
+        x = self.tokenizer.texts_to_sequences([text])
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features([text])
+        features = self.standardize_features(features)
+
+        pred = self.obscenity_model([x, features]).detach()
+        result = self.sigmoid(pred.numpy())
+        classification = "Obscene" if result[0][0] > 0.4 else "Not obscene"
+        return result[0][0], classification
 
     def predict_toxicity(self, text):
         x = self.tokenizer.texts_to_sequences([text])

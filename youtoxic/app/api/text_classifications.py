@@ -18,10 +18,15 @@ def get_text_classifications():
             "Identity hate"
         ] = pipeline.predict_identity_hate(text)
         pred_types.append("Identity hate")
+    if "obscene" in session["types"]:
+        preds["Obscenity"], classes[
+            "Obscenity"
+        ] = pipeline.predict_obscenity(text)
+        pred_types.append("Obscenity")
     session.pop("text", None)
     session.pop("types", None)
     return render_template(
-        "result.html",
+        "text_classifications.html",
         title="Results",
         text=text,
         preds=preds,

@@ -12,7 +12,7 @@ def get_tweets():
     num_tweets = session["num_tweets"]
     tweets = get_all_tweets(username, num_tweets=num_tweets)
     return render_template(
-        "return_tweets.html",
+        "tweets.html",
         title="Tweets Posted by " + username,
         form=form,
         tweets=tweets,
