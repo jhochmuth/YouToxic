@@ -49,11 +49,11 @@ def runserver(debug, host, port, threads, send_bytes):
     """Creates app instance."""
     app = ctx.create_app()
     app.config.from_object(Config)
-    app.config['DEBUG'] = debug
+    app.config["DEBUG"] = debug
     bootstrap = Bootstrap(app)
     pipeline = ctx.create_pipeline()
-    #db = SQLAlchemy(app)
-    #migrate = Migrate(app, db)
+    # db = SQLAlchemy(app)
+    # migrate = Migrate(app, db)
 
     init_logging()
     logger = getLogger(__name__)
@@ -64,12 +64,7 @@ def runserver(debug, host, port, threads, send_bytes):
         logger.info(f"Starting {__name__} in debug mode")
         app.run(host=host, port=port)
     else:
-        serve(
-            app,
-            listen=f"{host}:{port}",
-            threads=threads,
-            send_bytes=send_bytes
-        )
+        serve(app, listen=f"{host}:{port}", threads=threads, send_bytes=send_bytes)
 
 
 if __name__ == "__main__":

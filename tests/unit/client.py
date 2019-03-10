@@ -11,7 +11,7 @@ def client():
     app = ctx.create_app()
     pipeline = ctx.create_pipeline()
     app.config.from_object(Config)
-    app.config['TESTING'] = True
+    app.config["TESTING"] = True
     client = app.test_client()
     bootstrap = Bootstrap(app)
 

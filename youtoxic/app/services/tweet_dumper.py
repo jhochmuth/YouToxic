@@ -34,9 +34,15 @@ def get_all_tweets(screen_name, num_tweets=3240):
     alltweets = []
 
     # make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name=screen_name, count=min(200, num_tweets), tweet_mode='extended')
+    new_tweets = api.user_timeline(
+        screen_name=screen_name, count=min(200, num_tweets), tweet_mode="extended"
+    )
     oldest = new_tweets[-1].id - 1
-    new_tweets = [tweet for tweet in new_tweets if not tweet.retweeted and 'RT @' not in tweet.full_text]
+    new_tweets = [
+        tweet
+        for tweet in new_tweets
+        if not tweet.retweeted and "RT @" not in tweet.full_text
+    ]
 
     # save most recent tweets
     alltweets.extend(new_tweets)
@@ -48,16 +54,24 @@ def get_all_tweets(screen_name, num_tweets=3240):
     # keep grabbing tweets until there are no tweets left to grab
     while len(new_tweets) > 0 and len(alltweets) < num_tweets:
         # all subsequent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest, tweet_mode='extended')
+        new_tweets = api.user_timeline(
+            screen_name=screen_name, count=200, max_id=oldest, tweet_mode="extended"
+        )
         oldest = new_tweets[-1].id - 1
-        new_tweets = [tweet for tweet in new_tweets if not tweet.retweeted and 'RT @' not in tweet.full_text]
+        new_tweets = [
+            tweet
+            for tweet in new_tweets
+            if not tweet.retweeted and "RT @" not in tweet.full_text
+        ]
 
         # save most recent tweets
         alltweets.extend(new_tweets)
 
     alltweets = alltweets[:num_tweets]
     # transform the tweepy tweets into a 2D array that will populate the csv
-    outtweets = [[tweet.id_str, tweet.created_at, tweet.full_text] for tweet in alltweets]
+    outtweets = [
+        [tweet.id_str, tweet.created_at, tweet.full_text] for tweet in alltweets
+    ]
 
     return outtweets
     """

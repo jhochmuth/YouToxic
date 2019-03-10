@@ -11,12 +11,12 @@ class Pipeline:
     embeddings = None
 
     def __init__(self):
-        self.toxicity_model = torch.load('youtoxic/app/models/toxicity_model.pt')
-        self.identity_model = torch.load('youtoxic/app/models/identity_model.pt')
+        self.toxicity_model = torch.load("youtoxic/app/models/toxicity_model.pt")
+        self.identity_model = torch.load("youtoxic/app/models/identity_model.pt")
         self.toxicity_model.eval()
         self.identity_model.eval()
 
-        with open('youtoxic/app/utils/tokenizer.pickle', 'rb') as handle:
+        with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
 
     # Note: models were trained when caps_vs_length feature was always 0.
@@ -36,7 +36,7 @@ class Pipeline:
 
     @staticmethod
     def standardize_features(features):
-        with open('youtoxic/app/utils/scalar.pickle', 'rb') as handle:
+        with open("youtoxic/app/utils/scalar.pickle", "rb") as handle:
             ss = pickle.load(handle)
         features = ss.transform(features)
         return features
@@ -55,7 +55,7 @@ class Pipeline:
 
         pred = self.identity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
-        classification = 'Identity hate' if result[0][0] > .4 else 'Not identity hate'
+        classification = "Identity hate" if result[0][0] > 0.4 else "Not identity hate"
         return result[0][0], classification
 
     def predict_identity_hate_multiple(self, texts):
@@ -68,7 +68,9 @@ class Pipeline:
 
         preds = self.identity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ['Identity hate' if pred > .4 else 'Not identity hate' for pred in preds]
+        classifications = [
+            "Identity hate" if pred > 0.4 else "Not identity hate" for pred in preds
+        ]
         return preds, classifications
 
     def predict_toxicity(self, text):
@@ -81,7 +83,7 @@ class Pipeline:
 
         pred = self.toxicity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
-        classification = 'Toxic' if result[0][0] > .4 else 'Not toxic'
+        classification = "Toxic" if result[0][0] > 0.4 else "Not toxic"
         return result[0][0], classification
 
     def predict_toxicity_multiple(self, texts):
@@ -94,5 +96,5 @@ class Pipeline:
 
         preds = self.toxicity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ['Toxic' if pred > .4 else 'Not toxic' for pred in preds]
+        classifications = ["Toxic" if pred > 0.4 else "Not toxic" for pred in preds]
         return preds, classifications

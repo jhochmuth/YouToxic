@@ -8,6 +8,6 @@ import youtoxic.app.api.twitter_usernames
 from youtoxic.app.context import app
 
 
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def index():
-    return render_template('index.html', title='Home')
+    return render_template("index.html", title="Home")

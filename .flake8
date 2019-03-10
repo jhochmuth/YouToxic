@@ -1,0 +1,10 @@
+[flake8]
+ignore = E203, E266, E501, W503, N806
+max-line-length = 88
+max-complexity = 18
+exclude=
+    .git,
+    dist,
+    *egg,
+    build,
+    *pb2*.py

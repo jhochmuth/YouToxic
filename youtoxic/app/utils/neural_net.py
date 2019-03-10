@@ -13,7 +13,7 @@ import torch.nn.functional as F
 
 embedding_dim = 300
 use_pretrained_embedding = True
-embedding_matrix = np.load('youtoxic/app/models/embedding_matrix/embedding_matrix.npy')
+embedding_matrix = np.load("youtoxic/app/models/embedding_matrix/embedding_matrix.npy")
 
 hidden_size = 60
 gru_len = hidden_size
@@ -45,14 +45,16 @@ class Embed_Layer(nn.Module):
 class GRU_Layer(nn.Module):
     def __init__(self):
         super(GRU_Layer, self).__init__()
-        self.gru = nn.GRU(input_size=300,
-                          hidden_size=gru_len,
-                          bidirectional=True)
+        self.gru = nn.GRU(input_size=300, hidden_size=gru_len, bidirectional=True)
 
     def init_weights(self):
-        ih = (param.data for name, param in self.named_parameters() if 'weight_ih' in name)
-        hh = (param.data for name, param in self.named_parameters() if 'weight_hh' in name)
-        b = (param.data for name, param in self.named_parameters() if 'bias' in name)
+        ih = (
+            param.data for name, param in self.named_parameters() if "weight_ih" in name
+        )
+        hh = (
+            param.data for name, param in self.named_parameters() if "weight_hh" in name
+        )
+        b = (param.data for name, param in self.named_parameters() if "bias" in name)
         for k in ih:
             nn.init.xavier_uniform_(k)
         for k in hh:
@@ -65,9 +67,17 @@ class GRU_Layer(nn.Module):
 
 
 class Caps_Layer(nn.Module):
-    def __init__(self, input_dim_capsule=gru_len * 2, num_capsule=Num_capsule, dim_capsule=Dim_capsule,
-                 routings=Routings, kernel_size=(9, 1), share_weights=True,
-                 activation='default', **kwargs):
+    def __init__(
+        self,
+        input_dim_capsule=gru_len * 2,
+        num_capsule=Num_capsule,
+        dim_capsule=Dim_capsule,
+        routings=Routings,
+        kernel_size=(9, 1),
+        share_weights=True,
+        activation="default",
+        **kwargs
+    ):
         super(Caps_Layer, self).__init__(**kwargs)
 
         self.num_capsule = num_capsule
@@ -75,28 +85,37 @@ class Caps_Layer(nn.Module):
         self.routings = routings
         self.kernel_size = kernel_size
         self.share_weights = share_weights
-        if activation == 'default':
+        if activation == "default":
             self.activation = self.squash
         else:
             self.activation = nn.ReLU(inplace=True)
 
         if self.share_weights:
             self.W = nn.Parameter(
-                nn.init.xavier_normal_(torch.empty(1, input_dim_capsule, self.num_capsule * self.dim_capsule)))
+                nn.init.xavier_normal_(
+                    torch.empty(
+                        1, input_dim_capsule, self.num_capsule * self.dim_capsule
+                    )
+                )
+            )
         else:
             self.W = nn.Parameter(
-                torch.randn(BATCH_SIZE, input_dim_capsule, self.num_capsule * self.dim_capsule))
+                torch.randn(
+                    BATCH_SIZE, input_dim_capsule, self.num_capsule * self.dim_capsule
+                )
+            )
 
     def forward(self, x):
         if self.share_weights:
             u_hat_vecs = torch.matmul(x, self.W)
         else:
-            print('add later')
+            print("add later")
 
         batch_size = x.size(0)
         input_num_capsule = x.size(1)
-        u_hat_vecs = u_hat_vecs.view((batch_size, input_num_capsule,
-                                      self.num_capsule, self.dim_capsule))
+        u_hat_vecs = u_hat_vecs.view(
+            (batch_size, input_num_capsule, self.num_capsule, self.dim_capsule)
+        )
         u_hat_vecs = u_hat_vecs.permute(0, 2, 1, 3)
         b = torch.zeros_like(u_hat_vecs[:, :, :, 0])
 
@@ -105,9 +124,9 @@ class Caps_Layer(nn.Module):
             c = F.softmax(b, dim=2)
             c = c.permute(0, 2, 1)
             b = b.permute(0, 2, 1)
-            outputs = self.activation(torch.einsum('bij,bijk->bik', (c, u_hat_vecs)))
+            outputs = self.activation(torch.einsum("bij,bijk->bik", (c, u_hat_vecs)))
             if i < self.routings - 1:
-                b = torch.einsum('bik,bijk->bij', (outputs, u_hat_vecs))
+                b = torch.einsum("bik,bijk->bij", (outputs, u_hat_vecs))
         return outputs
 
     def squash(self, x, axis=-1):
@@ -155,10 +174,9 @@ class Attention(nn.Module):
         feature_dim = self.feature_dim
         step_dim = self.step_dim
 
-        eij = torch.mm(
-            x.contiguous().view(-1, feature_dim),
-            self.weight
-        ).view(-1, step_dim)
+        eij = torch.mm(x.contiguous().view(-1, feature_dim), self.weight).view(
+            -1, step_dim
+        )
 
         if self.bias:
             eij = eij + self.b
@@ -183,12 +201,18 @@ class NeuralNet(nn.Module):
         fc_layer1 = 16
 
         self.embedding = nn.Embedding(max_features, embedding_dim)
-        self.embedding.weight = nn.Parameter(torch.tensor(embedding_matrix, dtype=torch.float32))
+        self.embedding.weight = nn.Parameter(
+            torch.tensor(embedding_matrix, dtype=torch.float32)
+        )
         self.embedding.weight.requires_grad = False
 
         self.embedding_dropout = nn.Dropout2d(0.0)
-        self.lstm = nn.LSTM(embedding_dim, hidden_size, bidirectional=True, batch_first=True)
-        self.gru = nn.GRU(hidden_size * 2, hidden_size, bidirectional=True, batch_first=True)
+        self.lstm = nn.LSTM(
+            embedding_dim, hidden_size, bidirectional=True, batch_first=True
+        )
+        self.gru = nn.GRU(
+            hidden_size * 2, hidden_size, bidirectional=True, batch_first=True
+        )
 
         self.lstm_attention = Attention(hidden_size * 2, maxlen)
         self.gru_attention = Attention(hidden_size * 2, maxlen)
@@ -204,7 +228,8 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         h_embedding = self.embedding(x[0])
         h_embedding = torch.squeeze(
-            self.embedding_dropout(torch.unsqueeze(h_embedding, 0)))
+            self.embedding_dropout(torch.unsqueeze(h_embedding, 0))
+        )
         if len(list(h_embedding.shape)) < 3:
             h_embedding = h_embedding.expand(1, -1, -1)
 
@@ -229,7 +254,9 @@ class NeuralNet(nn.Module):
 
         f = torch.tensor(x[1], dtype=torch.float)
 
-        conc = torch.cat((h_lstm_atten, h_gru_atten, content3, avg_pool, max_pool, f), 1)
+        conc = torch.cat(
+            (h_lstm_atten, h_gru_atten, content3, avg_pool, max_pool, f), 1
+        )
         conc = self.relu(self.linear(conc))
         conc = self.bn(conc)
         conc = self.dropout(conc)
