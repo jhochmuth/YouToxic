@@ -27,6 +27,11 @@ def get_tweet_classifications():
             "Identity hate"
         ] = pipeline.predict_identity_hate_multiple(texts)
         pred_types.append("Identity hate")
+    if "obscene" in session["types"]:
+        preds["Obscenity"], classes[
+            "Obscenity"
+        ] = pipeline.predict_obscenity_multiple(texts)
+        pred_types.append("Obscenity")
     return render_template(
         "tweet_classifications.html",
         title="Results",

@@ -91,6 +91,19 @@ class Pipeline:
         classification = "Obscene" if result[0][0] > 0.4 else "Not obscene"
         return result[0][0], classification
 
+    def predict_obscenity_multiple(self, texts):
+        x = self.tokenizer.texts_to_sequences(texts)
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features(texts)
+        features = self.standardize_features(features)
+
+        preds = self.obscenity_model([x, features]).detach()
+        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        classifications = ["Obscene" if pred > 0.4 else "Not obscene" for pred in preds]
+        return preds, classifications
+
     def predict_toxicity(self, text):
         x = self.tokenizer.texts_to_sequences([text])
         x = pad_sequences(x, maxlen=70)

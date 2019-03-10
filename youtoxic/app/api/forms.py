@@ -30,7 +30,7 @@ class TwitterAccountForm(FlaskForm):
     )
     types = SelectMultipleField(
         "Select classes of toxicity to predict",
-        choices=[("toxic", "Toxic"), ("identity", "Identity hate")],
+        choices=[("toxic", "Toxic"), ("identity", "Identity hate"), ("obscene", "Obscene")],
     )
     submit = SubmitField("Collect tweets")
 
