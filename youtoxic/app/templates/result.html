@@ -6,8 +6,8 @@
     <p>Text analyzed: {{ text }}</p>
     <br>
     {% for type in types %}
-        <p>{{ type }} classification: {{ classes[type] }}</p>
-        <p>{{ type }} prediction: {{ preds[type] }}</p>
+        <p>{{ type }} classification: <div id="judgement">{{ classes[type] }}</div></p>
+        <p>{{ type }} prediction: <div id="prediction">{{ preds[type] }}</div></p>
         <br>
     {% endfor %}
     <a href="{{ url_for('get_texts') }}">Analyze another comment</a>

@@ -2,6 +2,8 @@ name: YouToxic
 channels:
   - defaults
 dependencies:
+  - atomicwrites=1.3.0=py_0
+  - attrs=18.2.0=py37h28b3542_0
   - blas=1.0=mkl
   - ca-certificates=2019.1.23=0
   - certifi=2018.11.29=py37_0
@@ -14,17 +16,22 @@ dependencies:
   - mkl=2019.1=144
   - mkl_fft=1.0.10=py37h5e564d8_0
   - mkl_random=1.0.2=py37h27c97d8_0
+  - more-itertools=5.0.0=py37_0
   - ncurses=6.1=h0a44026_1
   - numpy=1.16.2=py37hacdab7b_0
   - numpy-base=1.16.2=py37h6575580_0
   - openssl=1.1.1b=h1de35cc_0
   - pip=19.0.3=py37_0
+  - pluggy=0.9.0=py37_0
+  - py=1.8.0=py37_0
+  - pytest=4.3.0=py37_0
   - python=3.7.2=haf84260_0
   - pyyaml=3.13=py37h1de35cc_0
   - readline=7.0=h1de35cc_5
   - scikit-learn=0.20.2=py37h27c97d8_0
   - scipy=1.2.1=py37h1410ff5_0
   - setuptools=40.8.0=py37_0
+  - six=1.12.0=py37_0
   - sqlite=3.26.0=ha441bb4_0
   - tk=8.6.8=ha441bb4_0
   - wheel=0.33.1=py37_0
@@ -33,6 +40,7 @@ dependencies:
   - zlib=1.2.11=h1de35cc_3
   - pip:
     - alembic==1.0.7
+    - beautifulsoup4==4.7.1
     - chardet==3.0.4
     - click==7.0
     - dominate==2.3.5
@@ -53,7 +61,7 @@ dependencies:
     - python-editor==1.0.4
     - requests==2.21.0
     - requests-oauthlib==1.2.0
-    - six==1.12.0
+    - soupsieve==1.8
     - sqlalchemy==1.2.18
     - torch==1.0.1.post2
     - tweepy==3.7.0
