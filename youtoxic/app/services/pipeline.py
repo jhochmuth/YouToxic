@@ -63,7 +63,7 @@ class Pipeline:
         pred = self.identity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
         classification = "Identity hate" if result[0][0] > 0.4 else "Not identity hate"
-        return result[0][0], classification
+        return round(result[0][0], 3), classification
 
     def predict_identity_hate_multiple(self, texts):
         x = self.tokenizer.texts_to_sequences(texts)
@@ -89,7 +89,7 @@ class Pipeline:
         pred = self.insult_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
         classification = "Insult" if result[0][0] > 0.4 else "Not an insult"
-        return result[0][0], classification
+        return round(result[0][0], 3), classification
 
     def predict_insult_multiple(self, texts):
         x = self.tokenizer.texts_to_sequences(texts)
@@ -115,7 +115,7 @@ class Pipeline:
         pred = self.obscenity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
         classification = "Obscene" if result[0][0] > 0.4 else "Not obscene"
-        return result[0][0], classification
+        return round(result[0][0], 3), classification
 
     def predict_obscenity_multiple(self, texts):
         x = self.tokenizer.texts_to_sequences(texts)
@@ -141,7 +141,7 @@ class Pipeline:
         pred = self.toxicity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
         classification = "Toxic" if result[0][0] > 0.4 else "Not toxic"
-        return result[0][0], classification
+        return round(result[0][0], 3), classification
 
     def predict_toxicity_multiple(self, texts):
         x = self.tokenizer.texts_to_sequences(texts)
