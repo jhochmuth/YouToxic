@@ -16,7 +16,7 @@ class EnterTextForm(FlaskForm):
     text = StringField("Enter text", validators=[Length(min=2)])
     types = SelectMultipleField(
         "Select classes of toxicity to predict",
-        choices=[("toxic", "Toxic"), ("identity", "Identity hate"), ("obscene", "Obscene")],
+        choices=[("toxic", "Toxic"), ("identity", "Identity hate"), ("obscene", "Obscene"), ("insult", "Insult")],
     )
     submit = SubmitField("Calculate predicted toxicity")
 
@@ -30,7 +30,7 @@ class TwitterAccountForm(FlaskForm):
     )
     types = SelectMultipleField(
         "Select classes of toxicity to predict",
-        choices=[("toxic", "Toxic"), ("identity", "Identity hate"), ("obscene", "Obscene")],
+        choices=[("toxic", "Toxic"), ("identity", "Identity hate"), ("obscene", "Obscene"), ("insult", "Insult")],
     )
     submit = SubmitField("Collect tweets")
 

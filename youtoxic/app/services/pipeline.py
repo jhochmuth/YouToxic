@@ -17,9 +17,11 @@ class Pipeline:
         self.toxicity_model = torch.load("youtoxic/app/models/toxicity_model.pt")
         self.identity_model = torch.load("youtoxic/app/models/identity_model.pt")
         self.obscenity_model = torch.load("youtoxic/app/models/obscenity_model.pt")
+        self.insult_model = torch.load("youtoxic/app/models/insult_model.pt")
         self.toxicity_model.eval()
         self.identity_model.eval()
         self.obscenity_model.eval()
+        self.insult_model.eval()
 
         with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
@@ -73,9 +75,33 @@ class Pipeline:
 
         preds = self.identity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = [
-            "Identity hate" if pred > 0.4 else "Not identity hate" for pred in preds
-        ]
+        classifications = ["Identity hate" if pred > 0.4 else "Not identity hate" for pred in preds]
+        return preds, classifications
+
+    def predict_insult(self, text):
+        x = self.tokenizer.texts_to_sequences([text])
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features([text])
+        features = self.standardize_features(features)
+
+        pred = self.insult_model([x, features]).detach()
+        result = self.sigmoid(pred.numpy())
+        classification = "Insult" if result[0][0] > 0.4 else "Not an insult"
+        return result[0][0], classification
+
+    def predict_insult_multiple(self, texts):
+        x = self.tokenizer.texts_to_sequences(texts)
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features(texts)
+        features = self.standardize_features(features)
+
+        preds = self.insult_model([x, features]).detach()
+        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        classifications = ["Insult" if pred > 0.4 else "Not an insult" for pred in preds]
         return preds, classifications
 
     def predict_obscenity(self, text):
