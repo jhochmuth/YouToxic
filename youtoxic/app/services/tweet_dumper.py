@@ -23,7 +23,7 @@ def validate_username(screen_name):
         return True
 
 
-def get_all_tweets(screen_name, num_tweets=3240):
+def get_tweets(screen_name, num_tweets=3240):
     # Twitter only allows access to a users most recent 3240 tweets with this method
 
     # authorize twitter, initialize tweepy

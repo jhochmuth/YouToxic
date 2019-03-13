@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-
 from tests.unit.client import client  # noqa:
 
 
@@ -15,3 +14,6 @@ def test_get_text_classifications(client):  # noqa:
     prediction = soup.find_all(id="prediction")[0].string
     assert judgement == "Not toxic"
     assert 0 < float(prediction) < 1
+
+    session.pop("text", None)
+    session.pop("types", None)

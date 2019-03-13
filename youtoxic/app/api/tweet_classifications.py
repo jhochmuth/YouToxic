@@ -1,7 +1,7 @@
 from flask import render_template, session
 
 from youtoxic.app.context import app, pipeline
-from youtoxic.app.services.tweet_dumper import get_all_tweets
+from youtoxic.app.services.tweet_dumper import get_tweets
 
 
 @app.route("/tweet-classifications", methods=["GET"])
@@ -15,7 +15,7 @@ def get_tweet_classifications():
     session.pop("username", None)
     session.pop("num_tweets", None)
     session.pop("display", None)
-    tweets = get_all_tweets(username, num_tweets=num_tweets)
+    tweets = get_tweets(username, num_tweets=num_tweets)
     texts = [row[2] for row in tweets]
     if "toxic" in session["types"]:
         preds["Toxicity"], classes["Toxicity"] = pipeline.predict_toxicity_multiple(
