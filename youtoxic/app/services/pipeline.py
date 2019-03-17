@@ -52,32 +52,6 @@ class Pipeline:
     def sigmoid(x):
         return 1 / (1 + np.exp(-x))
 
-    def predict_identity_hate(self, text):
-        x = self.tokenizer.texts_to_sequences([text])
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = self.get_features([text])
-        features = self.standardize_features(features)
-
-        pred = self.identity_model([x, features]).detach()
-        result = self.sigmoid(pred.numpy())
-        classification = "Identity hate" if result[0][0] > 0.4 else "Not identity hate"
-        return round(result[0][0], 3), classification
-
-    def predict_identity_hate_multiple(self, texts):
-        x = self.tokenizer.texts_to_sequences(texts)
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = self.get_features(texts)
-        features = self.standardize_features(features)
-
-        preds = self.identity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ["Identity hate" if pred > 0.4 else "Not identity hate" for pred in preds]
-        return preds, classifications
-
     def predict_insult(self, text):
         x = self.tokenizer.texts_to_sequences([text])
         x = pad_sequences(x, maxlen=70)
@@ -128,6 +102,32 @@ class Pipeline:
         preds = self.obscenity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
         classifications = ["Obscene" if pred > 0.4 else "Not obscene" for pred in preds]
+        return preds, classifications
+
+    def predict_prejudice(self, text):
+        x = self.tokenizer.texts_to_sequences([text])
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features([text])
+        features = self.standardize_features(features)
+
+        pred = self.identity_model([x, features]).detach()
+        result = self.sigmoid(pred.numpy())
+        classification = "Prejudice" if result[0][0] > 0.4 else "Not prejudice"
+        return round(result[0][0], 3), classification
+
+    def predict_prejudice_multiple(self, texts):
+        x = self.tokenizer.texts_to_sequences(texts)
+        x = pad_sequences(x, maxlen=70)
+        x = torch.tensor(x, dtype=torch.long)
+
+        features = self.get_features(texts)
+        features = self.standardize_features(features)
+
+        preds = self.identity_model([x, features]).detach()
+        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        classifications = ["Prejudice" if pred > 0.4 else "Not prejudice" for pred in preds]
         return preds, classifications
 
     def predict_toxicity(self, text):
