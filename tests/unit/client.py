@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 import pytest
 
 import youtoxic.app.context as ctx
-from youtoxic.config import Config
+from youtoxic.app.config import Config
 
 
 @pytest.fixture
@@ -14,7 +14,5 @@ def client():
     app.config["TESTING"] = True
     client = app.test_client()
     bootstrap = Bootstrap(app)  # noqa:
-
-    from youtoxic.app import routes  # noqa:
 
     yield client

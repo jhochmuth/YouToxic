@@ -1,8 +1,6 @@
-import datetime
-
 import tweepy
 
-from youtoxic.config import Config
+from youtoxic.app.config import Config
 
 
 # Twitter API credentials

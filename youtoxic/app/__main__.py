@@ -38,6 +38,10 @@ url_bar_and_content_div = html.Div([
 ])
 
 
+def run():
+    dash_app.run_server(debug=True)
+
+
 def serve_layout():
     if flask.has_request_context():
         return url_bar_and_content_div
