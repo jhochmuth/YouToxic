@@ -17,7 +17,7 @@ import dash_html_components as html
 import flask
 from flask.helpers import get_root_path
 
-from utils.neural_net import NeuralNet, Attention, Caps_Layer
+from youtoxic.app.utils.neural_net import NeuralNet, Attention, Caps_Layer
 
 
 meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
