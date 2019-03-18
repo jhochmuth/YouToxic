@@ -5,8 +5,7 @@ from youtoxic.app.api.text_layout import text_layout
 from youtoxic.app.api.text_predictions import get_text_predictions
 from youtoxic.app.api.tweet_layout import tweet_layout
 from youtoxic.app.api.tweet_predictions import get_tweet_predictions
-
-from youtoxic.app.context import create_pipeline
+from youtoxic.app.services.pipeline import Pipeline
 
 import dash
 from dash.dependencies import Input, Output, State
@@ -20,17 +19,25 @@ from flask.helpers import get_root_path
 from youtoxic.app.utils.neural_net import NeuralNet, Attention, Caps_Layer
 
 
-meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
+def create_server():
+    meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
 
-dash_app = dash.Dash(__name__,
-                     url_base_pathname='/dash/',
-                     assets_folder=get_root_path(__name__) + '/assets/',
-                     meta_tags=[meta_viewport],
-                     external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
+    app = dash.Dash(__name__,
+                    url_base_pathname='/dash/',
+                    assets_folder=get_root_path(__name__) + '/assets/',
+                    meta_tags=[meta_viewport],
+                    external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
-dash_app.config['suppress_callback_exceptions'] = True
-dash_app.title = 'YouToxic'
-dash_app.layout = dash_layout
+    app.config['suppress_callback_exceptions'] = True
+    app.title = 'YouToxic'
+    app.layout = dash_layout
+
+    return app
+
+
+def create_pipeline():
+    return Pipeline()
+
 
 url_bar_and_content_div = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -38,21 +45,20 @@ url_bar_and_content_div = html.Div([
 ])
 
 
-def run():
-    dash_app.run_server(debug=True)
-
-
 def serve_layout():
     if flask.has_request_context():
         return url_bar_and_content_div
-    return html.Div([
-        url_bar_and_content_div,
-        dash_layout,
-        text_layout,
-        tweet_layout
-    ])
+
+    else:
+        return html.Div([
+            url_bar_and_content_div,
+            dash_layout,
+            text_layout,
+            tweet_layout
+        ])
 
 
+dash_app = create_server()
 dash_app.layout = serve_layout
 pipeline = create_pipeline()
 
