@@ -4,9 +4,25 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-class Config(object):
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "1234"
-    CONSUMER_KEY = os.environ['CONSUMER_KEY']
-    CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
-    ACCESS_KEY = os.environ['ACCESS_KEY']
-    ACCESS_SECRET = os.environ['ACCESS_SECRET']
+class Config:
+    def __init__(self):
+        self.CONSUMER_KEY = os.environ.get('CONSUMER_KEY') or ''
+        self.CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET') or ''
+        self.ACCESS_KEY = os.environ.get('ACCESS_KEY') or ''
+        self.ACCESS_SECRET = os.environ.get('ACCESS_SECRET') or ''
+
+    @property
+    def consumer_key(self):
+        return self.CONSUMER_KEY
+
+    @property
+    def consumer_secret(self):
+        return self.CONSUMER_SECRET
+
+    @property
+    def access_key(self):
+        return self.ACCESS_KEY
+
+    @property
+    def access_secret(self):
+        return self.ACCESS_SECRET

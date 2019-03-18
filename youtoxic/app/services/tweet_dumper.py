@@ -4,10 +4,11 @@ from youtoxic.app.config import Config
 
 
 # Twitter API credentials
-consumer_key = Config.CONSUMER_KEY
-consumer_secret = Config.CONSUMER_SECRET
-access_key = Config.ACCESS_KEY
-access_secret = Config.ACCESS_SECRET
+config = Config()
+consumer_key = config.consumer_key
+consumer_secret = config.consumer_secret
+access_key = config.access_key
+access_secret = config.access_secret
 
 
 def validate_username(screen_name):
