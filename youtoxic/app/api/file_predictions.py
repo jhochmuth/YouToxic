@@ -71,26 +71,27 @@ def get_file_predictions(contents, filename, types, pipeline):
 
     return html.Div([
         html.H5(filename),
-
-        dash_table.DataTable(
-            data=df.to_dict('rows'),
-            columns=table_columns,
-            id='table',
-            style_table={'border': 'thin black solid'},
-            style_header={'fontWeight': 'bold',
-                          'backgroundColor': 'rgb(150,150,150)',
-                          'textAlign': 'center'},
-            style_cell={'textAlign': 'left',
-                        'fontFamily': 'optima',
-                        'border': 'thin lightgrey solid',
-                        'padding': 15},
-            style_data={'whiteSpace': 'normal'},
-            css=[{'selector': '.dash-cell div.dash-cell-value',
-                  'rule': 'display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;'}],
-            merge_duplicate_headers=True,
-            pagination_mode='fe',
-            pagination_settings={'displayed_pages': 1,
-                                 'current_page': 0,
-                                 'page_size': 20}
-        ),
+        html.Div(
+            dash_table.DataTable(
+                data=df.to_dict('rows'),
+                columns=table_columns,
+                id='table',
+                style_table={'border': 'thin black solid'},
+                style_header={'fontWeight': 'bold',
+                              'backgroundColor': 'rgb(150,150,150)',
+                              'textAlign': 'center'},
+                style_cell={'textAlign': 'left',
+                            'fontFamily': 'optima',
+                            'border': 'thin lightgrey solid',
+                            'padding': 15},
+                style_data={'whiteSpace': 'normal'},
+                css=[{'selector': '.dash-cell div.dash-cell-value',
+                      'rule': 'display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;'}],
+                merge_duplicate_headers=True,
+                pagination_mode='fe',
+                pagination_settings={'displayed_pages': 1,
+                                     'current_page': 0,
+                                     'page_size': 20}
+            ),
+        )
     ])

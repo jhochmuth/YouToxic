@@ -1,15 +1,13 @@
 import dash_core_components as dcc
 import dash_html_components as html
 
-import datetime
+import dash_table
 
 from dateutil import parser
 
-import dash_table
-
 import pandas as pd
 
-from services.tweet_dumper import get_tweets, get_tweets_by_date, validate_username
+from youtoxic.app.services.tweet_dumper import get_tweets, get_tweets_by_date, validate_username
 
 
 def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, end_date, pipeline):
@@ -100,7 +98,7 @@ def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, e
             'displayed_pages': 1,
             'current_page': 0,
             'page_size': 25
-        }
+        },
     )
 
     y_values = dict()
@@ -168,9 +166,11 @@ def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, e
     if num_tweets > 3240:
         over_max_tweets_message = html.Div([
             html.P('You requested {} tweets, but Twitter limits the maximum to 3240.'.format(num_tweets)),
-            html.Br()
-        ])
+        ],
+            style={'marginBottom': '20'})
 
     return html.Div([
-        over_max_tweets_message, table, graph
+        html.Div(over_max_tweets_message),
+        html.Div(table, style={'overflowY': 'scroll', 'height': '500'}),
+        html.Div(graph)
     ])
