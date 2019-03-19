@@ -1,28 +1,41 @@
 import os
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 class Config:
     def __init__(self):
-        self.CONSUMER_KEY = os.environ.get('CONSUMER_KEY') or ''
-        self.CONSUMER_SECRET = os.environ.get('CONSUMER_SECRET') or ''
-        self.ACCESS_KEY = os.environ.get('ACCESS_KEY') or ''
-        self.ACCESS_SECRET = os.environ.get('ACCESS_SECRET') or ''
+        self.consumer_key = os.environ.get('CONSUMER_KEY') or ''
+        self.consumer_secret = os.environ.get('CONSUMER_SECRET') or ''
+        self.access_key = os.environ.get('ACCESS_KEY') or ''
+        self.access_secret = os.environ.get('ACCESS_SECRET') or ''
 
     @property
     def consumer_key(self):
-        return self.CONSUMER_KEY
+        return self.__consumer_key
+
+    @consumer_key.setter
+    def consumer_key(self, value):
+        self.__consumer_key = value
 
     @property
     def consumer_secret(self):
-        return self.CONSUMER_SECRET
+        return self.__consumer_secret
+
+    @consumer_secret.setter
+    def consumer_secret(self, value):
+        self.__consumer_secret = value
 
     @property
     def access_key(self):
-        return self.ACCESS_KEY
+        return self.__access_key
+
+    @access_key.setter
+    def access_key(self, value):
+        self.__access_key = value
 
     @property
     def access_secret(self):
-        return self.ACCESS_SECRET
+        return self.__access_secret
+
+    @access_secret.setter
+    def access_secret(self, value):
+        self.__access_secret = value
