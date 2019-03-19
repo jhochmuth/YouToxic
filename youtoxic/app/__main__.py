@@ -1,12 +1,3 @@
-from youtoxic.app.api.dash_layout import dash_layout
-from youtoxic.app.api.file_layout import file_layout
-from youtoxic.app.api.file_predictions import get_file_predictions
-from youtoxic.app.api.text_layout import text_layout
-from youtoxic.app.api.text_predictions import get_text_predictions
-from youtoxic.app.api.tweet_layout import tweet_layout
-from youtoxic.app.api.tweet_predictions import get_tweet_predictions
-from youtoxic.app.services.pipeline import Pipeline
-
 import dash
 from dash.dependencies import Input, Output, State
 
@@ -16,6 +7,14 @@ import dash_html_components as html
 import flask
 from flask.helpers import get_root_path
 
+from youtoxic.app.api.dash_layout import dash_layout
+from youtoxic.app.api.file_layout import file_layout
+from youtoxic.app.api.file_predictions import get_file_predictions
+from youtoxic.app.api.text_layout import text_layout
+from youtoxic.app.api.text_predictions import get_text_predictions
+from youtoxic.app.api.tweet_layout import tweet_layout
+from youtoxic.app.api.tweet_predictions import get_tweet_predictions
+from youtoxic.app.services.pipeline import Pipeline
 from youtoxic.app.utils.neural_net import NeuralNet, Attention, Caps_Layer
 
 
