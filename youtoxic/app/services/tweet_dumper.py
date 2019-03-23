@@ -57,7 +57,7 @@ def get_tweets(screen_name, num_tweets=3240):
 
     Returns
     -------
-    List
+    outtweets: List
         Each value of the list is a separate list containing a single tweet's ID, date created, and full text.
 
     """
@@ -146,7 +146,7 @@ def get_tweets_by_date(screen_name, start_date, end_date, num_tweets=3240):
 
         Returns
         -------
-        List
+        outtweets: List
             Each value of the list is a separate list containing a single tweet's ID, date created, and full text.
 
         """
