@@ -1,3 +1,5 @@
+"""Defines page layout for analysis by file."""
+
 import dash_core_components as dcc
 import dash_html_components as html
 

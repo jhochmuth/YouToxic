@@ -1,3 +1,5 @@
+"""Implements the method for predicting toxicity types of manually-entered text."""
+
 import dash_html_components as html
 
 import dash_table
@@ -6,6 +8,24 @@ import pandas as pd
 
 
 def get_text_predictions(text, types, pipeline):
+    """Returns the predictions for the supplied text.
+
+    Parameters
+    ----------
+    text: basestring
+        The text to predict.
+
+    types: List
+        The types of toxicity to make prediction for.
+
+    pipeline: Object
+        The pipeline object.
+
+    Returns
+    -------
+        The html layout for the subsection of the page that contains the results.
+
+    """
     if not text:
         return html.Div('Error: You must enter some text.',
                         style={'color': 'rgb(255, 0, 0'})

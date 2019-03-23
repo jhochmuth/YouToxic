@@ -7,7 +7,6 @@ import torch.nn.functional as f
 
 embedding_dim = 300
 use_pretrained_embedding = True
-embedding_matrix = np.load("youtoxic/app/models/embedding_matrix/embedding_matrix.npy")
 
 hidden_size = 60
 gru_len = hidden_size
@@ -191,12 +190,15 @@ class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
 
+        self.embedding_matrix = np.load("youtoxic/app/models/embedding_matrix/embedding_matrix.npy")
+
+
         fc_layer = 16
         fc_layer1 = 16
 
         self.embedding = nn.Embedding(max_features, embedding_dim)
         self.embedding.weight = nn.Parameter(
-            torch.tensor(embedding_matrix, dtype=torch.float32)
+            torch.tensor(self.embedding_matrix, dtype=torch.float32)
         )
         self.embedding.weight.requires_grad = False
 
