@@ -67,11 +67,26 @@ tweet_layout = html.Div([
                 ),
             ]),
         ],
-            className='seven columns'),
+            className='three columns'),
         ],
-        className='row'
+        className='row',
+        style={'marginBottom': '20'}
     ),
     html.Div([
         html.Button('Submit', id='button')
     ], className='eleven columns')
 ])
+
+
+"""        html.Div([
+            dcc.RadioItems(
+                id='limit-by-toxicity',
+                options=[
+                    {'label': 'All', 'value': 'all'},
+                    {'label': 'Toxic Only', 'value': 'toxic'}
+                ],
+                value='all',
+
+            )
+        ],
+            className='three columns'),"""
