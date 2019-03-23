@@ -3,10 +3,10 @@ import os
 
 class Config:
     def __init__(self):
-        self.consumer_key = os.environ.get('CONSUMER_KEY') or ''
-        self.consumer_secret = os.environ.get('CONSUMER_SECRET') or ''
-        self.access_key = os.environ.get('ACCESS_KEY') or ''
-        self.access_secret = os.environ.get('ACCESS_SECRET') or ''
+        self.consumer_key = os.environ.get("CONSUMER_KEY") or ""
+        self.consumer_secret = os.environ.get("CONSUMER_SECRET") or ""
+        self.access_key = os.environ.get("ACCESS_KEY") or ""
+        self.access_secret = os.environ.get("ACCESS_SECRET") or ""
 
     @property
     def consumer_key(self):

@@ -176,7 +176,9 @@ def get_tweets_by_date(screen_name, start_date, end_date, num_tweets=3240):
     # Search for first tweet created before end_date.
     while current_tweet_date > end_date:
         # Get most recent 200 tweets that have not been examined yet.
-        new_tweets = api.user_timeline(screen_name=screen_name, count=200, max_id=oldest)
+        new_tweets = api.user_timeline(
+            screen_name=screen_name, count=200, max_id=oldest
+        )
 
         # If all tweets have been examined, return none.
         if new_tweets is None:

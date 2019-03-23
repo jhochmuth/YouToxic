@@ -193,8 +193,9 @@ class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
 
-        self.embedding_matrix = np.load("youtoxic/app/models/embedding_matrix/embedding_matrix.npy")
-
+        self.embedding_matrix = np.load(
+            "youtoxic/app/models/embedding_matrix/embedding_matrix.npy"
+        )
 
         fc_layer = 16
         fc_layer1 = 16

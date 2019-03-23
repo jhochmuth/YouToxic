@@ -139,7 +139,9 @@ class Pipeline:
 
         preds = self.insult_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ["Insult" if pred > self.threshold else "Not an insult" for pred in preds]
+        classifications = [
+            "Insult" if pred > self.threshold else "Not an insult" for pred in preds
+        ]
         return preds, classifications
 
     def predict_obscenity(self, text):
@@ -197,7 +199,9 @@ class Pipeline:
 
         preds = self.obscenity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ["Obscene" if pred > self.threshold else "Not obscene" for pred in preds]
+        classifications = [
+            "Obscene" if pred > self.threshold else "Not obscene" for pred in preds
+        ]
         return preds, classifications
 
     def predict_prejudice(self, text):
@@ -226,7 +230,9 @@ class Pipeline:
 
         pred = self.identity_model([x, features]).detach()
         result = self.sigmoid(pred.numpy())
-        classification = "Prejudice" if result[0][0] > self.threshold else "Not prejudice"
+        classification = (
+            "Prejudice" if result[0][0] > self.threshold else "Not prejudice"
+        )
         return round(result[0][0], 3), classification
 
     def predict_prejudice_multiple(self, texts):
@@ -255,7 +261,9 @@ class Pipeline:
 
         preds = self.identity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ["Prejudice" if pred > self.threshold else "Not prejudice" for pred in preds]
+        classifications = [
+            "Prejudice" if pred > self.threshold else "Not prejudice" for pred in preds
+        ]
         return preds, classifications
 
     def predict_toxicity(self, text):
@@ -313,5 +321,7 @@ class Pipeline:
 
         preds = self.toxicity_model([x, features]).detach()
         preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
-        classifications = ["Toxic" if pred > self.threshold else "Not toxic" for pred in preds]
+        classifications = [
+            "Toxic" if pred > self.threshold else "Not toxic" for pred in preds
+        ]
         return preds, classifications
