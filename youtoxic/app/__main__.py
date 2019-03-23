@@ -1,3 +1,5 @@
+"""Contains functionality for running the app."""
+
 import dash
 from dash.dependencies import Input, Output, State
 
@@ -19,6 +21,7 @@ from youtoxic.app.utils.neural_net import NeuralNet, Attention, Caps_Layer
 
 
 def create_server():
+    """Creates the dash app instance."""
     meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
 
     app = dash.Dash(__name__,
@@ -35,6 +38,7 @@ def create_server():
 
 
 def create_pipeline():
+    """Creates the pipeline object."""
     return Pipeline()
 
 
@@ -45,6 +49,7 @@ url_bar_and_content_div = html.Div([
 
 
 def serve_layout():
+    """Serves general layout to dash app."""
     if flask.has_request_context():
         return url_bar_and_content_div
 
@@ -66,6 +71,18 @@ pipeline = create_pipeline()
     Output('page-content', 'children'),
     [Input('url', 'pathname')])
 def display_page(pathname):
+    """Callback function to inform app of which page to display.
+
+    Parameters
+    ----------
+    pathname: str
+        The pathname of the page to display.
+
+    Returns
+    -------
+        The layout corresponding to the requested pathname.
+
+    """
     if pathname == '/texts':
         return text_layout
     if pathname == '/tweets':
@@ -81,6 +98,24 @@ def display_page(pathname):
     [Input('button', 'n_clicks')],
     [State('input-text', 'value'), State('types', 'values')])
 def update_output(n_clicks, text, types):
+    """Callback function to display prediction results of manual text entry.
+
+    Parameters
+    ----------
+    n_clicks: int
+        Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
+
+    text: str
+        The text to make a prediction for.
+
+    types:
+        The types of toxicity to predict for.
+
+    Returns
+    -------
+       The html layout for the subsection of the page that contains results.
+
+    """
     if n_clicks is not None:
         return get_text_predictions(text, types, pipeline)
 
@@ -95,6 +130,36 @@ def update_output(n_clicks, text, types):
      State('date-picker', 'start_date'),
      State('date-picker', 'end_date')])
 def update_output(n_clicks, username, num_tweets, types, limit_date, start_date, end_date):
+    """Callback function to display prediction results of a Twitter username search.
+
+    Parameters
+    ----------
+    n_clicks: int
+        Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
+
+    username: str
+        The Twitter user to collect tweets from.
+
+    num_tweets: int
+        The maximum number of tweets to analyze.
+
+    types:
+        The types of toxicity to predict for.
+
+    limit_date: str
+        Whether to get tweets between a certain date range ('date') or the most recent tweets ('all').
+
+    start_date: Datetime
+        The beginning value of the date range. Only matters if limit_date == 'date'.
+
+    end_date: Datetime
+        The ending value of the date range. Only matters if limit_date == 'date'.
+
+    Returns
+    -------
+       The html layout for the subsection of the page that contains results.
+
+    """
     if n_clicks is not None:
         return get_tweet_predictions(username, num_tweets, types, limit_date, start_date, end_date, pipeline)
 
@@ -103,6 +168,19 @@ def update_output(n_clicks, username, num_tweets, types, limit_date, start_date,
     Output('date-picker', 'style'),
     [Input('limit-by-date', 'value')])
 def toggle_date_picker(toggle_value):
+    """Callback function to inform app if tweet_layout should display date range selector.
+
+    Parameters
+    ----------
+    toggle_value: str
+        Whether to display date range selector ('date') or not ('all').
+
+    Returns
+    -------
+    dict
+        Display is set to 'block' if date range selector should be displayed, 'none' otherwise.
+
+    """
     if toggle_value == 'date':
         return {'display': 'block'}
     else:
@@ -116,6 +194,24 @@ def toggle_date_picker(toggle_value):
      State('types', 'values')]
 )
 def update_output(contents, filename, types):
+    """Callback function to display prediction results of file analysis.
+
+    Parameters
+    ----------
+    contents: str
+        Contents of the uploaded file.
+
+    filename: str
+        The name of the file.
+
+    types: List
+        The types of toxicity to predict for.
+
+    Returns
+    -------
+        The html layout for the subsection of the page that contains results.
+
+    """
     if contents is not None:
         return get_file_predictions(contents, filename, types, pipeline)
 

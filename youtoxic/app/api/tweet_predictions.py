@@ -18,7 +18,7 @@ def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, e
     Parameters
     ----------
     username: str
-        The text to predict.
+        The Twitter user to collect tweets from.
 
     num_tweets: int
         The maximum number of tweets to analyze.
@@ -26,21 +26,21 @@ def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, e
     types: List
         The types of toxicity to predict for.
 
-    limit_date: bool
-        Whether to get tweets between a certain date range (true) or the most recent tweets (false).
+    limit_date: str
+        Whether to get tweets between a certain date range ('date') or the most recent tweets ('all').
 
     start_date: Datetime
-        Minimum date for date-limited collection.
+        Minimum date for date-limited collection. Only matters if limit_date == 'date'.
 
     end_date: Datetime
-        Maximum date for date-limited collection.
+        Maximum date for date-limited collection. Only matters if limit_date == 'date'.
 
     pipeline: Object
         The pipeline object used to make predictions.
 
     Returns
     -------
-        The html layout for the subsection of the page that contains the results.
+        The html layout for the subsection of the page that contains results.
 
     """
     if limit_date == 'date' and (not start_date or not end_date):

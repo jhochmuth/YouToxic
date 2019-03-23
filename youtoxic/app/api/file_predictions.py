@@ -30,7 +30,7 @@ def get_file_predictions(contents, filename, types, pipeline):
 
     Returns
     -------
-        The html layout for the subsection of the page that contains the results.
+        The html layout for the subsection of the page that contains results.
 
     """
     content_type, content_string = contents.split(',')

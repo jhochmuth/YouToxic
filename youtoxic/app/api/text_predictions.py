@@ -13,7 +13,7 @@ def get_text_predictions(text, types, pipeline):
     Parameters
     ----------
     text: str
-        The text to predict.
+        The text to make a prediction for.
 
     types: List
         The types of toxicity to predict for.
@@ -23,7 +23,7 @@ def get_text_predictions(text, types, pipeline):
 
     Returns
     -------
-        The html layout for the subsection of the page that contains the results.
+        The html layout for the subsection of the page that contains results.
 
     """
     if not text:
