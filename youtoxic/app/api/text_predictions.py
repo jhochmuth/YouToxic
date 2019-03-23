@@ -1,4 +1,4 @@
-"""Implements the method for predicting toxicity types of manually-entered text."""
+"""For predicting the toxicity of manually-entered text."""
 
 import dash_html_components as html
 
@@ -8,18 +8,18 @@ import pandas as pd
 
 
 def get_text_predictions(text, types, pipeline):
-    """Returns the predictions for the supplied text.
+    """Returns the toxicity predictions for the entered text.
 
     Parameters
     ----------
-    text: basestring
+    text: str
         The text to predict.
 
     types: List
-        The types of toxicity to make prediction for.
+        The types of toxicity to predict for.
 
     pipeline: Object
-        The pipeline object.
+        The pipeline object used to make predictions.
 
     Returns
     -------

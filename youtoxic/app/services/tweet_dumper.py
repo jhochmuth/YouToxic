@@ -1,3 +1,5 @@
+"""Collects tweets from a specified Twitter user."""
+
 import tweepy
 
 from youtoxic.app.config import Config
@@ -12,6 +14,19 @@ access_secret = config.access_secret
 
 
 def validate_username(screen_name):
+    """Validates that a Twitter user with specified name exists.
+
+    Parameters
+    ----------
+    screen_name: String
+        The username to search for.
+
+    Returns
+    -------
+    bool
+        True if user with that name exists, False otherwise.
+
+    """
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
@@ -25,7 +40,27 @@ def validate_username(screen_name):
 
 
 def get_tweets(screen_name, num_tweets=3240):
-    # Twitter only allows access to a users most recent 3240 tweets with this method.
+    """Returns a list of tweets from a specified Twitter user.
+
+    Notes
+    -----
+    Twitter only allows the most recent 3240 tweets to be collected.
+    Retweets are excluded.
+
+    Parameters
+    ----------
+    screen_name: String
+        The Twitter user to collect tweets from.
+
+    num_tweets: int
+        The number of tweets to collect
+
+    Returns
+    -------
+    List
+        Each value of the list is a separate list containing a single tweet's ID, date created, and full text.
+
+    """
 
     # Authorize twitter and initialize tweepy.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -88,7 +123,33 @@ def get_tweets(screen_name, num_tweets=3240):
 
 
 def get_tweets_by_date(screen_name, start_date, end_date, num_tweets=3240):
-    # Note: Twitter only allows access to a user's most recent 3240 tweets with this method.
+    """Returns a list of tweets created within the specified date range from a Twitter user.
+
+        Notes
+        -----
+        Twitter only allows the most recent 3240 tweets to be collected.
+        Retweets are excluded.
+
+        Parameters
+        ----------
+        screen_name: String
+            The Twitter user to collect tweets from.
+
+        start_date: Datetime.Date
+            The beginning value of the date range.
+
+        end_date: Datetime.Date
+            The ending value of the date range.
+
+        num_tweets: int
+            The number of tweets to collect
+
+        Returns
+        -------
+        List
+            Each value of the list is a separate list containing a single tweet's ID, date created, and full text.
+
+        """
 
     # Authorize twitter and initialize tweepy.
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)

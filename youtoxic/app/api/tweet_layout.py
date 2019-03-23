@@ -1,9 +1,11 @@
 """Defines page layout for analysis of tweets."""
+
 import datetime
 
 import dash_core_components as dcc
 
 import dash_html_components as html
+
 
 tweet_layout = html.Div(
     [

@@ -1,3 +1,5 @@
+"""For predicting the toxicities of tweets of a specified Twitter user."""
+
 import dash_core_components as dcc
 import dash_html_components as html
 
@@ -11,6 +13,36 @@ from youtoxic.app.services.tweet_dumper import get_tweets, get_tweets_by_date, v
 
 
 def get_tweet_predictions(username, num_tweets, types, limit_date, start_date, end_date, pipeline):
+    """Returns the toxicity predictions for tweets of a specified twitter user.
+
+    Parameters
+    ----------
+    username: str
+        The text to predict.
+
+    num_tweets: int
+        The maximum number of tweets to analyze.
+
+    types: List
+        The types of toxicity to predict for.
+
+    limit_date: bool
+        Whether to get tweets between a certain date range (true) or the most recent tweets (false).
+
+    start_date: Datetime
+        Minimum date for date-limited collection.
+
+    end_date: Datetime
+        Maximum date for date-limited collection.
+
+    pipeline: Object
+        The pipeline object used to make predictions.
+
+    Returns
+    -------
+        The html layout for the subsection of the page that contains the results.
+
+    """
     if limit_date == 'date' and (not start_date or not end_date):
         return html.Div('Error: You must specify a date range if selecting to limit by date.',
                         style={'color': 'rgb(255, 0, 0'})

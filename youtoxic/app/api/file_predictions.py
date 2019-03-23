@@ -1,3 +1,5 @@
+"""For predicting the toxicities of texts given in file form."""
+
 import base64
 
 import dash_html_components as html
@@ -10,6 +12,27 @@ import pandas as pd
 
 
 def get_file_predictions(contents, filename, types, pipeline):
+    """Returns the toxicity predictions for the texts contained in a csv or xls file.
+
+    Parameters
+    ----------
+    contents: str
+        Contents of the uploaded file.
+
+    filename: str
+        The name of the file.
+
+    types: List
+        The types of toxicity to predict for.
+
+    pipeline: Object
+        The pipeline object used to make predictions.
+
+    Returns
+    -------
+        The html layout for the subsection of the page that contains the results.
+
+    """
     content_type, content_string = contents.split(',')
 
     decoded = base64.b64decode(content_string)
