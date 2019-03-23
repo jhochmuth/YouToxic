@@ -10,11 +10,7 @@ import torch
 
 
 class Pipeline:
-    """This object initializes all models and makes the actual predictions."""
-    toxicity_model = None
-    identity_model = None
-    tokenizer = None
-    embeddings = None
+    """This object loads all models and makes the actual predictions."""
 
     def __init__(self):
         """Initializes pipeline object by loading models and tokenizer."""

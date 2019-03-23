@@ -1,3 +1,6 @@
+"""Contains the implementation of the neural network used by all models."""
+
+
 import numpy as np
 
 import torch

@@ -1,3 +1,6 @@
+"""Todo: Delete this file after LFS is enabled."""
+
+
 def create_model():
     files = list()
     files.append("models/model_1.pt")
