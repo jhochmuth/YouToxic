@@ -52,6 +52,9 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/source
+!./docs/source/conf.py
+!./docs/source/index.rst
 
 
 # PyCharm gitignore:
@@ -75,3 +78,6 @@ docs/_build/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+# PyTorch Models
+youtoxic/app/models/*.pt
+youtoxic/app/models/embedding_matrix/embedding_matrix.npy
