@@ -8,7 +8,12 @@ setup(
     author='Julius Hochmuth',
     description='A Python Flask Web Server that predicts the toxicity of text using Deep Learning.',
     url='https://github.com/jhochmuth/YouToxic',
-    packages=find_packages(),
+    package_data={
+        'youtoxic.app.models': ['*'],
+        'youtoxic.app.models.embedding_matrix': ['*']
+    },
+    include_package_date=True,
+    packages=find_packages(exclude=["tests"]),
     license='Apache 2.0',
     long_description=open('README.md').read(),
     entry_points="""
