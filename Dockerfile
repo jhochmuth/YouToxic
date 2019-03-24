@@ -1,11 +1,12 @@
 # Use an official Python runtime as a parent image
-FROM continuumio/miniconda3
+FROM python:3.7.2
 
-# Copy the current directory contents into the container at /app
-COPY . .
+WORKDIR /app
 
-RUN conda env create --file environment.yml
-RUN conda activate YouToxic
+# Copy the current directory contents into the container
+COPY . /app
+
+RUN pip install -r requirements.txt
 RUN python setup.py install
 
 # Run __main__.py when the container launches

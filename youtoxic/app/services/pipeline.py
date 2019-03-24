@@ -8,26 +8,31 @@ import numpy as np
 
 import torch
 
+from youtoxic.app.utils.path import get_abs_path
+
 
 class Pipeline:
     """This object loads all models and makes the actual predictions."""
 
     def __init__(self):
         """Initializes pipeline object by loading models and tokenizer."""
-        self.toxicity_model = torch.load("youtoxic/app/models/toxicity_model.pt")
-        self.identity_model = torch.load("youtoxic/app/models/identity_model.pt")
-        self.obscenity_model = torch.load("youtoxic/app/models/obscenity_model.pt")
-        self.insult_model = torch.load("youtoxic/app/models/insult_model.pt")
+        import os
+        import youtoxic
+
+        p = os.path.dirname(youtoxic.__file__)
+        self.toxicity_model = torch.load(get_abs_path("app/models/toxicity_model.pt"))
+        self.identity_model = torch.load(get_abs_path("app/models/identity_model.pt"))
+        self.obscenity_model = torch.load(get_abs_path("app/models/obscenity_model.pt"))
+        self.insult_model = torch.load(get_abs_path("app/models/insult_model.pt"))
         self.toxicity_model.eval()
         self.identity_model.eval()
         self.obscenity_model.eval()
         self.insult_model.eval()
         self.threshold = 0.4
 
-        with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
+        with open(get_abs_path("app/utils/tokenizer.pickle"), "rb") as handle:
             self.tokenizer = pickle.load(handle)
 
-    # Note: models were trained when caps_vs_length feature was always 0.
     @staticmethod
     def get_features(texts):
         """Calculates extra features for specified texts.
@@ -74,7 +79,7 @@ class Pipeline:
             A list containing the standardized features.
 
         """
-        with open("youtoxic/app/utils/scalar.pickle", "rb") as handle:
+        with open(get_abs_path("app/utils/scalar.pickle"), "rb") as handle:
             ss = pickle.load(handle)
         features = ss.transform(features)
         return features
