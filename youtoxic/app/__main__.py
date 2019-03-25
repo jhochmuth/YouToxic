@@ -18,7 +18,6 @@ from youtoxic.app.api.text_predictions import get_text_predictions
 from youtoxic.app.api.tweet_layout import tweet_layout
 from youtoxic.app.api.tweet_predictions import get_tweet_predictions
 from youtoxic.app.services.pipeline import Pipeline
-from youtoxic.app.utils.neural_net import Attention, Caps_Layer, NeuralNet  # noqa
 
 
 def create_server():

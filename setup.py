@@ -3,16 +3,18 @@ from setuptools import find_packages
 
 
 setup(
-    name='YouToxic',
+    name='youtoxic',
     version='0.1',
     author='Julius Hochmuth',
-    description='A Python Flask Web Server that predicts the toxicity of text using Deep Learning.',
+    description='A Python Dash Server that predicts the toxicity of text using Deep Learning.',
     url='https://github.com/jhochmuth/YouToxic',
     package_data={
         'youtoxic.app.models': ['*'],
-        'youtoxic.app.models.embedding_matrix': ['*']
+        'youtoxic.app.models.embedding_matrix': ['*'],
+        'youtoxic.app.utils': ['*.pickle'],
+        'youtoxic.app.assets': ['*']
     },
-    include_package_date=True,
+    include_package_data=True,
     packages=find_packages(exclude=["tests"]),
     license='Apache 2.0',
     long_description=open('README.md').read(),
@@ -21,6 +23,6 @@ setup(
         youtoxic=youtoxic.app.__main__:main
     """,
     install_requires=[
-        "Flask"
+        "Dash"
     ]
 )

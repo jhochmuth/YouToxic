@@ -7,7 +7,8 @@ WORKDIR /app
 COPY . /app
 
 RUN pip install -r requirements.txt
+
 RUN python setup.py install
 
 # Run __main__.py when the container launches
-CMD ["python", "youtoxic/app/__main__.py", "runserver"]
+CMD ["youtoxic", "runserver"]

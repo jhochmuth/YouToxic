@@ -9,6 +9,7 @@ import numpy as np
 import torch
 
 from youtoxic.app.utils.path import get_abs_path
+from youtoxic.app.utils.neural_net import NeuralNet
 
 
 class Pipeline:
@@ -20,10 +21,13 @@ class Pipeline:
         import youtoxic
 
         p = os.path.dirname(youtoxic.__file__)
-        self.toxicity_model = torch.load(get_abs_path("app/models/toxicity_model.pt"))
-        self.identity_model = torch.load(get_abs_path("app/models/identity_model.pt"))
-        self.obscenity_model = torch.load(get_abs_path("app/models/obscenity_model.pt"))
-        self.insult_model = torch.load(get_abs_path("app/models/insult_model.pt"))
+        #self.toxicity_model = torch.load(get_abs_path("app/models/toxicity_model.pt"))
+        #self.identity_model = torch.load(get_abs_path("app/models/identity_model.pt"))
+        #self.obscenity_model = torch.load(get_abs_path("app/models/obscenity_model.pt"))
+        #self.insult_model = torch.load(get_abs_path("app/models/insult_model.pt"))
+        self.toxicity_model = NeuralNet()
+        self.toxicity_model.load_state_dict(torch.load("youtoxic/app/models/identity_model_state.pt"))
+        self.identity_model, self.obscenity_model, self.insult_model = self.toxicity_model, self.toxicity_model, self.toxicity_model
         self.toxicity_model.eval()
         self.identity_model.eval()
         self.obscenity_model.eval()
