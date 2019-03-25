@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as f
 
 
-embedding_dim = 300
+embedding_size = 300
 use_pretrained_embedding = True
 
 hidden_size = 60
@@ -16,7 +16,6 @@ gru_len = hidden_size
 Routings = 4
 Num_capsule = 5
 Dim_capsule = 5
-dropout_p = 0.25
 rate_drop_dense = 0.28
 LR = 0.001
 T_epsilon = 1e-7
@@ -26,9 +25,9 @@ maxlen = 70
 max_features = 95000
 
 
-class Embed_Layer(nn.Module):  # noqa:
+class EmbedLayer(nn.Module):
     def __init__(self, embedding_matrix=None, vocab_size=None, embedding_dim=300):
-        super(Embed_Layer, self).__init__()
+        super(EmbedLayer, self).__init__()
         self.encoder = nn.Embedding(vocab_size + 1, embedding_dim)
         if use_pretrained_embedding:
             self.encoder.weight.data.copy_(torch.from_numpy(embedding_matrix))
@@ -37,9 +36,9 @@ class Embed_Layer(nn.Module):  # noqa:
         return nn.Dropout(p=dropout_p)(self.encoder(x))
 
 
-class GRU_Layer(nn.Module):  # noqa:
+class GRULayer(nn.Module):
     def __init__(self):
-        super(GRU_Layer, self).__init__()
+        super(GRULayer, self).__init__()
         self.gru = nn.GRU(input_size=300, hidden_size=gru_len, bidirectional=True)
 
     def init_weights(self):
@@ -61,7 +60,7 @@ class GRU_Layer(nn.Module):  # noqa:
         return self.gru(x)
 
 
-class Caps_Layer(nn.Module):  # noqa:
+class CapsLayer(nn.Module):
     def __init__(
         self,
         input_dim_capsule=gru_len * 2,
@@ -73,7 +72,7 @@ class Caps_Layer(nn.Module):  # noqa:
         activation="default",
         **kwargs
     ):
-        super(Caps_Layer, self).__init__(**kwargs)
+        super(CapsLayer, self).__init__(**kwargs)
 
         self.num_capsule = num_capsule
         self.dim_capsule = dim_capsule
@@ -124,19 +123,20 @@ class Caps_Layer(nn.Module):  # noqa:
                 b = torch.einsum("bik,bijk->bij", (outputs, u_hat_vecs))
         return outputs
 
-    def squash(self, x, axis=-1):
+    @staticmethod
+    def squash(x, axis=-1):
         s_squared_norm = (x ** 2).sum(axis, keepdim=True)
         scale = torch.sqrt(s_squared_norm + T_epsilon)
         return x / scale
 
 
-class Capsule_Main(nn.Module):  # noqa:
+class CapsuleMain(nn.Module):
     def __init__(self, embedding_matrix=None, vocab_size=None):
-        super(Capsule_Main, self).__init__()
-        self.embed_layer = Embed_Layer(embedding_matrix, vocab_size)
-        self.gru_layer = GRU_Layer()
+        super(CapsuleMain, self).__init__()
+        self.embed_layer = EmbedLayer(embedding_matrix, vocab_size)
+        self.gru_layer = GRULayer()
         self.gru_layer.init_weights()
-        self.caps_layer = Caps_Layer()
+        self.caps_layer = CapsLayer()
         self.dense_layer = torch.Dense_Layer()
 
     def forward(self, content):
@@ -193,13 +193,13 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
 
         self.embedding_matrix = np.load(
-            "youtoxic/app/models/embedding_matrix/embedding_matrix.npy"
+            "youtoxic/app/models/embedding_matrix.npy"
         )
 
         fc_layer = 16
         fc_layer1 = 16
 
-        self.embedding = nn.Embedding(max_features, embedding_dim)
+        self.embedding = nn.Embedding(max_features, embedding_size)
         self.embedding.weight = nn.Parameter(
             torch.tensor(self.embedding_matrix, dtype=torch.float32)
         )
@@ -207,7 +207,7 @@ class NeuralNet(nn.Module):
 
         self.embedding_dropout = nn.Dropout2d(0.0)
         self.lstm = nn.LSTM(
-            embedding_dim, hidden_size, bidirectional=True, batch_first=True
+            embedding_size, hidden_size, bidirectional=True, batch_first=True
         )
         self.gru = nn.GRU(
             hidden_size * 2, hidden_size, bidirectional=True, batch_first=True
@@ -222,7 +222,7 @@ class NeuralNet(nn.Module):
         self.fc = nn.Linear(fc_layer ** 2, fc_layer)
         self.out = nn.Linear(fc_layer, 1)
         self.lincaps = nn.Linear(Num_capsule * Dim_capsule, 1)
-        self.caps_layer = Caps_Layer()
+        self.caps_layer = CapsLayer()
 
     def forward(self, x):
         h_embedding = self.embedding(x[0])
