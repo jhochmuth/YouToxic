@@ -79,7 +79,3 @@ docs/source
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-
-# PyTorch Models
-youtoxic/app/models/*.pt
-youtoxic/app/models/embedding_matrix/embedding_matrix.npy
