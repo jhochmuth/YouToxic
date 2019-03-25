@@ -1,5 +1,7 @@
 """Contains functionality for running the app."""
 
+import click
+
 import dash
 from dash.dependencies import Input, Output, State
 
@@ -38,6 +40,7 @@ def create_server():
     app.config["suppress_callback_exceptions"] = True
     app.title = "YouToxic"
     app.layout = dash_layout
+    app.css.append_css({"external_url": "./assets/stylesheet.css"})
 
     return app
 
@@ -220,4 +223,4 @@ def update_file_output(contents, filename, types):
         return get_file_predictions(contents, filename, types, pipeline)
 
 
-dash_app.run_server(debug=True)
+dash_app.run_server(debug=True, host='0.0.0.0')
