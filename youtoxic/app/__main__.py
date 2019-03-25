@@ -31,7 +31,7 @@ def create_server():
 
     app = dash.Dash(
         __name__,
-        url_base_pathname="/dash/",
+        url_base_pathname="/youtoxic/",
         assets_folder=get_root_path(__name__) + "/assets/",
         meta_tags=[meta_viewport],
         external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css"],
@@ -223,4 +223,18 @@ def update_file_output(contents, filename, types):
         return get_file_predictions(contents, filename, types, pipeline)
 
 
-dash_app.run_server(debug=True, host='0.0.0.0')
+@click.group()
+def main():
+    pass
+
+
+@main.command()
+@click.option('--debug', envvar='DEBUG', default=False, help='debug mode')
+@click.option('--host', envvar='HOST', default='127.0.0.1', help='host IP address')
+@click.option('--port', envvar='PORT', default=8050, help='port')
+def runserver(debug, host, port):
+    dash_app.run_server(debug=debug, host=host, port=port)
+
+
+if __name__ == "__main__":
+    main()

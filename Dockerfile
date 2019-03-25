@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt
 RUN python setup.py install
 
 # Run __main__.py when the container launches
-CMD ["youtoxic", "runserver"]
+CMD ["youtoxic", "runserver", "--host=0.0.0.0", "--port=8050"]
