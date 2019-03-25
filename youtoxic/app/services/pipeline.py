@@ -18,8 +18,15 @@ class Pipeline:
     def __init__(self):
         """Initializes pipeline object by loading models and tokenizer."""
         self.toxicity_model = NeuralNet()
+        self.identity_model = NeuralNet()
+        self.obscenity_model = NeuralNet()
+        self.insult_model = NeuralNet()
+
         self.toxicity_model.load_state_dict(torch.load("youtoxic/app/models/toxicity_model_state.pt"))
-        self.identity_model, self.obscenity_model, self.insult_model = self.toxicity_model, self.toxicity_model, self.toxicity_model
+        self.identity_model.load_state_dict(torch.load("youtoxic/app/models/identity_model_state.pt"))
+        self.obscenity_model.load_state_dict(torch.load("youtoxic/app/models/obscenity_model_state.pt"))
+        self.insult_model.load_state_dict(torch.load("youtoxic/app/models/insult_model_state.pt"))
+
         self.toxicity_model.eval()
         self.identity_model.eval()
         self.obscenity_model.eval()
