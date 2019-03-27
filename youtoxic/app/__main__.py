@@ -31,7 +31,7 @@ def create_server():
 
     app = dash.Dash(
         __name__,
-        url_base_pathname="/youtoxic/",
+        url_base_pathname="/",
         assets_folder=get_root_path(__name__) + "/assets/",
         meta_tags=[meta_viewport],
         external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css"],
