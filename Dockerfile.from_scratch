@@ -1,11 +1,14 @@
-# Get YouToxic image from Docker Hub
-FROM jhochmuth/youtoxic
+# Use an official Python runtime as a parent image
+FROM python:3.7.2
 
-# Set working directory.
+# Set working directory
 WORKDIR /app
 
 # Copy the current directory contents into the container
 COPY . /app
+
+# Install requirements
+RUN pip install -r requirements.txt
 
 # Run setup of YouToxic
 RUN python setup.py install
