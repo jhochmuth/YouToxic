@@ -1,0 +1,12 @@
+python-dateutil==2.8.0
+tweepy==3.7.0
+torch
+numpy==1.16.2
+pandas==0.24.2
+dash==0.39.0
+dash-core-components==0.44.0
+dash-html-components==0.14.0
+Keras-Preprocessing==1.0.9
+Click==7.0
+Flask==1.0.2
+scikit-learn==0.20.2

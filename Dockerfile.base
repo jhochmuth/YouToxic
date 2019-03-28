@@ -1,14 +1,14 @@
 # Use an official Python runtime as a parent image
-FROM python:3.7.2
+FROM python:3.7.2-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy the current directory contents into the container
-COPY ./requirements.txt /app
+COPY ./requirements-container.txt /app
 
 # Install requirements
-RUN pip install -r requirements.txt
+RUN pip install -r requirements-container.txt
 
 # Cleanup
 RUN rm -rf *
