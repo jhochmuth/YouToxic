@@ -9,4 +9,3 @@ pep8-naming==0.8.2
 pycodestyle==2.5.0
 pydocstyle==3.0.0
 pytest==4.3.0
--e git+https://github.com/jhochmuth/YouToxic.git@dfc650cce364a6f4857333fc19743459607762b6#egg=YouToxic
