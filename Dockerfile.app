@@ -1,5 +1,5 @@
 # Get YouToxic image from Docker Hub
-FROM jhochmuth/youtoxic
+FROM jhochmuth/youtoxic-base
 
 # Set working directory.
 WORKDIR /app
