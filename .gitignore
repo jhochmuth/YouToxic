@@ -1,6 +1,8 @@
+bin
 .DS_Store
 
 *.log
+docker_build.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
