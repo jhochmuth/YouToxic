@@ -8,7 +8,6 @@ import numpy as np
 
 import torch
 
-from youtoxic.app.utils.path import get_abs_path
 from youtoxic.app.utils.neural_net import NeuralNet
 
 
@@ -33,7 +32,7 @@ class Pipeline:
         self.insult_model.eval()
         self.threshold = 0.4
 
-        with open(get_abs_path("app/utils/tokenizer.pickle"), "rb") as handle:
+        with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
 
     @staticmethod
@@ -82,7 +81,7 @@ class Pipeline:
             A list containing the standardized features.
 
         """
-        with open(get_abs_path("app/utils/scalar.pickle"), "rb") as handle:
+        with open("youtoxic/app/utils/scalar.pickle", "rb") as handle:
             ss = pickle.load(handle)
         features = ss.transform(features)
         return features
