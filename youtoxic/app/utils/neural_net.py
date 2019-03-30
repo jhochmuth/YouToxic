@@ -2,6 +2,8 @@
 
 import numpy as np
 
+import pickle
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
@@ -191,10 +193,11 @@ class Attention(nn.Module):
 class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
-
-        self.embedding_matrix = np.load(
-            "youtoxic/app/models/embedding_matrix.npy"
-        )
+        with open("youtoxic/app/models/embeddings.pickle", "rb") as handle:
+            self.embedding_matrix = pickle.load(handle)
+        #self.embedding_matrix = np.load(
+        #    "youtoxic/app/models/embedding_matrix.npy"
+        #)
 
         fc_layer = 16
         fc_layer1 = 16
