@@ -11,4 +11,4 @@ COPY ./requirements-container.txt /app
 RUN pip install -r requirements-container.txt
 
 # Cleanup
-#RUN rm -rf *
+RUN rm -rf *
