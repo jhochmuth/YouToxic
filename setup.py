@@ -10,7 +10,6 @@ setup(
     url='https://github.com/jhochmuth/YouToxic',
     package_data={
         'youtoxic.app.models': ['*'],
-        'youtoxic.app.models.embedding_matrix': ['*'],
         'youtoxic.app.utils': ['*.pickle'],
         'youtoxic.app.assets': ['*']
     },
