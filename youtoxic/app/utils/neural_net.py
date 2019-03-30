@@ -193,8 +193,7 @@ class Attention(nn.Module):
 class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
-        with open("youtoxic/app/models/embeddings.pickle", "rb") as handle:
-            self.embedding_matrix = pickle.load(handle)
+        self.embedding_matrix = np.loadtxt('youtoxic/app/models/embeddings.txt')
         #self.embedding_matrix = np.load(
         #    "youtoxic/app/models/embedding_matrix.npy"
         #)
