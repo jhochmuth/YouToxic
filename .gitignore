@@ -1,5 +1,7 @@
 bin
 .DS_Store
+charts/
+youtoxic.yaml
 
 *.log
 
