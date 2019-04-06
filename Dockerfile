@@ -1,5 +1,5 @@
 # Get YouToxic image from Docker Hub
-FROM python:3.7.2
+FROM python:3.7.2-slim
 
 # Set working directory.
 WORKDIR /app
