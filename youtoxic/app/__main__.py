@@ -23,6 +23,7 @@ def runserver(debug, host, port):
     bootstrap = Bootstrap(app)  # noqa
     dash_app = dash_view.add_dash(app)  # noqa
 
+    # Construct the core application
     app.register_blueprint(routes.main_bp)
 
     app.run(debug=debug, host=host, port=port)
