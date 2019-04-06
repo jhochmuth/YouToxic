@@ -1,7 +1,7 @@
 # Get YouToxic image from Docker Hub
-FROM python:3.7.2-slim
+FROM jhochmuth/youtoxic-base
 
-# Set working directory
+# Set working directory.
 WORKDIR /app
 
 # Copy the current directory contents into the container
@@ -16,12 +16,9 @@ ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ins
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/obscenity_model_state.pt youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/toxicity_model_state.pt youtoxic/app/models
 
-# Install dependencies
-RUN pip install -r requirements.txt
-
 # Run setup of YouToxic
 RUN python setup.py install
 
 # Run __main__.py when the container launches
-CMD ["youtoxic", "runserver", "--host=0.0.0.0", "--port=8050"]
-#CMD ["youtoxic", "runserver"]
+#CMD ["youtoxic", "runserver", "--host=0.0.0.0", "--port=8050"]
+CMD ["youtoxic", "runserver"]
