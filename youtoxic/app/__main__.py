@@ -25,8 +25,7 @@ def runserver():
 
     app.register_blueprint(routes.main_bp)
 
-    #app.run(debug=debug, host=host, port=port)
-    app.run()
+    app.run(debug=debug, host=host, port=port)
 
 
 if __name__ == "__main__":
