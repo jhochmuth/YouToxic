@@ -31,9 +31,9 @@ def add_dash(server):
     """Plot.ly Dash view which populates the screen with loaded DataFrames."""
     external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
     dash_app = Dash(server=server,
+                    assets_folder="assets/",
                     external_stylesheets=external_stylesheets,
                     routes_pathname_prefix='/dash/')
-
     # Create Dash Layout
     dash_app.layout = html.Div(
         id='dash-container'
