@@ -36,7 +36,6 @@ def create_server():
         meta_tags=[meta_viewport],
         external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css"],
     )
-    get_root_path(__name__)
     app.config["suppress_callback_exceptions"] = True
     app.title = "YouToxic"
     app.layout = dash_layout
