@@ -6,7 +6,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 import flask
-from flask.helpers import get_root_path
 
 from youtoxic.app.api.dash_layout import dash_layout
 from youtoxic.app.api.file_layout import file_layout
@@ -28,34 +27,30 @@ url_bar_and_content_div = html.Div(
 )
 
 
-def serve_layout():
-    """Serves general layout to dash app."""
-    if flask.has_request_context():
-        return url_bar_and_content_div
-
-    else:
-        return html.Div(
-            [url_bar_and_content_div, dash_layout, text_layout, tweet_layout, file_layout]
-        )
-
-
 def add_dash(server):
-    """Dash view which populates the screen with loaded DataFrames."""
-    meta_viewport = {
-        "name": "viewport",
-        "content": "width=device-width, initial-scale=1, shrink-to-fit=no",
-    }
-
+    """Plot.ly Dash view which populates the screen with loaded DataFrames."""
+    external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
     dash_app = Dash(server=server,
-                    url_base_pathname="/dash/",
-                    assets_folder=get_root_path(__name__) + "/assets/",
-                    meta_tags=[meta_viewport],
-                    external_stylesheets=["https://codepen.io/chriddyp/pen/bWLwgP.css"],)
+                    external_stylesheets=external_stylesheets,
+                    routes_pathname_prefix='/dash/')
 
-    dash_app.config["suppress_callback_exceptions"] = True
+    # Create Dash Layout
+    dash_app.layout = html.Div(
+        id='dash-container'
+    )
+
+    def serve_layout():
+        """Serves general layout to dash app."""
+        if flask.has_request_context():
+            return url_bar_and_content_div
+
+        else:
+            return html.Div(
+                [url_bar_and_content_div, dash_layout, text_layout, tweet_layout, file_layout]
+            )
+
     pipeline = create_pipeline()
     dash_app.layout = serve_layout
-    dash_app.css.append_css({"external_url": "assets/stylesheet.css"})
 
     @dash_app.callback(Output("page-content", "children"), [Input("url", "pathname")])
     def display_page(pathname):
