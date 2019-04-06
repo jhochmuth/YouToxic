@@ -11,7 +11,8 @@ setup(
     package_data={
         'youtoxic.app.models': ['*'],
         'youtoxic.app.utils': ['*.pickle'],
-        'youtoxic.app.assets': ['*']
+        'youtoxic.app.assets': ['*'],
+        'youtoxic.app.templates': ['*']
     },
     include_package_data=True,
     packages=find_packages(exclude=["tests"]),
