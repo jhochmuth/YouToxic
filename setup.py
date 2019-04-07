@@ -22,6 +22,5 @@ setup(
     entry_points="""
         [console_scripts]
         youtoxic=youtoxic.app.__main__:main
-    """,
-    zip_safe=False
+    """
 )
