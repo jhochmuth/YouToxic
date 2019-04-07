@@ -20,7 +20,7 @@ ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/tox
 RUN pip install -r requirements.txt
 
 # Run setup of YouToxic
-RUN python setup.py install
+RUN pip install -e .
 
 WORKDIR /app
 
