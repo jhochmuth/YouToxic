@@ -20,5 +20,4 @@ ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/tox
 RUN python setup.py install
 
 # Run __main__.py when the container launches
-#CMD ["youtoxic", "runserver", "--host=0.0.0.0", "--port=8050"]
 CMD ["youtoxic", "runserver"]

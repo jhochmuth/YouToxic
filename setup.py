@@ -15,8 +15,8 @@ setup(
         'youtoxic': 'youtoxic/app/templates/*'
     },
     include_package_data=True,
-    data_files=[('youtoxic/app/templates', ['index.html']),
-                ('youtoxic/app/assets', ['image.png', 'image-2.png', 'stylesheet.css'])],
+    #data_files=[('youtoxic/app/templates', ['index.html']),
+    #            ('youtoxic/app/assets', ['image.png', 'image-2.png', 'stylesheet.css'])],
     packages=find_packages(exclude=["tests"]),
     license='Apache 2.0',
     long_description=open('README.md').read(),
