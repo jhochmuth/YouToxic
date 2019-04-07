@@ -2,6 +2,7 @@ bin
 .DS_Store
 charts/
 youtoxic.yaml
+service.yaml
 
 *.log
 

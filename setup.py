@@ -1,4 +1,5 @@
 from distutils.core import setup
+
 from setuptools import find_packages
 
 
@@ -8,14 +9,13 @@ setup(
     author='Julius Hochmuth',
     description='A Python Dash Server that predicts the toxicity of text using Deep Learning.',
     url='https://github.com/jhochmuth/YouToxic',
-    package_data={
-        'youtoxic': 'youtoxic/app/models/*',
-        'youtoxic': 'youtoxic/app/utils/*.pickle',
-        'youtoxic': ['youtoxic/app/assets/image.png', 'youtoxic/app/assets/stylesheet.css'],
-        'youtoxic': 'youtoxic/app/templates/*'
-    },
+    package_data={"youtoxic": [
+        "app/models/*",
+        "app/utils/*.pickle",
+        "app/assets/*",
+        "app/templates/*"
+    ]},
     include_package_data=True,
-    data_files=[('youtoxic/app/assets', ['image.png', 'image-2.png', 'stylesheet.css'])],
     packages=find_packages(exclude=["tests"]),
     license='Apache 2.0',
     long_description=open('README.md').read(),
@@ -23,7 +23,4 @@ setup(
         [console_scripts]
         youtoxic=youtoxic.app.__main__:main
     """,
-    install_requires=[
-        "Dash"
-    ]
 )
