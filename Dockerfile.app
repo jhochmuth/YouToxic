@@ -17,7 +17,7 @@ ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/obs
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/toxicity_model_state.pt youtoxic/app/models
 
 # Run setup of YouToxic
-RUN python setup.py install
+RUN pip install -e .
 
 # Run __main__.py when the container launches
-CMD ["youtoxic", "runserver"]
+CMD ["youtoxic", "runserver", "--host=0.0.0.0", "--port=8050"]

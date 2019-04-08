@@ -10,4 +10,4 @@ Keras-Preprocessing==1.0.9
 Click==7.0
 Flask==1.0.2
 Flask-Bootstrap==3.3.7
-scikit-learn==0.20.2
+scikit-learn==0.20.0
