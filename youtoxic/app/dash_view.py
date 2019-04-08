@@ -17,11 +17,6 @@ from youtoxic.app.api.tweet_predictions import get_tweet_predictions
 from youtoxic.app.services.pipeline import Pipeline
 
 
-def create_pipeline():
-    """Creates the pipeline object."""
-    return Pipeline()
-
-
 url_bar_and_content_div = html.Div(
     [dcc.Location(id="url", refresh=False), html.Div(id="page-content")]
 )
@@ -35,7 +30,7 @@ def add_dash(server):
                     assets_folder="assets/",
                     external_stylesheets=external_stylesheets,
                     routes_pathname_prefix='/dash/')
-    # Create Dash Layout
+
     dash_app.layout = html.Div(
         id='dash-container'
     )
@@ -50,7 +45,7 @@ def add_dash(server):
                 [url_bar_and_content_div, dash_layout, text_layout, tweet_layout, file_layout]
             )
 
-    pipeline = create_pipeline()
+    pipeline = Pipeline()
     dash_app.layout = serve_layout
 
     @dash_app.callback(Output("page-content", "children"), [Input("url", "pathname")])
