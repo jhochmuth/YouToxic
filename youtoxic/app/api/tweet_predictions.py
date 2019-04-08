@@ -50,6 +50,12 @@ def get_tweet_predictions(
         The html layout for the subsection of the page that contains results.
 
     """
+    if username.lower() == "realdonaldtrump":
+        return html.Div(
+            "Is that really necessary? It is obvious that all those tweets "
+            "will include every type of toxicity known to mankind.",
+            style={"color": "rgb(255, 0, 0"},
+        )
     if limit_date == "date" and (not start_date or not end_date):
         return html.Div(
             "Error: You must specify a date range if selecting to limit by date.",
@@ -99,6 +105,7 @@ def get_tweet_predictions(
     df = pd.DataFrame()
     df["time"] = [row[1] for row in tweets]
     df["text"] = texts
+
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]
         df["Toxicity_pred"] = preds["toxic"]
