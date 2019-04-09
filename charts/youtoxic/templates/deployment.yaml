@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "charts.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      name: {{ include "charts.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ include "charts.fullname" . }}
+    spec:
+      containers:
+      - name: {{ include "charts.fullname" . }}
+        image: {{ .Values.image.repository }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: CONSUMER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtoxic-secret
+              key: CONSUMER_KEY
+        - name: CONSUMER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: youtoxic-secret
+              key: CONSUMER_SECRET
+        - name: ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtoxic-secret
+              key: ACCESS_KEY
+        - name: ACCESS_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: youtoxic-secret
+              key: ACCESS_SECRET
