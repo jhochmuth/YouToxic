@@ -1,6 +1,6 @@
 bin
 .DS_Store
-secret.yaml
+secrets.yaml
 
 *.log
 

@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: jhochmuth/youtoxic-app
+  repository: jhochmuth/youtoxic
   tag: latest
   pullPolicy: IfNotPresent
 
