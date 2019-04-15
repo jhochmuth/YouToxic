@@ -31,12 +31,10 @@ def add_dash(server):
                     external_stylesheets=external_stylesheets,
                     routes_pathname_prefix='/dash/')
 
-    dash_app.layout = html.Div(
-        id='dash-container'
-    )
+    dash_app.layout = dash_layout
+    dash_app.config['suppress_callback_exceptions'] = True
 
     def serve_layout():
-        """Serves general layout to dash app."""
         if flask.has_request_context():
             return url_bar_and_content_div
 
@@ -46,10 +44,10 @@ def add_dash(server):
             )
 
     pipeline = Pipeline()
-    dash_app.layout = serve_layout
+    #dash_app.layout = serve_layout
 
-    @dash_app.callback(Output("page-content", "children"), [Input("url", "pathname")])
-    def display_page(pathname):
+    @dash_app.callback(Output("content", "children"), [Input("tabs", "value")])
+    def display_page(tab):
         """Callback function to inform app of which page to display.
 
         Parameters
@@ -62,11 +60,11 @@ def add_dash(server):
             The layout corresponding to the requested pathname.
 
         """
-        if pathname == "/texts":
-            return text_layout
-        if pathname == "/tweets":
+        if tab == 'tweet-predictions':
             return tweet_layout
-        if pathname == "/files":
+        if tab == 'text-predictions':
+            return text_layout
+        if tab == 'file-predictions':
             return file_layout
         else:
             return dash_layout

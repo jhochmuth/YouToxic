@@ -9,16 +9,6 @@ import dash_html_components as html
 
 tweet_layout = html.Div(
     [
-        html.Div(
-            [
-                html.H2(
-                    "YouToxic – Tweet Analysis", style={"color": "rgb(200, 200, 200)"}
-                ),
-                html.Img(src="assets/image-2.png"),
-            ],
-            style={"fontFamily": "arial black", "marginBottom": "20"},
-            className="banner",
-        ),
         html.Details(
             [
                 html.Summary(
