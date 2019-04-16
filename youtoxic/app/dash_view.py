@@ -33,31 +33,20 @@ def add_dash(server):
 
     dash_app.layout = dash_layout
     dash_app.config['suppress_callback_exceptions'] = True
-
-    def serve_layout():
-        if flask.has_request_context():
-            return url_bar_and_content_div
-
-        else:
-            return html.Div(
-                [url_bar_and_content_div, dash_layout, text_layout, tweet_layout, file_layout]
-            )
-
     pipeline = Pipeline()
-    #dash_app.layout = serve_layout
 
     @dash_app.callback(Output("content", "children"), [Input("tabs", "value")])
     def display_page(tab):
-        """Callback function to inform app of which page to display.
+        """Callback function to inform app of which tab to display.
 
         Parameters
         ----------
-        pathname: str
-            The pathname of the page to display.
+        pathname: tab
+            The value of the tab to display.
 
         Returns
         -------
-            The layout corresponding to the requested pathname.
+            The layout corresponding to the requested tab.
 
         """
         if tab == 'tweet-predictions':
