@@ -60,7 +60,7 @@ def get_file_predictions(contents, filename, types, pipeline):
     preds, judgements = dict(), dict()
 
     if "Toxicity" in types:
-        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_multiple(texts)
+        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_ulm_multiple(texts)
     if "Insult" in types:
         preds["insult"], judgements["insult"] = pipeline.predict_insult_multiple(texts)
     if "Obscenity" in types:

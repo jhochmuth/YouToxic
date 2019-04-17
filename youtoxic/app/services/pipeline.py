@@ -2,12 +2,18 @@
 
 import pickle
 
+from fastai.text.transform import Tokenizer
+
 from keras_preprocessing.sequence import pad_sequences
 
 import numpy as np
 
 import torch
+from torch.autograd.variable import Variable
 
+from youtoxic.app.utils.feature_engineering import get_features, standardize_features
+from youtoxic.app.utils.functions import sigmoid, softmax
+from youtoxic.app.utils.load_files import load_mappings, load_model
 from youtoxic.app.utils.neural_net import NeuralNet
 
 
@@ -21,6 +27,9 @@ class Pipeline:
         self.obscenity_model = NeuralNet()
         self.insult_model = NeuralNet()
 
+        self.mappings = load_mappings('youtoxic/app/models/itos.pkl')
+        self.ulm_toxicity_model = load_model(len(self.mappings), 'youtoxic/app/models/ulm_toxicity_model.h5')
+
         self.toxicity_model.load_state_dict(torch.load("youtoxic/app/models/toxicity_model_state.pt"))
         self.identity_model.load_state_dict(torch.load("youtoxic/app/models/identity_model_state.pt"))
         self.obscenity_model.load_state_dict(torch.load("youtoxic/app/models/obscenity_model_state.pt"))
@@ -30,66 +39,11 @@ class Pipeline:
         self.identity_model.eval()
         self.obscenity_model.eval()
         self.insult_model.eval()
+
         self.threshold = 0.4
 
         with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
-
-    @staticmethod
-    def get_features(texts):
-        """Calculates extra features for specified texts.
-
-        Notes
-        -----
-        Models were trained when caps_vs_length feature was always set to 0.
-
-        Parameters
-        ----------
-        texts: List
-            A list of strings, each of which represents one individual text.
-
-        Returns
-        -------
-        List
-            Each value of the list contains a value representing each feature: caps_vs_length and words_vs_unique.
-
-        """
-        features = list()
-        for text in texts:
-            text = text.lower()
-            length = len(text)
-            capitals = sum(1 for c in text if c.isupper())
-            caps_vs_length = capitals / length
-            num_words = len(text.split())
-            num_unique_words = len(set(text.lower().split()))
-            words_vs_unique = num_unique_words / num_words
-            features.append([caps_vs_length, words_vs_unique])
-        return features
-
-    @staticmethod
-    def standardize_features(features):
-        """Standardizes features using a pre-fit Standard Scalar object.
-
-        Parameters
-        ----------
-        features: List
-            A list containing the features to standardize.
-
-        Returns
-        -------
-        List
-            A list containing the standardized features.
-
-        """
-        with open("youtoxic/app/utils/scalar.pickle", "rb") as handle:
-            ss = pickle.load(handle)
-        features = ss.transform(features)
-        return features
-
-    @staticmethod
-    def sigmoid(x):
-        """Defines the sigmoid function."""
-        return 1 / (1 + np.exp(-x))
 
     def predict_insult(self, text):
         """Predicts if a text is an insult.
@@ -112,11 +66,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features([text])
-        features = self.standardize_features(features)
+        features = get_features([text])
+        features = standardize_features(features)
 
         pred = self.insult_model([x, features]).detach()
-        result = self.sigmoid(pred.numpy())
+        result = sigmoid(pred.numpy())
         classification = "Insult" if result[0][0] > self.threshold else "Not an insult"
         return round(result[0][0], 3), classification
 
@@ -141,11 +95,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features(texts)
-        features = self.standardize_features(features)
+        features = get_features(texts)
+        features = standardize_features(features)
 
         preds = self.insult_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
         classifications = [
             "Insult" if pred > self.threshold else "Not an insult" for pred in preds
         ]
@@ -172,11 +126,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features([text])
-        features = self.standardize_features(features)
+        features = get_features([text])
+        features = standardize_features(features)
 
         pred = self.obscenity_model([x, features]).detach()
-        result = self.sigmoid(pred.numpy())
+        result = sigmoid(pred.numpy())
         classification = "Obscene" if result[0][0] > self.threshold else "Not obscene"
         return round(result[0][0], 3), classification
 
@@ -201,11 +155,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features(texts)
-        features = self.standardize_features(features)
+        features = get_features(texts)
+        features = standardize_features(features)
 
         preds = self.obscenity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
         classifications = [
             "Obscene" if pred > self.threshold else "Not obscene" for pred in preds
         ]
@@ -232,11 +186,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features([text])
-        features = self.standardize_features(features)
+        features = get_features([text])
+        features = standardize_features(features)
 
         pred = self.identity_model([x, features]).detach()
-        result = self.sigmoid(pred.numpy())
+        result = sigmoid(pred.numpy())
         classification = (
             "Prejudice" if result[0][0] > self.threshold else "Not prejudice"
         )
@@ -263,11 +217,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features(texts)
-        features = self.standardize_features(features)
+        features = get_features(texts)
+        features = standardize_features(features)
 
         preds = self.identity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
         classifications = [
             "Prejudice" if pred > self.threshold else "Not prejudice" for pred in preds
         ]
@@ -294,11 +248,11 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features([text])
-        features = self.standardize_features(features)
+        features = get_features([text])
+        features = standardize_features(features)
 
         pred = self.toxicity_model([x, features]).detach()
-        result = self.sigmoid(pred.numpy())
+        result = sigmoid(pred.numpy())
         classification = "Toxic" if result[0][0] > self.threshold else "Not toxic"
         return round(result[0][0], 3), classification
 
@@ -323,12 +277,85 @@ class Pipeline:
         x = pad_sequences(x, maxlen=70)
         x = torch.tensor(x, dtype=torch.long)
 
-        features = self.get_features(texts)
-        features = self.standardize_features(features)
+        features = get_features(texts)
+        features = standardize_features(features)
 
         preds = self.toxicity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in self.sigmoid(preds.numpy())]
+        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
         classifications = [
             "Toxic" if pred > self.threshold else "Not toxic" for pred in preds
         ]
         return preds, classifications
+
+    def predict_text_ulm(self, model, text):
+        """Handles calculation of predictions using any ULMFiT model.
+
+        Parameters
+        ----------
+        model: SequentialRNN
+            The ULMFiT model to use for getting predictions.
+
+        text: str
+            The text to analyze.
+
+        Returns
+        -------
+        float
+            The prediction.
+
+        """
+        texts = [text]
+        tok = Tokenizer().process_all(texts)
+        encoded = [self.mappings[p] for p in tok[0]]
+
+        ary = np.reshape(np.array(encoded), (-1, 1))
+        tensor = torch.from_numpy(ary)
+        variable = Variable(tensor)
+
+        predictions = model(variable)
+        numpy_preds = predictions[0].data.numpy()
+        return softmax(numpy_preds[0])[0]
+
+    def predict_toxicity_ulm(self, text):
+        """Predicts if a text contains general toxicity using a ULMFiT model.
+
+        Parameters
+        ----------
+        text: str
+            The text to make a prediction for.
+
+        Returns
+        -------
+        float
+            The numeric prediction.
+
+        str
+            'Toxic' if prediction > threshold, 'Not toxic' otherwise.
+
+        """
+        pred = self.predict_text_ulm(self.ulm_toxicity_model, text)[1]
+        classification = "Toxic" if pred > self.threshold else "Not toxic"
+        return pred, classification
+
+    def predict_toxicity_ulm_multiple(self, texts):
+        """Predicts if each text in a list contains general toxicity using a ULMFiT model.
+
+        Parameters
+        ----------
+        texts: List
+            A list of texts to make predictions for.
+
+        Returns
+        -------
+        preds: List
+            Contains the numeric prediction for each text.
+
+        classifications: List
+            For each text, contains 'Toxic' if prediction > threshold, 'Not toxic' otherwise.
+
+        """
+        preds, classifications = [None] * len(texts), [None] * len(texts)
+        for i, text in enumerate(texts):
+            preds[i], classifications[i] = self.predict_toxicity_ulm(text)
+        return preds, classifications
+

@@ -24,7 +24,6 @@ def runserver(debug, host, port):
     dash_app = dash_view.add_dash(app)  # noqa
 
     app.register_blueprint(routes.main_bp)
-
     app.run(debug=debug, host=host, port=port)
 
 

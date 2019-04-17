@@ -40,7 +40,7 @@ def get_text_predictions(text, types, pipeline):
     types_order, preds, judgements = list(), dict(), dict()
 
     if "toxic" in types:
-        preds["Toxicity"], judgements["Toxicity"] = pipeline.predict_toxicity(text)
+        preds["Toxicity"], judgements["Toxicity"] = pipeline.predict_toxicity_ulm(text)
         types_order.append("Toxicity")
     if "insult" in types:
         preds["Insult"], judgements["Insult"] = pipeline.predict_insult(text)

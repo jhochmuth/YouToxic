@@ -29,7 +29,6 @@ Flask-WTF==0.14.2
 idna==2.8
 ipython-genutils==0.2.0
 itsdangerous==1.1.0
-jsonschema==3.0.1
 jupyter-core==4.4.0
 Keras-Preprocessing==1.0.9
 Mako==1.0.7
