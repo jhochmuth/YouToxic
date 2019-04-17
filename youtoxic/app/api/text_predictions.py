@@ -23,6 +23,7 @@ def get_text_predictions(text, types, pipeline):
 
     Returns
     -------
+    html.Div
         The html layout for the subsection of the page that contains results.
 
     """

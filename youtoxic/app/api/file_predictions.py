@@ -29,6 +29,7 @@ def get_file_predictions(contents, filename, types, pipeline):
 
     Returns
     -------
+    html.Div
         The html layout for the subsection of the page that contains results.
 
     """

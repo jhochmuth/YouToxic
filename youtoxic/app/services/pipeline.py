@@ -27,7 +27,7 @@ class Pipeline:
         self.obscenity_model = NeuralNet()
         self.insult_model = NeuralNet()
 
-        self.mappings = load_mappings("youtoxic/app/models/mappings.pickle")
+        self.mappings = load_mappings("youtoxic/app/models/mappings.pkl")
         self.ulm_toxicity_model = load_model(
             len(self.mappings), "youtoxic/app/models/ulm_toxicity_model.h5"
         )
@@ -94,10 +94,10 @@ class Pipeline:
 
         Returns
         -------
-        preds: List
+        List
             Contains the numeric prediction for each text.
 
-        classifications: List
+        List
             For each text, contains 'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
         """
@@ -154,10 +154,10 @@ class Pipeline:
 
         Returns
         -------
-        preds: List
+        List
             Contains the numeric prediction for each text.
 
-        classifications: List
+        List
             For each text, contains 'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
         """
@@ -216,10 +216,10 @@ class Pipeline:
 
         Returns
         -------
-        preds: List
+        List
             Contains the numeric prediction for each text.
 
-        classifications: List
+        List
             For each text, contains 'Prejudice' if prediction > threshold, 'Not prejudice' otherwise.
 
         """
@@ -357,10 +357,10 @@ class Pipeline:
 
         Returns
         -------
-        preds: List
+        List
             Contains the numeric prediction for each text.
 
-        classifications: List
+        List
             For each text, contains 'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
         """

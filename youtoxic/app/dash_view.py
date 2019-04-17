@@ -5,8 +5,6 @@ import dash_core_components as dcc
 
 import dash_html_components as html
 
-import flask
-
 from youtoxic.app.api.dash_layout import dash_layout
 from youtoxic.app.api.file_layout import file_layout
 from youtoxic.app.api.file_predictions import get_file_predictions

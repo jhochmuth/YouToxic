@@ -17,10 +17,92 @@ from youtoxic.app.services.tweet_dumper import (
 )
 
 
+def create_datatable(df, table_columns):
+    """Creates a DataTable from tweet data."""
+    table = dash_table.DataTable(
+        id="table",
+        columns=table_columns,
+        data=df.to_dict("rows"),
+        style_table={"border": "thin black solid"},
+        style_header={
+            "fontWeight": "bold",
+            "backgroundColor": "rgb(150,150,150)",
+            "textAlign": "center",
+        },
+        style_cell={
+            "textAlign": "left",
+            "fontFamily": "optima",
+            "border": "thin lightgrey solid",
+            "padding": 15,
+        },
+        style_data={"whiteSpace": "normal"},
+        css=[
+            {
+                "selector": ".dash-cell div.dash-cell-value",
+                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
+            }
+        ],
+        merge_duplicate_headers=True,
+        sorting=True,
+        pagination_mode="fe",
+        pagination_settings={"displayed_pages": 1, "current_page": 0, "page_size": 25},
+    )
+
+    return table
+
+
+def create_dataframe(texts, tweets, types, preds, judgements):
+    """Creates a DataFrame from tweet data."""
+    df = pd.DataFrame()
+    df["time"] = [row[1] for row in tweets]
+    df["text"] = texts
+
+    if "Toxicity" in types:
+        df["Toxicity_judgement"] = judgements["toxic"]
+        df["Toxicity_pred"] = preds["toxic"]
+        df["Toxicity_pred"] = df["Toxicity_pred"].map("{:.3f}".format)
+    if "Insult" in types:
+        df["Insult_judgement"] = judgements["insult"]
+        df["Insult_pred"] = preds["insult"]
+        df["Insult_pred"] = df["Insult_pred"].map("{:.3f}".format)
+    if "Obscenity" in types:
+        df["Obscenity_judgement"] = judgements["obscene"]
+        df["Obscenity_pred"] = preds["obscene"]
+        df["Obscenity_pred"] = df["Obscenity_pred"].map("{:.3f}".format)
+    if "Prejudice" in types:
+        df["Prejudice_judgement"] = judgements["prejudice"]
+        df["Prejudice_pred"] = preds["prejudice"]
+        df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
+
+    return df
+
+
+def get_predictions(texts, types, pipeline):
+    """Gets the predictions and classifications of specified types for given texts."""
+    preds, judgements = dict(), dict()
+
+    if "Toxicity" in types:
+        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_ulm_multiple(
+            texts
+        )
+    if "Insult" in types:
+        preds["insult"], judgements["insult"] = pipeline.predict_insult_multiple(texts)
+    if "Obscenity" in types:
+        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_multiple(
+            texts
+        )
+    if "Prejudice" in types:
+        preds["prejudice"], judgements[
+            "prejudice"
+        ] = pipeline.predict_prejudice_multiple(texts)
+
+    return preds, judgements
+
+
 def get_tweet_predictions(
     username, num_tweets, types, limit_date, start_date, end_date, pipeline
 ):
-    """Returns the toxicity predictions for tweets of a specified twitter user.
+    """Collects tweets, analyzes them, and creates .
 
     Parameters
     ----------
@@ -47,6 +129,7 @@ def get_tweet_predictions(
 
     Returns
     -------
+    html.Div
         The html layout for the subsection of the page that contains results.
 
     """
@@ -87,43 +170,8 @@ def get_tweet_predictions(
         )
 
     texts = [row[2] for row in tweets]
-    preds, judgements = dict(), dict()
-
-    if "Toxicity" in types:
-        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_ulm_multiple(
-            texts
-        )
-    if "Insult" in types:
-        preds["insult"], judgements["insult"] = pipeline.predict_insult_multiple(texts)
-    if "Obscenity" in types:
-        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_multiple(
-            texts
-        )
-    if "Prejudice" in types:
-        preds["prejudice"], judgements[
-            "prejudice"
-        ] = pipeline.predict_prejudice_multiple(texts)
-
-    df = pd.DataFrame()
-    df["time"] = [row[1] for row in tweets]
-    df["text"] = texts
-
-    if "Toxicity" in types:
-        df["Toxicity_judgement"] = judgements["toxic"]
-        df["Toxicity_pred"] = preds["toxic"]
-        df["Toxicity_pred"] = df["Toxicity_pred"].map("{:.3f}".format)
-    if "Insult" in types:
-        df["Insult_judgement"] = judgements["insult"]
-        df["Insult_pred"] = preds["insult"]
-        df["Insult_pred"] = df["Insult_pred"].map("{:.3f}".format)
-    if "Obscenity" in types:
-        df["Obscenity_judgement"] = judgements["obscene"]
-        df["Obscenity_pred"] = preds["obscene"]
-        df["Obscenity_pred"] = df["Obscenity_pred"].map("{:.3f}".format)
-    if "Prejudice" in types:
-        df["Prejudice_judgement"] = judgements["prejudice"]
-        df["Prejudice_pred"] = preds["prejudice"]
-        df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
+    preds, judgements = get_predictions(texts, types, pipeline)
+    df = create_dataframe(texts, tweets, types, preds, judgements)
 
     table_columns = list()
     table_columns.append({"name": ["", "Time Posted"], "id": "time"})
@@ -138,34 +186,7 @@ def get_tweet_predictions(
         table_columns.append(judgement)
         table_columns.append(pred)
 
-    table = dash_table.DataTable(
-        id="table",
-        columns=table_columns,
-        data=df.to_dict("rows"),
-        style_table={"border": "thin black solid"},
-        style_header={
-            "fontWeight": "bold",
-            "backgroundColor": "rgb(150,150,150)",
-            "textAlign": "center",
-        },
-        style_cell={
-            "textAlign": "left",
-            "fontFamily": "optima",
-            "border": "thin lightgrey solid",
-            "padding": 15,
-        },
-        style_data={"whiteSpace": "normal"},
-        css=[
-            {
-                "selector": ".dash-cell div.dash-cell-value",
-                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
-            }
-        ],
-        merge_duplicate_headers=True,
-        sorting=True,
-        pagination_mode="fe",
-        pagination_settings={"displayed_pages": 1, "current_page": 0, "page_size": 25},
-    )
+    table = create_datatable(df, table_columns)
 
     y_values = dict()
 

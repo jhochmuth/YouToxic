@@ -1,13 +1,12 @@
 """Contains implementation of the ULMFiT RNN model."""
 
 import contextlib
-
 import warnings
 
 import torch
-from torch.autograd.variable import Variable
-import torch.nn.functional as F
 import torch.nn as nn
+import torch.nn.functional as F
+from torch.autograd.variable import Variable
 
 
 IS_TORCH_04 = True
@@ -224,7 +223,6 @@ class RNNEncoder(nn.Module):
             raw_output = emb
             new_hidden, raw_outputs, outputs = [], [], []
             for l, (rnn, drop) in enumerate(zip(self.rnns, self.dropouths)):
-                current_input = raw_output
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore")
                     raw_output, new_h = rnn(raw_output, self.hidden[l])
