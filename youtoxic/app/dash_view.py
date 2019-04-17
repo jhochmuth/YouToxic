@@ -25,14 +25,16 @@ url_bar_and_content_div = html.Div(
 def add_dash(server):
     """Plot.ly Dash view which populates the screen with loaded DataFrames."""
     external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
-    dash_app = Dash(__name__,
-                    server=server,
-                    assets_folder="assets/",
-                    external_stylesheets=external_stylesheets,
-                    routes_pathname_prefix='/dash/')
+    dash_app = Dash(
+        __name__,
+        server=server,
+        assets_folder="assets/",
+        external_stylesheets=external_stylesheets,
+        routes_pathname_prefix="/dash/",
+    )
 
     dash_app.layout = dash_layout
-    dash_app.config['suppress_callback_exceptions'] = True
+    dash_app.config["suppress_callback_exceptions"] = True
     pipeline = Pipeline()
 
     @dash_app.callback(Output("content", "children"), [Input("tabs", "value")])
@@ -49,11 +51,11 @@ def add_dash(server):
             The layout corresponding to the requested tab.
 
         """
-        if tab == 'tweet-predictions':
+        if tab == "tweet-predictions":
             return tweet_layout
-        if tab == 'text-predictions':
+        if tab == "text-predictions":
             return text_layout
-        if tab == 'file-predictions':
+        if tab == "file-predictions":
             return file_layout
         else:
             return dash_layout
@@ -98,7 +100,7 @@ def add_dash(server):
         ],
     )
     def update_tweet_output(
-            n_clicks, username, num_tweets, types, limit_date, start_date, end_date
+        n_clicks, username, num_tweets, types, limit_date, start_date, end_date
     ):
         """Callback function to display prediction results of a Twitter username search.
 
@@ -135,7 +137,9 @@ def add_dash(server):
                 username, num_tweets, types, limit_date, start_date, end_date, pipeline
             )
 
-    @dash_app.callback(Output("date-picker", "style"), [Input("limit-by-date", "value")])
+    @dash_app.callback(
+        Output("date-picker", "style"), [Input("limit-by-date", "value")]
+    )
     def toggle_date_picker(toggle_value):
         """Callback function to inform app if tweet_layout should display date range selector.
 

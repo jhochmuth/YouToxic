@@ -15,11 +15,15 @@ dash_layout = html.Div(
             style={"fontFamily": "arial black"},
             className="banner",
         ),
-        dcc.Tabs(id="tabs", value='tweet-predictions', children=[
-            dcc.Tab(label='Tweet Predictions', value="tweet-predictions"),
-            dcc.Tab(label='Text Predictions', value="text-predictions"),
-            dcc.Tab(label='File Predictions', value="file-predictions")
-        ]),
-        html.Div(id='content')
+        dcc.Tabs(
+            id="tabs",
+            value="tweet-predictions",
+            children=[
+                dcc.Tab(label="Tweet Predictions", value="tweet-predictions"),
+                dcc.Tab(label="Text Predictions", value="text-predictions"),
+                dcc.Tab(label="File Predictions", value="file-predictions"),
+            ],
+        ),
+        html.Div(id="content"),
     ]
 )

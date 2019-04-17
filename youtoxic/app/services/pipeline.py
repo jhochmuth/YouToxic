@@ -27,13 +27,23 @@ class Pipeline:
         self.obscenity_model = NeuralNet()
         self.insult_model = NeuralNet()
 
-        self.mappings = load_mappings('youtoxic/app/models/mappings.pickle')
-        self.ulm_toxicity_model = load_model(len(self.mappings), 'youtoxic/app/models/ulm_toxicity_model.h5')
+        self.mappings = load_mappings("youtoxic/app/models/mappings.pickle")
+        self.ulm_toxicity_model = load_model(
+            len(self.mappings), "youtoxic/app/models/ulm_toxicity_model.h5"
+        )
 
-        self.toxicity_model.load_state_dict(torch.load("youtoxic/app/models/toxicity_model_state.pt"))
-        self.identity_model.load_state_dict(torch.load("youtoxic/app/models/identity_model_state.pt"))
-        self.obscenity_model.load_state_dict(torch.load("youtoxic/app/models/obscenity_model_state.pt"))
-        self.insult_model.load_state_dict(torch.load("youtoxic/app/models/insult_model_state.pt"))
+        self.toxicity_model.load_state_dict(
+            torch.load("youtoxic/app/models/toxicity_model_state.pt")
+        )
+        self.identity_model.load_state_dict(
+            torch.load("youtoxic/app/models/identity_model_state.pt")
+        )
+        self.obscenity_model.load_state_dict(
+            torch.load("youtoxic/app/models/obscenity_model_state.pt")
+        )
+        self.insult_model.load_state_dict(
+            torch.load("youtoxic/app/models/insult_model_state.pt")
+        )
 
         self.toxicity_model.eval()
         self.identity_model.eval()
@@ -358,4 +368,3 @@ class Pipeline:
         for i, text in enumerate(texts):
             preds[i], classifications[i] = self.predict_toxicity_ulm(text)
         return preds, classifications
-
