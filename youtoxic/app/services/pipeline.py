@@ -27,7 +27,7 @@ class Pipeline:
         self.obscenity_model = NeuralNet()
         self.insult_model = NeuralNet()
 
-        self.mappings = load_mappings('youtoxic/app/models/itos.pkl')
+        self.mappings = load_mappings('youtoxic/app/models/mappings.pickle')
         self.ulm_toxicity_model = load_model(len(self.mappings), 'youtoxic/app/models/ulm_toxicity_model.h5')
 
         self.toxicity_model.load_state_dict(torch.load("youtoxic/app/models/toxicity_model_state.pt"))
