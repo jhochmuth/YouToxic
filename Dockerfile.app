@@ -10,6 +10,7 @@ COPY . /app
 # Download LFS files
 RUN rm -rf ./youtoxic/app/models
 RUN mkdir ./youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ulm_toxicity_model.h5 youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/embedding_matrix.npy youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/identity_model_state.pt youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/insult_model_state.pt youtoxic/app/models
