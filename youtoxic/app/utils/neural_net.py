@@ -1,4 +1,4 @@
-"""Contains the implementation of the neural network used by all models."""
+"""Contains the implementation of the basic RNN neural networks."""
 
 import numpy as np
 

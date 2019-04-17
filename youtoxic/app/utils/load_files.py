@@ -1,3 +1,5 @@
+"""Contains implementation of the functions used for loading the mappings and models."""
+
 import collections
 
 from pathlib import Path

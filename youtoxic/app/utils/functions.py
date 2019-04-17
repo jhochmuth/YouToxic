@@ -1,3 +1,5 @@
+"""Contains implementation of functions used for normalization of values returned by the models."""
+
 import numpy as np
 
 

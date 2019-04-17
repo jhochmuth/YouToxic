@@ -1,3 +1,5 @@
+"""Contains implementation of functions used for feature engineering."""
+
 import pickle
 
 
