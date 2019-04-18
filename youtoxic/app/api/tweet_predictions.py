@@ -15,6 +15,7 @@ from youtoxic.app.services.tweet_dumper import (
     get_tweets_by_date,
     validate_username,
 )
+from youtoxic.app.utils.preprocessing import preprocess_texts
 
 
 def create_graph(tweets, types, preds):
@@ -237,6 +238,7 @@ def get_tweet_predictions(
         )
 
     texts = [row[2] for row in tweets]
+    texts = preprocess_texts(texts)
     preds, judgements = get_predictions(texts, types, pipeline)
     df = create_dataframe(texts, tweets, types, preds, judgements)
 
