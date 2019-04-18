@@ -27,10 +27,19 @@ class Pipeline:
         self.obscenity_model = NeuralNet()
         self.insult_model = NeuralNet()
 
-        self.mappings = load_mappings("youtoxic/app/models/mappings.pkl")
+        self.toxicity_mappings = load_mappings("youtoxic/app/models/toxicity_mappings.pkl")
         self.ulm_toxicity_model = load_model(
-            len(self.mappings), "youtoxic/app/models/ulm_toxicity_model.h5"
+            len(self.toxicity_mappings), "youtoxic/app/models/toxicity_model.h5"
         )
+
+        self.insult_mappings = load_mappings("youtoxic/app/models/insult_mappings.pkl")
+        self.ulm_insult_model = load_model(len(self.insult_mappings), "youtoxic/app/models/insult_model.h5")
+
+        self.obscenity_mappings = load_mappings("youtoxic/app/models/obscenity_mappings.pkl")
+        self.ulm_obscenity_model = load_model(len(self.obscenity_mappings), "youtoxic/app/models/obscenity_model.h5")
+
+        self.identity_mappings = load_mappings("youtoxic/app/models/identity_mappings.pkl")
+        self.ulm_identity_model = load_model(len(self.identity_mappings), "youtoxic/app/models/identity_model.h5")
 
         self.toxicity_model.load_state_dict(
             torch.load("youtoxic/app/models/toxicity_model_state.pt")
@@ -297,7 +306,7 @@ class Pipeline:
         ]
         return preds, classifications
 
-    def predict_text_ulm(self, model, text):
+    def predict_text_ulm(self, model, mappings, text):
         """Handles calculation of predictions using any ULMFiT model.
 
         Parameters
@@ -316,7 +325,7 @@ class Pipeline:
         """
         texts = [text]
         tok = Tokenizer().process_all(texts)
-        encoded = [self.mappings[p] for p in tok[0]]
+        encoded = [mappings[p] for p in tok[0]]
 
         ary = np.reshape(np.array(encoded), (-1, 1))
         tensor = torch.from_numpy(ary)
@@ -343,7 +352,7 @@ class Pipeline:
             'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
         """
-        pred = self.predict_text_ulm(self.ulm_toxicity_model, text)[1]
+        pred = self.predict_text_ulm(self.ulm_toxicity_model, self.toxicity_mappings, text)[1]
         classification = "Toxic" if pred > self.threshold else "Not toxic"
         return pred, classification
 
@@ -367,4 +376,133 @@ class Pipeline:
         preds, classifications = [None] * len(texts), [None] * len(texts)
         for i, text in enumerate(texts):
             preds[i], classifications[i] = self.predict_toxicity_ulm(text)
+        return preds, classifications
+
+    def predict_insult_ulm(self, text):
+        """Predicts if a text contains an insult using a ULMFiT model.
+
+        Parameters
+        ----------
+        text: str
+            The text to make a prediction for.
+
+        Returns
+        -------
+        float
+            The numeric prediction.
+
+        str
+            'Insult' if prediction > threshold, 'Not an insult' otherwise.
+
+        """
+        pred = self.predict_text_ulm(self.ulm_insult_model, self.insult_mappings, text)[1]
+        classification = "Insult" if pred > self.threshold else "Not an insult"
+        return pred, classification
+
+    def predict_insult_ulm_multiple(self, texts):
+        """Predicts if each text in a list contains an insult using a ULMFiT model.
+
+        Parameters
+        ----------
+        texts: List
+            A list of texts to make predictions for.
+
+        Returns
+        -------
+        List
+            Contains the numeric prediction for each text.
+
+        List
+            For each text, contains 'Insult' if prediction > threshold, 'Not an insult' otherwise.
+
+        """
+        preds, classifications = [None] * len(texts), [None] * len(texts)
+        for i, text in enumerate(texts):
+            preds[i], classifications[i] = self.predict_insult_ulm(text)
+        return preds, classifications
+
+    def predict_obscenity_ulm(self, text):
+        """Predicts if a text contains obscenity using a ULMFiT model.
+
+        Parameters
+        ----------
+        text: str
+            The text to make a prediction for.
+
+        Returns
+        -------
+        float
+            The numeric prediction.
+
+        str
+            'Obscene' if prediction > threshold, 'Not obscene' otherwise.
+
+        """
+        pred = self.predict_text_ulm(self.ulm_obscenity_model, self.obscenity_mappings, text)[1]
+        classification = "Obscene" if pred > self.threshold else "Not obscene"
+        return pred, classification
+
+    def predict_obscenity_ulm_multiple(self, texts):
+        """Predicts if each text in a list contains obscenity using a ULMFiT model.
+
+        Parameters
+        ----------
+        texts: List
+            A list of texts to make predictions for.
+
+        Returns
+        -------
+        List
+            Contains the numeric prediction for each text.
+
+        List
+            For each text, contains 'Obscene' if prediction > threshold, 'Not obscene' otherwise.
+
+        """
+        preds, classifications = [None] * len(texts), [None] * len(texts)
+        for i, text in enumerate(texts):
+            preds[i], classifications[i] = self.predict_obscenity_ulm(text)
+        return preds, classifications
+
+    def predict_identity_ulm(self, text):
+        """Predicts if a text contains identity hate using a ULMFiT model.
+
+        Parameters
+        ----------
+        text: str
+            The text to make a prediction for.
+
+        Returns
+        -------
+        float
+            The numeric prediction.
+
+        str
+            'Identity hate' if prediction > threshold, 'Not identity hate' otherwise.
+
+        """
+        pred = self.predict_text_ulm(self.ulm_identity_model, self.identity_mappings, text)[1]
+        classification = "Identity hate" if pred > self.threshold else "Not identity hate"
+        return pred, classification
+
+    def predict_identity_ulm_multiple(self, texts):
+        """Predicts if each text in a list contains identity hate using a ULMFiT model.
+
+        Parameters
+        ----------
+        texts: List
+            A list of texts to make predictions for.
+
+        Returns
+        -------
+        List
+            Contains the numeric prediction for each text.
+
+        List
+            For each text, contains 'Identity hate' if prediction > threshold, 'Not identity hate' otherwise.
+
+        """
+        preds, classifications = [None] * len(texts), [None] * len(texts)
+        for i, text in enumerate(texts):
+            preds[i], classifications[i] = self.predict_identity_ulm(text)
         return preds, classifications

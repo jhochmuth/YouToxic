@@ -55,7 +55,7 @@ def create_graph(tweets, types, preds):
     if "prejudice" in preds:
         y = list()
         prejudice_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
+        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
             if pred > 0.4:
                 prejudice_tweets += 1
             y.append(prejudice_tweets / (total_tweets + 1))
@@ -154,15 +154,15 @@ def get_predictions(texts, types, pipeline):
             texts
         )
     if "Insult" in types:
-        preds["insult"], judgements["insult"] = pipeline.predict_insult_multiple(texts)
+        preds["insult"], judgements["insult"] = pipeline.predict_insult_ulm_multiple(texts)
     if "Obscenity" in types:
-        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_multiple(
+        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_ulm_multiple(
             texts
         )
     if "Prejudice" in types:
         preds["prejudice"], judgements[
             "prejudice"
-        ] = pipeline.predict_prejudice_multiple(texts)
+        ] = pipeline.predict_identity_ulm_multiple(texts)
 
     return preds, judgements
 

@@ -44,13 +44,13 @@ def get_text_predictions(text, types, pipeline):
         preds["Toxicity"], judgements["Toxicity"] = pipeline.predict_toxicity_ulm(text)
         types_order.append("Toxicity")
     if "insult" in types:
-        preds["Insult"], judgements["Insult"] = pipeline.predict_insult(text)
+        preds["Insult"], judgements["Insult"] = pipeline.predict_insult_ulm(text)
         types_order.append("Insult")
     if "obscene" in types:
-        preds["Obscenity"], judgements["Obscenity"] = pipeline.predict_obscenity(text)
+        preds["Obscenity"], judgements["Obscenity"] = pipeline.predict_obscenity_ulm(text)
         types_order.append("Obscenity")
     if "prejudice" in types:
-        preds["Prejudice"], judgements["Prejudice"] = pipeline.predict_prejudice(text)
+        preds["Prejudice"], judgements["Prejudice"] = pipeline.predict_identity_ulm(text)
         types_order.append("Prejudice")
 
     df = pd.DataFrame()

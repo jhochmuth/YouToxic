@@ -65,15 +65,15 @@ def get_file_predictions(contents, filename, types, pipeline):
             texts
         )
     if "Insult" in types:
-        preds["insult"], judgements["insult"] = pipeline.predict_insult_multiple(texts)
+        preds["insult"], judgements["insult"] = pipeline.predict_insult_ulm_multiple(texts)
     if "Obscenity" in types:
-        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_multiple(
+        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_ulm_multiple(
             texts
         )
     if "Prejudice" in types:
         preds["prejudice"], judgements[
             "prejudice"
-        ] = pipeline.predict_prejudice_multiple(texts)
+        ] = pipeline.predict_identity_ulm_multiple(texts)
 
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]
