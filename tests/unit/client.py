@@ -1,18 +1,15 @@
-from flask_bootstrap import Bootstrap
+from flask import Flask
 
 import pytest
 
-import youtoxic.app.context as ctx
-from youtoxic.app.config import Config
+from youtoxic.app.dash_view import add_dash
 
 
 @pytest.fixture
 def client():
-    app = ctx.create_app()
-    pipeline = ctx.create_pipeline()  # noqa:
-    app.config.from_object(Config)
+    app = Flask(__name__, instance_relative_config=False)
     app.config["TESTING"] = True
+
     client = app.test_client()
-    bootstrap = Bootstrap(app)  # noqa:
 
     yield client
