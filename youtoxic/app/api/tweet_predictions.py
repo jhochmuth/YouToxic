@@ -266,8 +266,7 @@ def get_tweet_predictions(
     """
     if username.lower() == "realdonaldtrump":
         return html.Div(
-            "Is that really necessary? It is obvious that all those tweets "
-            "will include every type of toxicity known to mankind.",
+            "Is that really necessary? It is obvious that those tweets contain nothing of value.",
             style={"color": "rgb(255, 0, 0"},
         )
     if limit_date == "date" and (not start_date or not end_date):
