@@ -10,12 +10,11 @@ COPY . /app
 # Download LFS files
 RUN rm -rf ./youtoxic/app/models
 RUN mkdir ./youtoxic/app/models
+
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ulm_toxicity_model.h5 youtoxic/app/models
-ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/embedding_matrix.npy youtoxic/app/models
-ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/identity_model_state.pt youtoxic/app/models
-ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/insult_model_state.pt youtoxic/app/models
-ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/obscenity_model_state.pt youtoxic/app/models
-ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/toxicity_model_state.pt youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ulm_insult_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ulm_obscenity_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/ulm_identity_model.h5 youtoxic/app/models
 
 # Run setup of YouToxic
 RUN pip install -e .
