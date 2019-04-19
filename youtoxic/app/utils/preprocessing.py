@@ -5,7 +5,7 @@ def preprocess_text(text):
     words = text.split()
     preprocessed = list()
     for word in words:
-        if '@' not in word:
+        if '@' not in word and 'http' not in word:
             preprocessed.append(word)
     return ' '.join(preprocessed)
 
