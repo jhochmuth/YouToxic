@@ -1,5 +1,6 @@
-"""Contains implementation of the functions used for loading the mappings and models."""
+"""Contains implementation of the functions used for loading the mappings and models.
 
+"""
 import collections
 import pickle
 from pathlib import Path
@@ -12,7 +13,19 @@ from youtoxic.app.utils.lm_rnn import get_rnn_classifier
 
 
 def load_mappings(mappings_filename):
-    """Loads the vocabulary mappings."""
+    """Loads the vocabulary mappings.
+
+    Parameters
+    ----------
+    mappings_filename: str
+        The file containing the vocabulary mappings.
+
+    Returns
+    -------
+    defaultdict
+        The vocabulary mappings contained within the specified file.
+
+    """
     itos = pickle.load(Path(mappings_filename).open("rb"))
     stoi = collections.defaultdict(
         lambda: 0, {str(v): int(k) for k, v in enumerate(itos)}
@@ -27,9 +40,8 @@ def load_model(vocab_size, classifier_filename):
     ----------
     vocab_size: int
         The number of unique vocabulary tokens.
-
     classifier_filename: str
-        The filename of the trained classifier
+        The file containing the trained classifier
 
     Returns
     -------
@@ -37,7 +49,6 @@ def load_model(vocab_size, classifier_filename):
         The trained classifer model.
 
     """
-    # these parameters aren't used, but this is the easiest way to get a model
     bptt, em_sz, nh, nl = 70, 400, 1150, 3
     dps = np.array([0.4, 0.5, 0.05, 0.3, 0.4]) * 0.5
     vs = vocab_size

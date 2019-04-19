@@ -18,7 +18,22 @@ def main():
 @click.option("--host", envvar="HOST", default="127.0.0.1", help="host IP address")
 @click.option("--port", envvar="PORT", default=8050, help="port")
 def runserver(debug, host, port):
-    """Construct the core application."""
+    """Constructs the core application.
+
+    Parameters
+    ----------
+    debug : bool
+        Starts app in debug mode if True.
+    host : str
+        Flask will use this host value.
+    port : int
+        The port of the webserver.
+
+    Returns
+    -------
+    None
+
+    """
     app = Flask(__name__, instance_relative_config=False)
     bootstrap = Bootstrap(app)  # noqa
     dash_app = dash_view.add_dash(app)  # noqa

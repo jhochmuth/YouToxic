@@ -1,5 +1,6 @@
-"""For predicting the toxicities of texts given in file form."""
+"""For predicting the toxicities of texts given in file form.
 
+"""
 import base64
 import io
 
@@ -15,16 +16,13 @@ def get_file_predictions(contents, filename, types, pipeline):
 
     Parameters
     ----------
-    contents: str
+    contents : str
         Contents of the uploaded file.
-
-    filename: str
+    filename : str
         The name of the file.
-
-    types: List
+    types : list of str
         The types of toxicity to predict for.
-
-    pipeline: Object
+    pipeline : Pipeline
         The pipeline object used to make predictions.
 
     Returns

@@ -1,5 +1,6 @@
-"""Contains the implementation of the basic RNN neural networks."""
+"""Contains the implementation of the basic RNN neural networks.
 
+"""
 import numpy as np
 
 import torch

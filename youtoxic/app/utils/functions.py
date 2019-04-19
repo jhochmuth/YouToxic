@@ -1,15 +1,40 @@
-"""Contains implementation of functions used for normalization of values returned by the models."""
+"""Contains implementation of functions used for normalization of values returned by the models.
 
+"""
 import numpy as np
 
 
 def sigmoid(x):
-    """Sigmoid function used to normalize output of the models."""
+    """Sigmoid function used to normalize output of the models.
+
+    Parameters
+    ----------
+    x : float
+        The value to normalize.
+
+    Returns
+    -------
+    float
+        The normalized value.
+
+    """
     return 1 / (1 + np.exp(-x))
 
 
 def softmax(x):
-    """Softmax function used to normalize output of the models."""
+    """Softmax function used to normalize output of the models.
+
+    Parameters
+    ----------
+    x : float
+        The value to normalize.
+
+    Returns
+    -------
+    float
+        The normalized value.
+
+    """
     if x.ndim == 1:
         x = x.reshape((1, -1))
     max_x = np.max(x, axis=1).reshape((-1, 1))

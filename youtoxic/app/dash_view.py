@@ -1,3 +1,6 @@
+"""Contains the functioning of the dash app.
+
+"""
 from dash import Dash
 from dash.dependencies import Input, Output, State
 
@@ -21,7 +24,19 @@ url_bar_and_content_div = html.Div(
 
 
 def add_dash(server):
-    """Plot.ly Dash view which populates the screen with loaded DataFrames."""
+    """Initializes the Dash app.
+
+    Parameters
+    ----------
+    server : Flask
+        The Flask app that serves the Dash app.
+
+    Returns
+    -------
+    Flask
+        The server of the Dash app.
+
+    """
     external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
     dash_app = Dash(
         __name__,
@@ -41,11 +56,12 @@ def add_dash(server):
 
         Parameters
         ----------
-        pathname: tab
+        tab : str
             The value of the tab to display.
 
         Returns
         -------
+        html.Div
             The layout corresponding to the requested tab.
 
         """
@@ -68,17 +84,16 @@ def add_dash(server):
 
         Parameters
         ----------
-        n_clicks: int
+        n_clicks : int
             Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
-
-        text: str
+        text : str
             The text to make a prediction for.
-
-        types:
+        types : list of str
             The types of toxicity to predict for.
 
         Returns
         -------
+        html.Div
            The html layout for the subsection of the page that contains results.
 
         """
@@ -104,29 +119,24 @@ def add_dash(server):
 
         Parameters
         ----------
-        n_clicks: int
+        n_clicks : int
             Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
-
-        username: str
+        username : str
             The Twitter user to collect tweets from.
-
-        num_tweets: int
+        num_tweets : int
             The maximum number of tweets to analyze.
-
-        types:
+        types : list of str
             The types of toxicity to predict for.
-
-        limit_date: str
+        limit_date : str
             Whether to get tweets between a certain date range ('date') or the most recent tweets ('all').
-
-        start_date: Datetime
+        start_date : Datetime
             The beginning value of the date range. Only matters if limit_date == 'date'.
-
-        end_date: Datetime
+        end_date : Datetime
             The ending value of the date range. Only matters if limit_date == 'date'.
 
         Returns
         -------
+        html.Div
            The html layout for the subsection of the page that contains results.
 
         """
@@ -143,7 +153,7 @@ def add_dash(server):
 
         Parameters
         ----------
-        toggle_value: str
+        toggle_value : str
             Whether to display date range selector ('date') or not ('all').
 
         Returns
@@ -167,17 +177,16 @@ def add_dash(server):
 
         Parameters
         ----------
-        contents: str
+        contents : str
             Contents of the uploaded file.
-
-        filename: str
+        filename : str
             The name of the file.
-
-        types: List
+        types : list of str
             The types of toxicity to predict for.
 
         Returns
         -------
+        html.Div
             The html layout for the subsection of the page that contains results.
 
         """

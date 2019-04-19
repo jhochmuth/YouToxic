@@ -1,3 +1,6 @@
+"""Contains routes for the flask app.
+
+"""
 from flask import Blueprint, render_template
 
 

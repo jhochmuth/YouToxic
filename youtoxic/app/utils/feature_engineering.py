@@ -1,5 +1,6 @@
-"""Contains implementation of functions used for feature engineering."""
+"""Contains implementation of functions used for feature engineering.
 
+"""
 import pickle
 
 
@@ -12,12 +13,12 @@ def get_features(texts):
 
     Parameters
     ----------
-    texts: List
-        A list of strings, each of which represents one individual text.
+    texts: list of str
+        The texts from which features are created.
 
     Returns
     -------
-    List
+    list of lists
         Each value of the list contains a value representing each feature: caps_vs_length and words_vs_unique.
 
     """
@@ -39,13 +40,13 @@ def standardize_features(features):
 
     Parameters
     ----------
-    features: List
-        A list containing the features to standardize.
+    features: list of lists
+        The features to standardize.
 
     Returns
     -------
-    List
-        A list containing the standardized features.
+    list of lists
+        Contains the standardized features.
 
     """
     with open("youtoxic/app/utils/scalar.pickle", "rb") as handle:

@@ -1,5 +1,6 @@
-"""For predicting the toxicity of manually-entered text."""
+"""For predicting the toxicity of manually-entered text.
 
+"""
 import dash_html_components as html
 
 import dash_table
@@ -12,13 +13,11 @@ def get_text_predictions(text, types, pipeline):
 
     Parameters
     ----------
-    text: str
+    text : str
         The text to make a prediction for.
-
-    types: List
+    types : list of str
         The types of toxicity to predict for.
-
-    pipeline: Object
+    pipeline : Pipeline
         The pipeline object used to make predictions.
 
     Returns

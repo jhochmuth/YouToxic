@@ -1,4 +1,6 @@
-"""Contains implementation of the ULMFiT RNN model."""
+"""Contains implementation of the ULMFiT RNN model.
+
+"""
 
 import contextlib
 import warnings

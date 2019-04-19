@@ -1,5 +1,6 @@
-"""Defines page layout for analysis of tweets."""
+"""Defines page layout for analysis of tweets.
 
+"""
 import datetime
 
 import dash_core_components as dcc

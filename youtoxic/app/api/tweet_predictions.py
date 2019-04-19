@@ -1,5 +1,6 @@
-"""For predicting the toxicities of tweets of a specified Twitter user."""
+"""For predicting the toxicities of tweets of a specified Twitter user.
 
+"""
 import dash_core_components as dcc
 
 import dash_html_components as html
@@ -19,7 +20,23 @@ from youtoxic.app.utils.preprocessing import preprocess_texts
 
 
 def create_graph(tweets, types, preds):
-    """Creates a Graph from tweet data."""
+    """Creates a Graph displaying information about the given tweets.
+
+    Parameters
+    ----------
+    tweets : list of lists
+        The list of tweets.
+    types : List
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    Graph
+        A line graph with all information plotted.
+
+    """
     y_values = dict()
 
     if "toxic" in preds:
@@ -86,7 +103,21 @@ def create_graph(tweets, types, preds):
 
 
 def create_datatable(df, table_columns):
-    """Creates a DataTable from tweet data."""
+    """Creates a DataTable from tweet data.
+
+    Parameters
+    ----------
+    df : DataFrame
+        A DataFrame containing information about tweets.
+    table_columns : List
+        A list containing the information needed to create a DataTable from the given DataFrame.
+
+    Returns
+    -------
+    DataTable
+        The DataTable containing the given information.
+
+    """
     table = dash_table.DataTable(
         id="table",
         columns=table_columns,
@@ -120,7 +151,27 @@ def create_datatable(df, table_columns):
 
 
 def create_dataframe(texts, tweets, types, preds, judgements):
-    """Creates a DataFrame from tweet data."""
+    """Creates a DataFrame from tweet data.
+
+    Parameters
+    ----------
+    texts : List
+        The texts of the tweets.
+    tweets : List
+        The list of tweets.
+    types : List
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+    judgements : dict
+        A dictionary that has lists of judgements mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame containing information about the tweets.
+
+    """
     df = pd.DataFrame()
     df["time"] = [row[1] for row in tweets]
     df["text"] = texts
@@ -145,8 +196,26 @@ def create_dataframe(texts, tweets, types, preds, judgements):
     return df
 
 
-def get_predictions(texts, types, pipeline):
-    """Gets the predictions and classifications of specified types for given texts."""
+def make_predictions(texts, types, pipeline):
+    """Gets the predictions and classifications of specified types for given texts.
+
+    Parameters
+    ----------
+    texts : list of str
+        The texts of the tweets.
+    types : list of str
+        Predictions will be made for these types of toxicity.
+    pipeline : Pipeline
+        The pipeline object to use to make predictions.
+
+    Returns
+    -------
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+    judgements : dict
+        A dictionary that has lists of judgements mapped to the respective type of toxicity.
+
+    """
     preds, judgements = dict(), dict()
 
     if "Toxicity" in types:
@@ -170,29 +239,23 @@ def get_predictions(texts, types, pipeline):
 def get_tweet_predictions(
     username, num_tweets, types, limit_date, start_date, end_date, pipeline
 ):
-    """Collects tweets, analyzes them, and creates .
+    """Collects tweets, analyzes them, and creates a table and a line graph.
 
     Parameters
     ----------
-    username: str
-        The Twitter user to collect tweets from.
-
-    num_tweets: int
+    username : str
+        Tweets will be collected from this user.
+    num_tweets : int
         The maximum number of tweets to analyze.
-
-    types: List
-        The types of toxicity to predict for.
-
-    limit_date: str
+    types : list of str
+        Predictions will be made for these types of toxicity
+    limit_date : str
         Whether to get tweets between a certain date range ('date') or the most recent tweets ('all').
-
-    start_date: Datetime
+    start_date : Datetime
         Minimum date for date-limited collection. Only matters if limit_date == 'date'.
-
-    end_date: Datetime
+    end_date : Datetime
         Maximum date for date-limited collection. Only matters if limit_date == 'date'.
-
-    pipeline: Object
+    pipeline : Pipeline
         The pipeline object used to make predictions.
 
     Returns
@@ -239,7 +302,7 @@ def get_tweet_predictions(
 
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
-    preds, judgements = get_predictions(texts, types, pipeline)
+    preds, judgements = make_predictions(texts, types, pipeline)
     df = create_dataframe(texts, tweets, types, preds, judgements)
 
     table_columns = list()

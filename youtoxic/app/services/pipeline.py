@@ -1,7 +1,6 @@
-"""Contains implementation of the Pipeline object."""
+"""Contains implementation of the Pipeline object.
 
-import pickle
-
+"""
 from fastai.text.transform import Tokenizer
 
 from keras_preprocessing.sequence import pad_sequences
@@ -14,18 +13,44 @@ from torch.autograd.variable import Variable
 from youtoxic.app.utils.feature_engineering import get_features, standardize_features
 from youtoxic.app.utils.functions import sigmoid, softmax
 from youtoxic.app.utils.load_files import load_mappings, load_model
-from youtoxic.app.utils.neural_net import NeuralNet
 
 
 class Pipeline:
-    """This object loads all models and makes the actual predictions."""
+    """This object loads all models and is used to make predictions.
 
-    def __init__(self):
-        """Initializes pipeline object by loading models and tokenizer."""
-        self.toxicity_model = NeuralNet()
-        self.identity_model = NeuralNet()
-        self.obscenity_model = NeuralNet()
-        self.insult_model = NeuralNet()
+    Attributes
+    ----------
+    threshold : float
+        The value to use when making a judgement on toxicity.
+    toxicity_mappings : defaultdict
+        The vocabulary mappings used for the toxicity model.
+    ulm_toxicity_model : SequentialRNN
+        The trained model for toxicity analysis.
+    insult_mappings : defaultdict
+        The vocabulary mappings used for the insult model.
+    ulm_insult_model : SequentialRNN
+        The trained model for insult analysis.
+    obscenity_mappings : defaultdict
+        The vocabulary mappings used for the obscenity model.
+    ulm_obscenity_model : SequentialRNN
+        The trained model for obscenity analysis.
+    identity_mappings : defaultdict
+        The vocabulary mappings used for the identity hate model.
+    ulm_identity_model : SequentialRNN
+        The trained model for identity hate analysis.
+
+    """
+
+    def __init__(self, threshold=0.4):
+        """Initializes pipeline object by loading models and tokenizer.
+
+        Parameters
+        ----------
+        threshold : float
+            The value to use when making a judgement on toxicity.
+
+        """
+        self.threshold = threshold
 
         self.toxicity_mappings = load_mappings("youtoxic/app/models/toxicity_mappings.pkl")
         self.ulm_toxicity_model = load_model(
@@ -41,6 +66,13 @@ class Pipeline:
         self.identity_mappings = load_mappings("youtoxic/app/models/identity_mappings.pkl")
         self.ulm_identity_model = load_model(len(self.identity_mappings), "youtoxic/app/models/identity_model.h5")
 
+        # The following code initializes the old RNN models.
+        """
+        self.toxicity_model = NeuralNet()
+        self.identity_model = NeuralNet()
+        self.obscenity_model = NeuralNet()
+        self.insult_model = NeuralNet()
+        
         self.toxicity_model.load_state_dict(
             torch.load("youtoxic/app/models/toxicity_model_state.pt")
         )
@@ -58,25 +90,23 @@ class Pipeline:
         self.identity_model.eval()
         self.obscenity_model.eval()
         self.insult_model.eval()
-
-        self.threshold = 0.4
-
+        
         with open("youtoxic/app/utils/tokenizer.pickle", "rb") as handle:
             self.tokenizer = pickle.load(handle)
+        """
 
     def predict_insult(self, text):
         """Predicts if a text is an insult.
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
@@ -98,15 +128,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
         """
@@ -129,14 +158,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
@@ -158,15 +186,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
         """
@@ -189,14 +216,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Prejudice' if prediction > threshold, 'Not prejudice' otherwise.
 
@@ -220,15 +246,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Prejudice' if prediction > threshold, 'Not prejudice' otherwise.
 
         """
@@ -251,14 +276,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
@@ -280,15 +304,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        preds: List
+        preds : list of float
             Contains the numeric prediction for each text.
-
-        classifications: List
+        classifications: list of float
             For each text, contains 'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
         """
@@ -307,14 +330,13 @@ class Pipeline:
         return preds, classifications
 
     def predict_text_ulm(self, model, mappings, text):
-        """Handles calculation of predictions using any ULMFiT model.
+        """Makes predictions using the given ULMFiT model.
 
         Parameters
         ----------
-        model: SequentialRNN
-            The ULMFiT model to use for getting predictions.
-
-        text: str
+        model : SequentialRNN
+            The ULMFiT model to use for making predictions.
+        text : str
             The text to analyze.
 
         Returns
@@ -340,14 +362,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
@@ -361,15 +382,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
         """
@@ -383,14 +403,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
@@ -404,15 +423,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
         """
@@ -426,14 +444,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
@@ -447,15 +464,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
         """
@@ -469,14 +485,13 @@ class Pipeline:
 
         Parameters
         ----------
-        text: str
+        text : str
             The text to make a prediction for.
 
         Returns
         -------
         float
             The numeric prediction.
-
         str
             'Identity hate' if prediction > threshold, 'Not identity hate' otherwise.
 
@@ -490,15 +505,14 @@ class Pipeline:
 
         Parameters
         ----------
-        texts: List
+        texts : list of str
             A list of texts to make predictions for.
 
         Returns
         -------
-        List
+        list of float
             Contains the numeric prediction for each text.
-
-        List
+        list of str
             For each text, contains 'Identity hate' if prediction > threshold, 'Not identity hate' otherwise.
 
         """
