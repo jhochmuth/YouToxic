@@ -1,6 +1,6 @@
 from tests.unit.client import client  # noqa:
 
-from youtoxic.app.api.tweet_predictions import make_predictions
+from youtoxic.app.api.tweet_predictions import make_predictions_multiple
 from youtoxic.app.services.pipeline import Pipeline
 from youtoxic.app.services.tweet_dumper import get_tweets
 from youtoxic.app.utils.preprocessing import preprocess_texts
@@ -18,6 +18,6 @@ def test_get_tweet_classifications(client):  # noqa:
     tweets = get_tweets(username, num_tweets)
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
-    preds, judgements = make_predictions(texts, types, pipeline)
+    preds, judgements = make_predictions_multiple(texts, types, pipeline)
     for type in types2:
         assert [0 <= pred <= 1 for pred in preds[type]]

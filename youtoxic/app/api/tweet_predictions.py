@@ -16,6 +16,7 @@ from youtoxic.app.services.tweet_dumper import (
     get_tweets_by_date,
     validate_username,
 )
+from youtoxic.app.utils.predictions import make_predictions_multiple
 from youtoxic.app.utils.preprocessing import preprocess_texts
 
 
@@ -196,46 +197,6 @@ def create_dataframe(texts, tweets, types, preds, judgements):
     return df
 
 
-def make_predictions(texts, types, pipeline):
-    """Gets the predictions and classifications of specified types for given texts.
-
-    Parameters
-    ----------
-    texts : list of str
-        The texts of the tweets.
-    types : list of str
-        Predictions will be made for these types of toxicity.
-    pipeline : Pipeline
-        The pipeline object to use to make predictions.
-
-    Returns
-    -------
-    preds : dict
-        A dictionary that has lists of predictions mapped to the respective type of toxicity.
-    judgements : dict
-        A dictionary that has lists of judgements mapped to the respective type of toxicity.
-
-    """
-    preds, judgements = dict(), dict()
-
-    if "Toxicity" in types:
-        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_ulm_multiple(
-            texts
-        )
-    if "Insult" in types:
-        preds["insult"], judgements["insult"] = pipeline.predict_insult_ulm_multiple(texts)
-    if "Obscenity" in types:
-        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_ulm_multiple(
-            texts
-        )
-    if "Prejudice" in types:
-        preds["prejudice"], judgements[
-            "prejudice"
-        ] = pipeline.predict_identity_ulm_multiple(texts)
-
-    return preds, judgements
-
-
 def get_tweet_predictions(
     username, num_tweets, types, limit_date, start_date, end_date, pipeline
 ):
@@ -301,7 +262,7 @@ def get_tweet_predictions(
 
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
-    preds, judgements = make_predictions(texts, types, pipeline)
+    preds, judgements = make_predictions_multiple(texts, types, pipeline)
     df = create_dataframe(texts, tweets, types, preds, judgements)
 
     table_columns = list()

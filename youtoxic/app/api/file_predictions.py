@@ -10,6 +10,8 @@ import dash_table
 
 import pandas as pd
 
+from youtoxic.app.utils.predictions import make_predictions_multiple
+
 
 def get_file_predictions(contents, filename, types, pipeline):
     """Returns the toxicity predictions for the texts contained in a csv or xls file.
@@ -54,24 +56,10 @@ def get_file_predictions(contents, filename, types, pipeline):
             ["There was an error processing this file."],
             style={"color": "rgb(250, 0, 0)"},
         )
+
     texts = df["text"].values
 
-    preds, judgements = dict(), dict()
-
-    if "Toxicity" in types:
-        preds["toxic"], judgements["toxic"] = pipeline.predict_toxicity_ulm_multiple(
-            texts
-        )
-    if "Insult" in types:
-        preds["insult"], judgements["insult"] = pipeline.predict_insult_ulm_multiple(texts)
-    if "Obscenity" in types:
-        preds["obscene"], judgements["obscene"] = pipeline.predict_obscenity_ulm_multiple(
-            texts
-        )
-    if "Prejudice" in types:
-        preds["prejudice"], judgements[
-            "prejudice"
-        ] = pipeline.predict_identity_ulm_multiple(texts)
+    preds, judgements = make_predictions_multiple(texts, types, pipeline)
 
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]
