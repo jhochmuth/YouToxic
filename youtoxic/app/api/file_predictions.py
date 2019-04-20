@@ -76,18 +76,7 @@ def get_file_predictions(contents, filename, types, pipeline):
         df["Prejudice_pred"] = preds["prejudice"]
         df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
 
-    table_columns = [{"name": ["", "Text"], "id": "text"}]
-    judgement_columns = [
-        {"name": [t, "Judgement"], "id": "{}_judgement".format(t)} for t in types
-    ]
-    pred_columns = [
-        {"name": [t, "Prediction"], "id": "{}_pred".format(t)} for t in types
-    ]
-    for judgement, pred in zip(judgement_columns, pred_columns):
-        table_columns.append(judgement)
-        table_columns.append(pred)
-
-    graph = create_file_table(df, table_columns)
+    graph = create_file_table(df, types)
 
     return html.Div(
         [

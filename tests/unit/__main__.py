@@ -1,7 +1,9 @@
 import pytest
 
-from tests.unit.client import client
-from tests.unit.test_get_tweet_classifications import test_get_tweet_classifications
+from tests.unit.client import client  # noqa
+from tests.unit.test_text_classifications import test_get_text_classifications  # noqa
+from tests.unit.test_get_tweet_classifications import test_get_tweet_classifications  # noqa
+from tests.unit.test_get_tweets import test_get_tweet  # noqa
 
 
 def main():
@@ -9,5 +11,4 @@ def main():
 
 
 if __name__ == "__main__":
-    test_get_tweet_classifications(client)
     main()

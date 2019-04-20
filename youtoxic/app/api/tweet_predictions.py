@@ -85,20 +85,7 @@ def get_tweet_predictions(
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
     df = create_tweets_df(tweets, types, preds, judgements)
 
-    table_columns = list()
-    table_columns.append({"name": ["", "Time Posted"], "id": "time"})
-    table_columns.append({"name": ["", "Text of Tweet"], "id": "text"})
-    judgement_columns = [
-        {"name": [t, "Judgement"], "id": "{}_judgement".format(t)} for t in types
-    ]
-    pred_columns = [
-        {"name": [t, "Prediction"], "id": "{}_pred".format(t)} for t in types
-    ]
-    for judgement, pred in zip(judgement_columns, pred_columns):
-        table_columns.append(judgement)
-        table_columns.append(pred)
-
-    table = create_tweets_table(df, table_columns)
+    table = create_tweets_table(df, types)
     graph = create_tweets_graph(tweets, types, preds)
 
     over_max_tweets_message = None

@@ -4,15 +4,15 @@
 import dash_table
 
 
-def create_file_table(df, table_columns):
+def create_file_table(df, types):
     """Creates a DataTable from file data.
 
     Parameters
     ----------
     df : DataFrame
         A DataFrame containing information about the texts contained in a file.
-    table_columns : list of dicts
-        A list containing the information needed to create a DataTable from the given DataFrame.
+    types : list of str
+        The types of toxicity.
 
     Returns
     -------
@@ -20,6 +20,18 @@ def create_file_table(df, table_columns):
         The DataTable containing the given information.
 
     """
+    table_columns = list()
+    table_columns.append({"name": ["", "Text"], "id": "text"})
+    judgement_columns = [
+        {"name": [t, "Judgement"], "id": "{}_judgement".format(t)} for t in types
+    ]
+    pred_columns = [
+        {"name": [t, "Prediction"], "id": "{}_pred".format(t)} for t in types
+    ]
+    for judgement, pred in zip(judgement_columns, pred_columns):
+        table_columns.append(judgement)
+        table_columns.append(pred)
+
     table = dash_table.DataTable(
         data=df.to_dict("rows"),
         columns=table_columns,
@@ -101,15 +113,15 @@ def create_text_table(df):
     return table
 
 
-def create_tweets_table(df, table_columns):
+def create_tweets_table(df, types):
     """Creates a DataTable from tweet data.
 
     Parameters
     ----------
     df : DataFrame
         A DataFrame containing information about the tweets.
-    table_columns : list of dicts
-        A list containing the information needed to create a DataTable from the given DataFrame.
+    types : list of str
+        The types of toxicity.
 
     Returns
     -------
@@ -117,6 +129,20 @@ def create_tweets_table(df, table_columns):
         The DataTable containing the given information.
 
     """
+    table_columns = list()
+    table_columns.append({"name": ["", "Time Posted"], "id": "time"})
+    table_columns.append({"name": ["", "Text of Tweet"], "id": "text"})
+    judgement_columns = [
+        {"name": [t, "Judgement"], "id": "{}_judgement".format(t)} for t in types
+    ]
+    pred_columns = [
+        {"name": [t, "Prediction"], "id": "{}_pred".format(t)} for t in types
+    ]
+
+    for judgement, pred in zip(judgement_columns, pred_columns):
+        table_columns.append(judgement)
+        table_columns.append(pred)
+
     table = dash_table.DataTable(
         id="table",
         columns=table_columns,
