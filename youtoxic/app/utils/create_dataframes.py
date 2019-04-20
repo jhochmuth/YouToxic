@@ -4,7 +4,33 @@
 import pandas as pd
 
 
-def create_tweets_dataframe(tweets, types, preds, judgements):
+def create_text_df(types, preds, judgements):
+    """Creates a DataTable from text data.
+
+    Parameters
+    ----------
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+    judgements : dict
+        A dictionary that has lists of judgements mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame containing information about the text.
+
+    """
+    df = pd.DataFrame()
+    df["type"] = types
+    df["judgement"] = df["type"].map(judgements)
+    df["pred"] = df["type"].map(preds)
+    df["pred"] = df["pred"].map("{:.3f}".format)
+    return df
+
+
+def create_tweets_df(tweets, types, preds, judgements):
     """Creates a DataFrame from tweet data.
 
     Parameters

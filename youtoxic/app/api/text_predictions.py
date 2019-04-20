@@ -3,9 +3,9 @@
 """
 import dash_html_components as html
 
-import dash_table
-
-import pandas as pd
+from youtoxic.app.utils.create_dataframes import create_text_df
+from youtoxic.app.utils.create_tables import create_text_table
+from youtoxic.app.utils.predictions import make_predictions
 
 
 def get_text_predictions(text, types, pipeline):
@@ -37,55 +37,11 @@ def get_text_predictions(text, types, pipeline):
             style={"color": "rgb(255, 0, 0"},
         )
 
-    types_order, preds, judgements = list(), dict(), dict()
+    types_order, preds, judgements = make_predictions(text, types, pipeline)
 
-    if "toxic" in types:
-        preds["Toxicity"], judgements["Toxicity"] = pipeline.predict_toxicity_ulm(text)
-        types_order.append("Toxicity")
-    if "insult" in types:
-        preds["Insult"], judgements["Insult"] = pipeline.predict_insult_ulm(text)
-        types_order.append("Insult")
-    if "obscene" in types:
-        preds["Obscenity"], judgements["Obscenity"] = pipeline.predict_obscenity_ulm(text)
-        types_order.append("Obscenity")
-    if "prejudice" in types:
-        preds["Prejudice"], judgements["Prejudice"] = pipeline.predict_identity_ulm(text)
-        types_order.append("Prejudice")
+    df = create_text_df(types_order, preds, judgements)
 
-    df = pd.DataFrame()
-    df["type"] = types_order
-    df["judgement"] = df["type"].map(judgements)
-    df["pred"] = df["type"].map(preds)
-    df["pred"] = df["pred"].map("{:.3f}".format)
-
-    table = dash_table.DataTable(
-        id="table",
-        columns=[
-            {"name": "Analysis Type", "id": "type"},
-            {"name": "Judgement", "id": "judgement"},
-            {"name": "Prediction", "id": "pred"},
-        ],
-        data=df.to_dict("rows"),
-        style_table={"border": "thin black solid"},
-        style_header={
-            "fontWeight": "bold",
-            "backgroundColor": "rgb(220,220,220)",
-            "textAlign": "center",
-        },
-        style_cell={
-            "textAlign": "left",
-            "fontFamily": "optima",
-            "border": "thin lightgrey solid",
-            "padding": 10,
-        },
-        style_data={"whiteSpace": "normal"},
-        css=[
-            {
-                "selector": ".dash-cell div.dash-cell-value",
-                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
-            }
-        ],
-    )
+    table = create_text_table(df)
 
     return html.Div(
         [html.P("Text analyzed: {}".format(text), style={"marginBottom": "10"}), table]

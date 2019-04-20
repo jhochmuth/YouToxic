@@ -10,7 +10,7 @@ from youtoxic.app.services.tweet_dumper import (
     get_tweets_by_date,
     validate_username,
 )
-from youtoxic.app.utils.create_dataframes import create_tweets_dataframe
+from youtoxic.app.utils.create_dataframes import create_tweets_df
 from youtoxic.app.utils.create_graphs import create_tweets_graph
 from youtoxic.app.utils.create_tables import create_tweets_table
 from youtoxic.app.utils.predictions import make_predictions_multiple
@@ -83,7 +83,7 @@ def get_tweet_predictions(
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
-    df = create_tweets_dataframe(tweets, types, preds, judgements)
+    df = create_tweets_df(tweets, types, preds, judgements)
 
     table_columns = list()
     table_columns.append({"name": ["", "Time Posted"], "id": "time"})
