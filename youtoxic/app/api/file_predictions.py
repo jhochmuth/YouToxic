@@ -36,7 +36,6 @@ def get_file_predictions(contents, filename, types, pipeline):
     content_type, content_string = contents.split(",")
 
     decoded = base64.b64decode(content_string)
-    df = None
     try:
         if "csv" in filename:
             # Assume that the user uploaded a CSV file

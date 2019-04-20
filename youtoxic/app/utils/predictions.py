@@ -1,4 +1,4 @@
-"""Defines implementation of function used to make predictions of different types of toxicity for a list of texts.
+"""Defines functions used to make predictions of different types of toxicity for a list of texts.
 
 """
 

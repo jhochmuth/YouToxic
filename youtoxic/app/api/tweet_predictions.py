@@ -1,200 +1,20 @@
 """For predicting the toxicities of tweets of a specified Twitter user.
 
 """
-import dash_core_components as dcc
-
 import dash_html_components as html
 
-import dash_table
-
 from dateutil import parser
-
-import pandas as pd
 
 from youtoxic.app.services.tweet_dumper import (
     get_tweets,
     get_tweets_by_date,
     validate_username,
 )
+from youtoxic.app.utils.create_dataframes import create_tweets_dataframe
+from youtoxic.app.utils.create_graphs import create_tweets_graph
+from youtoxic.app.utils.create_tables import create_tweets_table
 from youtoxic.app.utils.predictions import make_predictions_multiple
 from youtoxic.app.utils.preprocessing import preprocess_texts
-
-
-def create_graph(tweets, types, preds):
-    """Creates a Graph displaying information about the given tweets.
-
-    Parameters
-    ----------
-    tweets : list of lists
-        The list of tweets.
-    types : List
-        The types of toxicity.
-    preds : dict
-        A dictionary that has lists of predictions mapped to the respective type of toxicity.
-
-    Returns
-    -------
-    Graph
-        A line graph with all information plotted.
-
-    """
-    y_values = dict()
-
-    if "toxic" in preds:
-        y = list()
-        toxic_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
-            if pred > 0.4:
-                toxic_tweets += 1
-            y.append(toxic_tweets / (total_tweets + 1))
-            total_tweets += 1
-        y_values["Toxicity"] = y
-
-    if "insult" in preds:
-        y = list()
-        insult_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["insult"])):
-            if pred > 0.4:
-                insult_tweets += 1
-            y.append(insult_tweets / (total_tweets + 1))
-            total_tweets += 1
-        y_values["Insult"] = y
-
-    if "obscene" in preds:
-        y = list()
-        obscene_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
-            if pred > 0.4:
-                obscene_tweets += 1
-            y.append(obscene_tweets / (total_tweets + 1))
-            total_tweets += 1
-        y_values["Obscenity"] = y
-
-    if "prejudice" in preds:
-        y = list()
-        prejudice_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
-            if pred > 0.4:
-                prejudice_tweets += 1
-            y.append(prejudice_tweets / (total_tweets + 1))
-            total_tweets += 1
-        y_values["Prejudice"] = y
-
-    graph = dcc.Graph(
-        id="toxicity-time",
-        figure={
-            "data": [
-                {
-                    "x": [row[1] for row in reversed(tweets)],
-                    "y": y_values[t],
-                    "name": t,
-                    "line": dict(shape="spline"),
-                }
-                for t in types
-            ],
-            "layout": {
-                "title": "Ratio of Toxic Tweets Over Time",
-                "xaxis": {"title": "Date and Time"},
-                "yaxis": {"title": "Ratio of Toxic Tweets"},
-            },
-        },
-    )
-
-    return graph
-
-
-def create_datatable(df, table_columns):
-    """Creates a DataTable from tweet data.
-
-    Parameters
-    ----------
-    df : DataFrame
-        A DataFrame containing information about tweets.
-    table_columns : List
-        A list containing the information needed to create a DataTable from the given DataFrame.
-
-    Returns
-    -------
-    DataTable
-        The DataTable containing the given information.
-
-    """
-    table = dash_table.DataTable(
-        id="table",
-        columns=table_columns,
-        data=df.to_dict("rows"),
-        style_table={"border": "thin black solid"},
-        style_header={
-            "fontWeight": "bold",
-            "backgroundColor": "rgb(150,150,150)",
-            "textAlign": "center",
-        },
-        style_cell={
-            "textAlign": "left",
-            "fontFamily": "optima",
-            "border": "thin lightgrey solid",
-            "padding": 15,
-        },
-        style_data={"whiteSpace": "normal"},
-        css=[
-            {
-                "selector": ".dash-cell div.dash-cell-value",
-                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
-            }
-        ],
-        merge_duplicate_headers=True,
-        sorting=True,
-        pagination_mode="fe",
-        pagination_settings={"displayed_pages": 1, "current_page": 0, "page_size": 25},
-    )
-
-    return table
-
-
-def create_dataframe(texts, tweets, types, preds, judgements):
-    """Creates a DataFrame from tweet data.
-
-    Parameters
-    ----------
-    texts : List
-        The texts of the tweets.
-    tweets : List
-        The list of tweets.
-    types : List
-        The types of toxicity.
-    preds : dict
-        A dictionary that has lists of predictions mapped to the respective type of toxicity.
-    judgements : dict
-        A dictionary that has lists of judgements mapped to the respective type of toxicity.
-
-    Returns
-    -------
-    DataFrame
-        A DataFrame containing information about the tweets.
-
-    """
-    df = pd.DataFrame()
-    df["time"] = [row[1] for row in tweets]
-    df["text"] = texts
-
-    if "Toxicity" in types:
-        df["Toxicity_judgement"] = judgements["toxic"]
-        df["Toxicity_pred"] = preds["toxic"]
-        df["Toxicity_pred"] = df["Toxicity_pred"].map("{:.3f}".format)
-    if "Insult" in types:
-        df["Insult_judgement"] = judgements["insult"]
-        df["Insult_pred"] = preds["insult"]
-        df["Insult_pred"] = df["Insult_pred"].map("{:.3f}".format)
-    if "Obscenity" in types:
-        df["Obscenity_judgement"] = judgements["obscene"]
-        df["Obscenity_pred"] = preds["obscene"]
-        df["Obscenity_pred"] = df["Obscenity_pred"].map("{:.3f}".format)
-    if "Prejudice" in types:
-        df["Prejudice_judgement"] = judgements["prejudice"]
-        df["Prejudice_pred"] = preds["prejudice"]
-        df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
-
-    return df
 
 
 def get_tweet_predictions(
@@ -263,7 +83,7 @@ def get_tweet_predictions(
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
-    df = create_dataframe(texts, tweets, types, preds, judgements)
+    df = create_tweets_dataframe(tweets, types, preds, judgements)
 
     table_columns = list()
     table_columns.append({"name": ["", "Time Posted"], "id": "time"})
@@ -278,8 +98,8 @@ def get_tweet_predictions(
         table_columns.append(judgement)
         table_columns.append(pred)
 
-    table = create_datatable(df, table_columns)
-    graph = create_graph(tweets, types, preds)
+    table = create_tweets_table(df, table_columns)
+    graph = create_tweets_graph(tweets, types, preds)
 
     over_max_tweets_message = None
     if num_tweets > 3240:
