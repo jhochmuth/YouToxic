@@ -23,6 +23,7 @@ dash_layout = html.Div(
                 dcc.Tab(label="Tweet Predictions", value="tweet-predictions"),
                 dcc.Tab(label="Text Predictions", value="text-predictions"),
                 dcc.Tab(label="File Predictions", value="file-predictions"),
+                dcc.Tab(label="Youtube Comment Predictions", value="youtube-predictions"),
             ],
         ),
         html.Div(id="content"),

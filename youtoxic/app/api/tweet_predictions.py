@@ -50,11 +50,13 @@ def get_tweet_predictions(
             "Is that really necessary? It is obvious that those tweets contain nothing of value.",
             style={"color": "rgb(255, 0, 0"},
         )
+
     if limit_date == "date" and (not start_date or not end_date):
         return html.Div(
             "Error: You must specify a date range if selecting to limit by date.",
             style={"color": "rgb(255, 0, 0"},
         )
+
     if not types:
         return html.Div(
             "Error: You must select at least one type of toxicity.",

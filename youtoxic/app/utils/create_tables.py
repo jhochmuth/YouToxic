@@ -4,6 +4,9 @@
 import dash_table
 
 
+# Todo: add separate function for youtube comments. Add time posted and username fields.
+
+
 def create_file_table(df, types):
     """Creates a DataTable from file data.
 

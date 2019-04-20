@@ -4,6 +4,7 @@ dash-core-components==0.44.0
 dash-html-components==0.14.0
 Flask==1.0.2
 Flask-Bootstrap==3.3.7
+google-api-python-client
 Keras-Preprocessing==1.0.9
 numpy==1.16.2
 pandas==0.24.2

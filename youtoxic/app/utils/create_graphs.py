@@ -4,6 +4,9 @@
 import dash_core_components as dcc
 
 
+# Todo: Add distribution plots for tweets. Add time and distribution plots for youtube comments.
+
+
 def create_tweets_graph(tweets, types, preds):
     """Creates a Graph displaying information about the given tweets.
 

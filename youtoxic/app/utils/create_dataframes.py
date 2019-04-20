@@ -73,3 +73,28 @@ def create_tweets_df(tweets, types, preds, judgements):
         df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
 
     return df
+
+
+def create_youtube_df(comments, types, preds, judgements):
+    df = pd.DataFrame()
+
+    df["text"] = comments
+
+    if "Toxicity" in types:
+        df["Toxicity_judgement"] = judgements["toxic"]
+        df["Toxicity_pred"] = preds["toxic"]
+        df["Toxicity_pred"] = df["Toxicity_pred"].map("{:.3f}".format)
+    if "Insult" in types:
+        df["Insult_judgement"] = judgements["insult"]
+        df["Insult_pred"] = preds["insult"]
+        df["Insult_pred"] = df["Insult_pred"].map("{:.3f}".format)
+    if "Obscenity" in types:
+        df["Obscenity_judgement"] = judgements["obscene"]
+        df["Obscenity_pred"] = preds["obscene"]
+        df["Obscenity_pred"] = df["Obscenity_pred"].map("{:.3f}".format)
+    if "Prejudice" in types:
+        df["Prejudice_judgement"] = judgements["prejudice"]
+        df["Prejudice_pred"] = preds["prejudice"]
+        df["Prejudice_pred"] = df["Prejudice_pred"].map("{:.3f}".format)
+
+    return df

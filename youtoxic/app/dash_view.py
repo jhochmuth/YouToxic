@@ -15,6 +15,8 @@ from youtoxic.app.api.text_layout import text_layout
 from youtoxic.app.api.text_predictions import get_text_predictions
 from youtoxic.app.api.tweet_layout import tweet_layout
 from youtoxic.app.api.tweet_predictions import get_tweet_predictions
+from youtoxic.app.api.youtube_layout import youtube_layout
+from youtoxic.app.api.youtube_predictions import get_youtube_predictions
 from youtoxic.app.services.pipeline import Pipeline
 
 
@@ -71,6 +73,8 @@ def add_dash(server):
             return text_layout
         if tab == "file-predictions":
             return file_layout
+        if tab == "youtube-predictions":
+            return youtube_layout
         else:
             return dash_layout
 
@@ -166,6 +170,39 @@ def add_dash(server):
             return {"display": "block"}
         else:
             return {"display": "none"}
+
+    @dash_app.callback(
+        Output("youtube-container", "children"),
+        [Input("button", "n_clicks")],
+        [
+            State("input-text", "value"),
+            State("types", "values"),
+        ],
+    )
+    def update_tweet_output(
+        n_clicks, video_id, types
+    ):
+        """Callback function to display prediction results of a Twitter username search.
+
+        Parameters
+        ----------
+        n_clicks : int
+            Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
+        video_id : str
+            Tweets will be collected from this user.
+        types : list of str
+            The types of toxicity to predict for.
+
+        Returns
+        -------
+        html.Div
+           The html layout for the subsection of the page that contains results.
+
+        """
+        if n_clicks is not None:
+            return get_youtube_predictions(
+                video_id, types, pipeline
+            )
 
     @dash_app.callback(
         Output("file-container", "children"),
