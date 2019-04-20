@@ -7,6 +7,7 @@ class Config:
         self.consumer_secret = os.environ.get("CONSUMER_SECRET") or ""
         self.access_key = os.environ.get("ACCESS_KEY") or ""
         self.access_secret = os.environ.get("ACCESS_SECRET") or ""
+        self.youtube_key = os.environ.get("YOUTUBE_KEY") or ""
 
     @property
     def consumer_key(self):
@@ -39,3 +40,11 @@ class Config:
     @access_secret.setter
     def access_secret(self, value):
         self.__access_secret = value
+
+    @property
+    def youtube_key(self):
+        return self.__youtube_key
+
+    @youtube_key.setter
+    def youtube_key(self, value):
+        self.__youtube_key = value

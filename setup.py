@@ -11,7 +11,6 @@ setup(
     url='https://github.com/jhochmuth/YouToxic',
     package_data={"youtoxic": [
         "app/models/*",
-        "app/utils/*.pickle",
         "app/assets/*",
         "app/templates/*"
     ]},

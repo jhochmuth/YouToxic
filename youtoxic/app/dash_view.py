@@ -122,7 +122,7 @@ def add_dash(server):
         n_clicks : int
             Number of times 'Submit' has been clicked. Set to None until user has clicked 'Submit' at least once.
         username : str
-            The Twitter user to collect tweets from.
+            Tweets will be collected from this user.
         num_tweets : int
             The maximum number of tweets to analyze.
         types : list of str
