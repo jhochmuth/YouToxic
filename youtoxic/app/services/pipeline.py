@@ -51,6 +51,7 @@ class Pipeline:
 
         """
         self.threshold = threshold
+        self.tokenizer = Tokenizer()
 
         self.toxicity_mappings = load_mappings("youtoxic/app/models/toxicity_mappings.pkl")
         self.ulm_toxicity_model = load_model(
@@ -336,6 +337,8 @@ class Pipeline:
         ----------
         model : SequentialRNN
             The ULMFiT model to use for making predictions.
+        mappings : defaultdict
+            The corresponding vocabulary mappings for the model.
         text : str
             The text to analyze.
 
@@ -345,8 +348,10 @@ class Pipeline:
             The prediction.
 
         """
+        if len(text.split()) == 0:
+            return [1, 0]
         texts = [text]
-        tok = Tokenizer().process_all(texts)
+        tok = self.tokenizer.process_all(texts)
         encoded = [mappings[p] for p in tok[0]]
 
         ary = np.reshape(np.array(encoded), (-1, 1))

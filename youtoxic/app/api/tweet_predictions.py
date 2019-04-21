@@ -78,17 +78,18 @@ def get_tweet_predictions(
 
     if not tweets:
         return html.Div(
-            "Error: Twitter account found, but no tweets are associated with that account.",
+            "Error: Twitter account found, but no tweets are associated with that account within the specified dates.",
             style={"color": "rgb(255, 0, 0"},
         )
 
+    times = [row[1].astimezone() for row in tweets]
     texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
     df = create_tweets_df(tweets, types, preds, judgements)
 
     table = create_tweets_table(df, types)
-    graph = create_tweets_graph(tweets, types, preds)
+    graph = create_tweets_graph(times, types, preds)
 
     over_max_tweets_message = None
     if num_tweets > 3240:

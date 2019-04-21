@@ -145,7 +145,7 @@ def get_tweets_by_date(screen_name, start_date, end_date, num_tweets=3240):
     if recent_tweet is None:
         return None
 
-    current_tweet_date = recent_tweet.created_at.date()
+    current_tweet_date = recent_tweet.created_at.astimezone().date()
     oldest = recent_tweet.id - 1
 
     if start_date > current_tweet_date:

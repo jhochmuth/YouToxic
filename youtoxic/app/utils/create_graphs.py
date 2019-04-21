@@ -4,13 +4,13 @@
 import dash_core_components as dcc
 
 
-def create_tweets_graph(tweets, types, preds):
+def create_tweets_graph(times, types, preds):
     """Creates a Graph plotting toxicity of tweets over time.
 
     Parameters
     ----------
-    tweets : list of lists
-        The list of tweets.
+    times : list of datetimes
+        The times that tweets were posted.
     types : list of str
         The types of toxicity.
     preds : dict
@@ -69,7 +69,7 @@ def create_tweets_graph(tweets, types, preds):
         figure={
             "data": [
                 {
-                    "x": [row[1] for row in reversed(tweets)],
+                    "x": list(reversed(times)),
                     "y": y_values[t],
                     "name": t,
                     "line": dict(shape="spline"),
@@ -79,7 +79,7 @@ def create_tweets_graph(tweets, types, preds):
             "layout": {
                 "title": "Ratio of Toxic Tweets Over Time",
                 "xaxis": {"title": "Date and Time"},
-                "yaxis": {"title": "Ratio of Toxic Tweets"},
+                "yaxis": {"title": "Ratio of Toxic Tweets",},
             },
         },
     )
@@ -136,10 +136,10 @@ def create_violin_plot(types, preds):
         figure={
             "data": data,
             "layout": {
-                "title": "Toxicity Destribution of Tweets",
+                "title": "Toxicity Distribution of Tweets",
                 "yaxis": {
                     "zeroline": False,
-                    "title": "Prediction"
+                    "title": "Prediction",
                 }
             }
         }

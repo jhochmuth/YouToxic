@@ -52,7 +52,7 @@ def create_tweets_df(tweets, types, preds, judgements):
     """
     df = pd.DataFrame()
 
-    df["time"] = [row[1] for row in tweets]
+    df["time"] = [row[1].astimezone() for row in tweets]
     df["text"] = [row[2] for row in tweets]
 
     if "Toxicity" in types:
