@@ -69,12 +69,12 @@ def add_dash(server):
         """
         if tab == "tweet-predictions":
             return tweet_layout
-        if tab == "text-predictions":
-            return text_layout
-        if tab == "file-predictions":
-            return file_layout
-        if tab == "youtube-predictions":
+        elif tab == "youtube-predictions":
             return youtube_layout
+        elif tab == "text-predictions":
+            return text_layout
+        elif tab == "file-predictions":
+            return file_layout
         else:
             return dash_layout
 

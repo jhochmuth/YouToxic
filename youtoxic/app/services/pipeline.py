@@ -41,7 +41,7 @@ class Pipeline:
 
     """
 
-    def __init__(self, threshold=0.4):
+    def __init__(self, threshold=0.5):
         """Initializes pipeline object by loading models and tokenizer.
 
         Parameters

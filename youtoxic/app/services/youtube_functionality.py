@@ -27,7 +27,7 @@ def get_top_level_comments(video_id):
 
     """
     youtube = discovery.build("youtube", "v3", developerKey=config.youtube_key)
-    threads, comments, authors = list(), list(), list()
+    threads, comments, authors, times = list(), list(), list(), list()
 
     try:
         results = youtube.commentThreads().list(part="snippet",
@@ -43,8 +43,10 @@ def get_top_level_comments(video_id):
         comment = item["snippet"]["topLevelComment"]
         text = comment["snippet"]["textDisplay"]
         author = comment["snippet"]["authorDisplayName"]
+        time = comment["snippet"]["publishedAt"]
         comments.append(text)
         authors.append(author)
+        times.append(time)
 
     # Keep getting comments from the following pages
     while "nextPageToken" in results:
@@ -60,7 +62,9 @@ def get_top_level_comments(video_id):
             comment = item["snippet"]["topLevelComment"]
             text = comment["snippet"]["textDisplay"]
             author = comment["snippet"]["authorDisplayName"]
+            time = comment["snippet"]["publishedAt"]
             comments.append(text)
             authors.append(author)
+            times.append(time)
 
-    return comments, authors
+    return comments, authors, times

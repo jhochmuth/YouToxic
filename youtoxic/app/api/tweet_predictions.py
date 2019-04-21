@@ -11,7 +11,7 @@ from youtoxic.app.services.tweet_dumper import (
     validate_username,
 )
 from youtoxic.app.utils.create_dataframes import create_tweets_df
-from youtoxic.app.utils.create_graphs import create_tweets_graph, create_violin_plot
+from youtoxic.app.utils.create_graphs import create_time_graph, create_violin_plot
 from youtoxic.app.utils.create_tables import create_tweets_table
 from youtoxic.app.utils.predictions import make_predictions_multiple
 from youtoxic.app.utils.preprocessing import preprocess_texts
@@ -89,7 +89,8 @@ def get_tweet_predictions(
     df = create_tweets_df(tweets, types, preds, judgements)
 
     table = create_tweets_table(df, types)
-    graph = create_tweets_graph(times, types, preds)
+    graph = create_time_graph(times, types, preds)
+    violin_plot = create_violin_plot(types, preds)
 
     over_max_tweets_message = None
     if num_tweets > 3240:
@@ -103,8 +104,6 @@ def get_tweet_predictions(
             ],
             style={"marginBottom": "20"},
         )
-
-    violin_plot = create_violin_plot(types, preds)
 
     return html.Div(
         [
