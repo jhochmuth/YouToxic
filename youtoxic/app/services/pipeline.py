@@ -96,240 +96,6 @@ class Pipeline:
             self.tokenizer = pickle.load(handle)
         """
 
-    def predict_insult(self, text):
-        """Predicts if a text is an insult.
-
-        Parameters
-        ----------
-        text : str
-            The text to make a prediction for.
-
-        Returns
-        -------
-        float
-            The numeric prediction.
-        str
-            'Insult' if prediction > threshold, 'Not an insult' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences([text])
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features([text])
-        features = standardize_features(features)
-
-        pred = self.insult_model([x, features]).detach()
-        result = sigmoid(pred.numpy())
-        classification = "Insult" if result[0][0] > self.threshold else "Not an insult"
-        return round(result[0][0], 3), classification
-
-    def predict_insult_multiple(self, texts):
-        """Predicts if each text in a list is an insult.
-
-        Parameters
-        ----------
-        texts : list of str
-            A list of texts to make predictions for.
-
-        Returns
-        -------
-        list of float
-            Contains the numeric prediction for each text.
-        list of str
-            For each text, contains 'Insult' if prediction > threshold, 'Not an insult' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences(texts)
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features(texts)
-        features = standardize_features(features)
-
-        preds = self.insult_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
-        classifications = [
-            "Insult" if pred > self.threshold else "Not an insult" for pred in preds
-        ]
-        return preds, classifications
-
-    def predict_obscenity(self, text):
-        """Predicts if a text contains obscenity.
-
-        Parameters
-        ----------
-        text : str
-            The text to make a prediction for.
-
-        Returns
-        -------
-        float
-            The numeric prediction.
-        str
-            'Obscene' if prediction > threshold, 'Not obscene' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences([text])
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features([text])
-        features = standardize_features(features)
-
-        pred = self.obscenity_model([x, features]).detach()
-        result = sigmoid(pred.numpy())
-        classification = "Obscene" if result[0][0] > self.threshold else "Not obscene"
-        return round(result[0][0], 3), classification
-
-    def predict_obscenity_multiple(self, texts):
-        """Predicts if each text in a list contains obscenity.
-
-        Parameters
-        ----------
-        texts : list of str
-            A list of texts to make predictions for.
-
-        Returns
-        -------
-        list of float
-            Contains the numeric prediction for each text.
-        list of str
-            For each text, contains 'Obscene' if prediction > threshold, 'Not obscene' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences(texts)
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features(texts)
-        features = standardize_features(features)
-
-        preds = self.obscenity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
-        classifications = [
-            "Obscene" if pred > self.threshold else "Not obscene" for pred in preds
-        ]
-        return preds, classifications
-
-    def predict_prejudice(self, text):
-        """Predicts if a text contains prejudice/identity hate.
-
-        Parameters
-        ----------
-        text : str
-            The text to make a prediction for.
-
-        Returns
-        -------
-        float
-            The numeric prediction.
-        str
-            'Prejudice' if prediction > threshold, 'Not prejudice' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences([text])
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features([text])
-        features = standardize_features(features)
-
-        pred = self.identity_model([x, features]).detach()
-        result = sigmoid(pred.numpy())
-        classification = (
-            "Prejudice" if result[0][0] > self.threshold else "Not prejudice"
-        )
-        return round(result[0][0], 3), classification
-
-    def predict_prejudice_multiple(self, texts):
-        """Predicts if each text in a list contains prejudice/identity hate.
-
-        Parameters
-        ----------
-        texts : list of str
-            A list of texts to make predictions for.
-
-        Returns
-        -------
-        list of float
-            Contains the numeric prediction for each text.
-        list of str
-            For each text, contains 'Prejudice' if prediction > threshold, 'Not prejudice' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences(texts)
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features(texts)
-        features = standardize_features(features)
-
-        preds = self.identity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
-        classifications = [
-            "Prejudice" if pred > self.threshold else "Not prejudice" for pred in preds
-        ]
-        return preds, classifications
-
-    def predict_toxicity(self, text):
-        """Predicts if a text contains general toxicity.
-
-        Parameters
-        ----------
-        text : str
-            The text to make a prediction for.
-
-        Returns
-        -------
-        float
-            The numeric prediction.
-        str
-            'Toxic' if prediction > threshold, 'Not toxic' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences([text])
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features([text])
-        features = standardize_features(features)
-
-        pred = self.toxicity_model([x, features]).detach()
-        result = sigmoid(pred.numpy())
-        classification = "Toxic" if result[0][0] > self.threshold else "Not toxic"
-        return round(result[0][0], 3), classification
-
-    def predict_toxicity_multiple(self, texts):
-        """Predicts if each text in a list contains general toxicity.
-
-        Parameters
-        ----------
-        texts : list of str
-            A list of texts to make predictions for.
-
-        Returns
-        -------
-        preds : list of float
-            Contains the numeric prediction for each text.
-        classifications: list of float
-            For each text, contains 'Toxic' if prediction > threshold, 'Not toxic' otherwise.
-
-        """
-        x = self.tokenizer.texts_to_sequences(texts)
-        x = pad_sequences(x, maxlen=70)
-        x = torch.tensor(x, dtype=torch.long)
-
-        features = get_features(texts)
-        features = standardize_features(features)
-
-        preds = self.toxicity_model([x, features]).detach()
-        preds = [round(pred[0], 3) for pred in sigmoid(preds.numpy())]
-        classifications = [
-            "Toxic" if pred > self.threshold else "Not toxic" for pred in preds
-        ]
-        return preds, classifications
-
     def predict_text_ulm(self, model, mappings, text):
         """Makes predictions using the given ULMFiT model.
 
@@ -349,18 +115,17 @@ class Pipeline:
 
         """
         if len(text.split()) == 0:
-            return [1, 0]
+            return 0
         texts = [text]
         tok = self.tokenizer.process_all(texts)
         encoded = [mappings[p] for p in tok[0]]
-
         ary = np.reshape(np.array(encoded), (-1, 1))
         tensor = torch.from_numpy(ary)
         variable = Variable(tensor)
 
         predictions = model(variable)
         numpy_preds = predictions[0].data.numpy()
-        return softmax(numpy_preds[0])[0]
+        return softmax(numpy_preds[0])[0][1]
 
     def predict_toxicity_ulm(self, text):
         """Predicts if a text contains general toxicity using a ULMFiT model.
@@ -378,7 +143,7 @@ class Pipeline:
             'Toxic' if prediction > threshold, 'Not toxic' otherwise.
 
         """
-        pred = self.predict_text_ulm(self.ulm_toxicity_model, self.toxicity_mappings, text)[1]
+        pred = self.predict_text_ulm(self.ulm_toxicity_model, self.toxicity_mappings, text)
         classification = "Toxic" if pred > self.threshold else "Not toxic"
         return pred, classification
 
@@ -419,7 +184,7 @@ class Pipeline:
             'Insult' if prediction > threshold, 'Not an insult' otherwise.
 
         """
-        pred = self.predict_text_ulm(self.ulm_insult_model, self.insult_mappings, text)[1]
+        pred = self.predict_text_ulm(self.ulm_insult_model, self.insult_mappings, text)
         classification = "Insult" if pred > self.threshold else "Not an insult"
         return pred, classification
 
@@ -460,7 +225,7 @@ class Pipeline:
             'Obscene' if prediction > threshold, 'Not obscene' otherwise.
 
         """
-        pred = self.predict_text_ulm(self.ulm_obscenity_model, self.obscenity_mappings, text)[1]
+        pred = self.predict_text_ulm(self.ulm_obscenity_model, self.obscenity_mappings, text)
         classification = "Obscene" if pred > self.threshold else "Not obscene"
         return pred, classification
 
@@ -501,7 +266,7 @@ class Pipeline:
             'Identity hate' if prediction > threshold, 'Not identity hate' otherwise.
 
         """
-        pred = self.predict_text_ulm(self.ulm_identity_model, self.identity_mappings, text)[1]
+        pred = self.predict_text_ulm(self.ulm_identity_model, self.identity_mappings, text)
         classification = "Identity hate" if pred > self.threshold else "Not identity hate"
         return pred, classification
 
