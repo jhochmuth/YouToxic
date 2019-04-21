@@ -4,11 +4,8 @@
 import dash_core_components as dcc
 
 
-# Todo: Add distribution plots for tweets. Add time and distribution plots for youtube comments.
-
-
 def create_tweets_graph(tweets, types, preds):
-    """Creates a Graph displaying information about the given tweets.
+    """Creates a Graph plotting toxicity of tweets over time.
 
     Parameters
     ----------
@@ -21,7 +18,7 @@ def create_tweets_graph(tweets, types, preds):
 
     Returns
     -------
-    Graph
+    dcc.Graph
         A line Graph with all data plotted.
 
     """
@@ -85,6 +82,67 @@ def create_tweets_graph(tweets, types, preds):
                 "yaxis": {"title": "Ratio of Toxic Tweets"},
             },
         },
+    )
+
+    return graph
+
+
+def create_violin_plot(types, preds):
+    """Creates a violin plot displaying the distribution for each type of toxicity.
+
+    Parameters
+    ----------
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    dcc.Graph
+        The violin plot with all distributions displayed.
+
+    """
+    type_ids = list()
+
+    if "Toxicity" in types:
+        type_ids.append("toxic")
+    if "Insult" in types:
+        type_ids.append("insult")
+    if "Obscenity" in types:
+        type_ids.append("obscene")
+    if "Identity hate" in types:
+        type_ids.append("prejudice")
+
+    data = []
+
+    for type_id, type_name in zip(type_ids, types):
+        trace = {
+            "type": 'violin',
+            "x": type_id,
+            "y": preds[type_id],
+            "name": type_name,
+            "box": {
+                "visible": True
+            },
+            "meanline": {
+                "visible": True
+            }
+        }
+        data.append(trace)
+
+    graph = dcc.Graph(
+        id='toxicity-distribution',
+        figure={
+            "data": data,
+            "layout": {
+                "title": "Toxicity Destribution of Tweets",
+                "yaxis": {
+                    "zeroline": False,
+                    "title": "Prediction"
+                }
+            }
+        }
     )
 
     return graph

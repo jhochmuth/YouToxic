@@ -11,7 +11,7 @@ from youtoxic.app.services.tweet_dumper import (
     validate_username,
 )
 from youtoxic.app.utils.create_dataframes import create_tweets_df
-from youtoxic.app.utils.create_graphs import create_tweets_graph
+from youtoxic.app.utils.create_graphs import create_tweets_graph, create_violin_plot
 from youtoxic.app.utils.create_tables import create_tweets_table
 from youtoxic.app.utils.predictions import make_predictions_multiple
 from youtoxic.app.utils.preprocessing import preprocess_texts
@@ -103,10 +103,13 @@ def get_tweet_predictions(
             style={"marginBottom": "20"},
         )
 
+    violin_plot = create_violin_plot(types, preds)
+
     return html.Div(
         [
             html.Div(over_max_tweets_message),
             html.Div(table, style={"overflowY": "scroll", "height": "500"}),
             html.Div(graph),
+            html.Div(violin_plot),
         ]
     )

@@ -75,10 +75,11 @@ def create_tweets_df(tweets, types, preds, judgements):
     return df
 
 
-def create_youtube_df(comments, types, preds, judgements):
+def create_youtube_df(comments, authors, types, preds, judgements):
     df = pd.DataFrame()
 
     df["text"] = comments
+    df["author"] = authors
 
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]
