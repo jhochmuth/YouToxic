@@ -4,7 +4,7 @@
 import dash_core_components as dcc
 
 
-def create_time_graph(times, types, preds):
+def create_time_ratio_graph(times, types, preds):
     """Creates a Graph plotting the ratio of toxicity over time.
 
     Parameters
@@ -28,40 +28,111 @@ def create_time_graph(times, types, preds):
         y = list()
         toxic_tweets = 0
         for total_tweets, pred in enumerate(reversed(preds["toxic"])):
-            if pred > 0.4:
+            if pred > 0.5:
                 toxic_tweets += 1
             y.append(toxic_tweets / (total_tweets + 1))
-            total_tweets += 1
         y_values["Toxicity"] = y
 
     if "insult" in preds:
         y = list()
         insult_tweets = 0
         for total_tweets, pred in enumerate(reversed(preds["insult"])):
-            if pred > 0.4:
+            if pred > 0.5:
                 insult_tweets += 1
             y.append(insult_tweets / (total_tweets + 1))
-            total_tweets += 1
         y_values["Insult"] = y
 
     if "obscene" in preds:
         y = list()
         obscene_tweets = 0
         for total_tweets, pred in enumerate(reversed(preds["obscene"])):
-            if pred > 0.4:
+            if pred > 0.5:
                 obscene_tweets += 1
             y.append(obscene_tweets / (total_tweets + 1))
-            total_tweets += 1
         y_values["Obscenity"] = y
 
     if "prejudice" in preds:
         y = list()
         prejudice_tweets = 0
         for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
-            if pred > 0.4:
+            if pred > 0.5:
                 prejudice_tweets += 1
             y.append(prejudice_tweets / (total_tweets + 1))
-            total_tweets += 1
+        y_values["Prejudice"] = y
+
+    graph = dcc.Graph(
+        id="ratio-time",
+        figure={
+            "data": [
+                {
+                    "x": list(reversed(times)),
+                    "y": y_values[t],
+                    "name": t,
+                    "line": dict(shape="spline"),
+                }
+                for t in types
+            ],
+            "layout": {
+                "title": "Ratio of Toxicity Over Time",
+                "xaxis": {"title": "Date and Time"},
+                "yaxis": {"title": "Ratio of Toxicity"},
+            },
+        },
+    )
+
+    return graph
+
+
+def create_time_toxicity_graph(times, types, preds):
+    """Creates a Graph plotting toxicity over time.
+
+    Parameters
+    ----------
+    times : list of datetimes
+        The times that the tweet/comment was created.
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    dcc.Graph
+        A line Graph with all data plotted.
+
+    """
+    y_values = dict()
+
+    if "toxic" in preds:
+        y = list()
+        total_preds = 0
+        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
+            total_preds += pred
+            y.append(total_preds / (total_tweets + 1))
+        y_values["Toxicity"] = y
+
+    if "insult" in preds:
+        y = list()
+        total_preds = 0
+        for total_tweets, pred in enumerate(reversed(preds["insult"])):
+            total_preds += pred
+            y.append(total_preds / (total_tweets + 1))
+        y_values["Insult"] = y
+
+    if "obscene" in preds:
+        y = list()
+        total_preds = 0
+        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
+            total_preds += pred
+            y.append(total_preds / (total_tweets + 1))
+        y_values["Obscenity"] = y
+
+    if "prejudice" in preds:
+        y = list()
+        total_preds = 0
+        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
+            total_preds += pred
+            y.append(total_preds / (total_tweets + 1))
         y_values["Prejudice"] = y
 
     graph = dcc.Graph(
@@ -77,9 +148,9 @@ def create_time_graph(times, types, preds):
                 for t in types
             ],
             "layout": {
-                "title": "Ratio of Toxicity Over Time",
+                "title": "Toxicity over Time",
                 "xaxis": {"title": "Date and Time"},
-                "yaxis": {"title": "Ratio of Toxicity"},
+                "yaxis": {"title": "Toxicity"},
             },
         },
     )
