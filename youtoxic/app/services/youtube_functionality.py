@@ -24,6 +24,10 @@ def get_top_level_comments(video_id):
         The list containing the top-level comments.
         It will be empty if there were no comments.
         None will be returned if no video was found with the specified id.
+    list of str or None
+        The list containing the authors of the comments.
+    list datetime or None
+        The list containing the times that the comments were posted.
 
     """
     youtube = discovery.build("youtube", "v3", developerKey=config.youtube_key)
@@ -34,7 +38,7 @@ def get_top_level_comments(video_id):
                                                 videoId=video_id,
                                                 textFormat="plainText").execute()
     except errors.HttpError:
-        return None
+        return None, None, None
 
     # Get the first set of comments
 

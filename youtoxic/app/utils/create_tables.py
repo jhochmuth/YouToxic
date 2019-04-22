@@ -193,6 +193,7 @@ def create_youtube_table(df, types):
     """
     table_columns = list()
     table_columns.append({"name": ["", "Author"], "id": "author"})
+    table_columns.append({"name": ["", "Time Posted"], "id": "time"})
     table_columns.append({"name": ["", "Comment Text"], "id": "text"})
     judgement_columns = [
         {"name": [t, "Judgement"], "id": "{}_judgement".format(t)} for t in types

@@ -1,6 +1,8 @@
 """Defines functions used for creating dataframes.
 
 """
+from dateutil.parser import parse
+
 import pandas as pd
 
 
@@ -75,11 +77,12 @@ def create_tweets_df(tweets, types, preds, judgements):
     return df
 
 
-def create_youtube_df(comments, authors, types, preds, judgements):
+def create_youtube_df(comments, authors, times, types, preds, judgements):
     df = pd.DataFrame()
 
     df["text"] = comments
     df["author"] = authors
+    df["time"] = [parse(time) for time in times]
 
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]

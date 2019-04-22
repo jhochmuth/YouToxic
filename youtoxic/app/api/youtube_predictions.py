@@ -24,7 +24,7 @@ def get_youtube_predictions(video_id, types, pipeline):
 
     preds, judgements = make_predictions_multiple(comments, types, pipeline)
 
-    df = create_youtube_df(comments, authors, types, preds, judgements)
+    df = create_youtube_df(comments, authors, times, types, preds, judgements)
     table = create_youtube_table(df, types)
     graph = create_time_graph(times, types, preds)
     plot = create_violin_plot(types, preds)
