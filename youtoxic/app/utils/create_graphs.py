@@ -158,6 +158,67 @@ def create_time_toxicity_graph(times, types, preds):
     return graph
 
 
+def create_box_plot(types, preds):
+    """Creates a box plot displaying the distribution for each type of toxicity.
+
+    Parameters
+    ----------
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    dcc.Graph
+        The box plot with all distributions displayed.
+
+    """
+    type_ids = list()
+
+    if "Toxicity" in types:
+        type_ids.append("toxic")
+    if "Insult" in types:
+        type_ids.append("insult")
+    if "Obscenity" in types:
+        type_ids.append("obscene")
+    if "Identity hate" in types:
+        type_ids.append("prejudice")
+
+    data = []
+
+    for type_id, type_name in zip(type_ids, types):
+        trace = {
+            "type": 'box',
+            "x": type_id,
+            "y": preds[type_id],
+            "name": type_name,
+            "box": {
+                "visible": True
+            },
+            "meanline": {
+                "visible": True
+            }
+        }
+        data.append(trace)
+
+    graph = dcc.Graph(
+        id='toxicity-distribution',
+        figure={
+            "data": data,
+            "layout": {
+                "title": "Toxicity Distributions",
+                "yaxis": {
+                    "zeroline": False,
+                    "title": "Prediction",
+                }
+            }
+        }
+    )
+
+    return graph
+
+
 def create_violin_plot(types, preds):
     """Creates a violin plot displaying the distribution for each type of toxicity.
 
