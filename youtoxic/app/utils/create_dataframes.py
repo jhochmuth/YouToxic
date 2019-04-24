@@ -1,8 +1,6 @@
 """Defines functions used for creating dataframes.
 
 """
-from dateutil.parser import parse
-
 import pandas as pd
 
 
@@ -82,7 +80,7 @@ def create_youtube_df(comments, authors, times, types, preds, judgements):
 
     df["text"] = comments
     df["author"] = authors
-    df["time"] = [parse(time) for time in times]
+    df["time"] = times
 
     if "Toxicity" in types:
         df["Toxicity_judgement"] = judgements["toxic"]

@@ -1,6 +1,8 @@
 """Defines functions used to collect comments posted on Youtube videos.
 
 """
+from dateutil.parser import parse
+
 import googleapiclient.discovery as discovery
 import googleapiclient.errors as errors
 
@@ -10,7 +12,7 @@ from youtoxic.app.config import Config
 config = Config()
 
 
-def get_top_level_comments(video_id):
+def get_top_level_comments(video_id, get_replies=True):
     """"Returns a list of all top-level comments posted on a youtube video.
 
     Parameters
@@ -71,4 +73,19 @@ def get_top_level_comments(video_id):
             authors.append(author)
             times.append(time)
 
+    comment_lists = list()
+    for thread in threads:
+        comment_lists.append(youtube.comments().list(part="snippet",
+                                                     parentId=thread["id"],
+                                                     textFormat="plainText").execute())
+
+    if get_replies:
+        for thread in comment_lists:
+            if len(thread["items"]) > 0:
+                for reply in thread["items"]:
+                    comments.append(reply["snippet"]["textDisplay"])
+                    authors.append(reply["snippet"]["authorDisplayName"])
+                    times.append(reply["snippet"]["publishedAt"])
+
+    times = [parse(time) for time in times]
     return comments, authors, times
