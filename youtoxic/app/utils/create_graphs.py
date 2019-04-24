@@ -27,7 +27,7 @@ def create_time_ratio_graph(times, types, preds):
     if "toxic" in preds:
         y = list()
         toxic_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
+        for total_tweets, pred in enumerate(preds["toxic"]):
             if pred > 0.5:
                 toxic_tweets += 1
             y.append(toxic_tweets / (total_tweets + 1))
@@ -36,7 +36,7 @@ def create_time_ratio_graph(times, types, preds):
     if "insult" in preds:
         y = list()
         insult_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["insult"])):
+        for total_tweets, pred in enumerate(preds["insult"]):
             if pred > 0.5:
                 insult_tweets += 1
             y.append(insult_tweets / (total_tweets + 1))
@@ -45,7 +45,7 @@ def create_time_ratio_graph(times, types, preds):
     if "obscene" in preds:
         y = list()
         obscene_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
+        for total_tweets, pred in enumerate(preds["obscene"]):
             if pred > 0.5:
                 obscene_tweets += 1
             y.append(obscene_tweets / (total_tweets + 1))
@@ -54,7 +54,7 @@ def create_time_ratio_graph(times, types, preds):
     if "prejudice" in preds:
         y = list()
         prejudice_tweets = 0
-        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
+        for total_tweets, pred in enumerate(preds["prejudice"]):
             if pred > 0.5:
                 prejudice_tweets += 1
             y.append(prejudice_tweets / (total_tweets + 1))
@@ -65,7 +65,7 @@ def create_time_ratio_graph(times, types, preds):
         figure={
             "data": [
                 {
-                    "x": list(reversed(times)),
+                    "x": times,
                     "y": y_values[t],
                     "name": t,
                     "line": dict(shape="spline"),
@@ -102,11 +102,10 @@ def create_time_toxicity_graph(times, types, preds):
 
     """
     y_values = dict()
-
     if "toxic" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
+        for total_tweets, pred in enumerate(preds["toxic"]):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Toxicity"] = y
@@ -114,7 +113,7 @@ def create_time_toxicity_graph(times, types, preds):
     if "insult" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(reversed(preds["insult"])):
+        for total_tweets, pred in enumerate(preds["insult"]):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Insult"] = y
@@ -122,7 +121,7 @@ def create_time_toxicity_graph(times, types, preds):
     if "obscene" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
+        for total_tweets, pred in enumerate(preds["obscene"]):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Obscenity"] = y
@@ -130,7 +129,7 @@ def create_time_toxicity_graph(times, types, preds):
     if "prejudice" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
+        for total_tweets, pred in enumerate(preds["prejudice"]):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Prejudice"] = y
@@ -140,7 +139,7 @@ def create_time_toxicity_graph(times, types, preds):
         figure={
             "data": [
                 {
-                    "x": list(reversed(times)),
+                    "x": times,
                     "y": y_values[t],
                     "name": t,
                     "line": dict(shape="spline"),
