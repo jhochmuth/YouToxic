@@ -20,7 +20,9 @@ youtube_layout = html.Div(
             ],
             style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
         ),
-        html.Div(id="youtube-container", style={"bottomMargin": "20"}),
+        dcc.Loading(id="loading-1",
+                    children=html.Div(id="youtube-container",
+                                      style={"bottomMargin": "20"})),
         html.Div(
             [
                 html.Div(
