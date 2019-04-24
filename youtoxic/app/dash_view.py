@@ -48,6 +48,7 @@ def add_dash(server):
         routes_pathname_prefix="/dash/",
     )
 
+    dash_app.title = "YouToxic"
     dash_app.layout = dash_layout
     dash_app.config["suppress_callback_exceptions"] = True
     pipeline = Pipeline()
