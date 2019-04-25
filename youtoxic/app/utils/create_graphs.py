@@ -4,7 +4,62 @@
 import dash_core_components as dcc
 
 
-def create_time_ratio_graph(times, types, preds):
+def create_toxicity_graph(times, types, preds):
+    """Creates a Graph plotting the toxicity over time.
+
+    Parameters
+    ----------
+    times : list of datetimes
+        The times that the tweet/comment was created.
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    dcc.Graph
+        A line Graph with all data plotted.
+
+    """
+    y_values = dict()
+
+    if "toxic" in preds:
+        y_values["Toxicity"] = preds["toxic"]
+
+    if "insult" in preds:
+        y_values["Insult"] = preds["insult"]
+
+    if "obscene" in preds:
+        y_values["Obscenity"] = preds["obscene"]
+
+    if "prejudice" in preds:
+        y_values["Prejudice"] = preds["prejudice"]
+
+    graph = dcc.Graph(
+        id="ratio-time",
+        figure={
+            "data": [
+                {
+                    "x": times,
+                    "y": y_values[t],
+                    "name": t,
+                    "line": dict(shape="spline"),
+                }
+                for t in types
+            ],
+            "layout": {
+                "title": "Toxicity Over Time",
+                "xaxis": {"title": "Date and Time"},
+                "yaxis": {"title": "Ratio of Toxicity"},
+            },
+        },
+    )
+
+    return graph
+
+
+def create_ratio_toxicity_graph(times, types, preds):
     """Creates a Graph plotting the ratio of toxicity over time.
 
     Parameters
@@ -83,8 +138,8 @@ def create_time_ratio_graph(times, types, preds):
     return graph
 
 
-def create_time_toxicity_graph(times, types, preds):
-    """Creates a Graph plotting toxicity over time.
+def create_average_toxicity_graph(times, types, preds):
+    """Creates a Graph plotting average toxicity over time.
 
     Parameters
     ----------
@@ -147,7 +202,7 @@ def create_time_toxicity_graph(times, types, preds):
                 for t in types
             ],
             "layout": {
-                "title": "Toxicity over Time",
+                "title": "Average Toxicity Over Time",
                 "xaxis": {"title": "Date and Time"},
                 "yaxis": {"title": "Toxicity"},
             },
