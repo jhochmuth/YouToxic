@@ -8,6 +8,9 @@ import dash_html_components as html
 
 file_layout = html.Div(
     [
+        dcc.Loading(id="loading-1",
+                    children=html.Div(id="file-container",
+                                      style={"marginBottom": "10"})),
         html.Details(
             [
                 html.Summary(
@@ -23,9 +26,6 @@ file_layout = html.Div(
             ],
             style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
         ),
-        dcc.Loading(id="loading-1",
-                    children=html.Div(id="file-container",
-                                      style={"marginBottom": "10"})),
         html.Div(
             [
                 dcc.Checklist(

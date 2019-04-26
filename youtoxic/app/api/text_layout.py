@@ -8,6 +8,7 @@ import dash_html_components as html
 
 text_layout = html.Div(
     [
+        html.Div(id="text-container", style={"marginBottom": "20"}),
         html.Details(
             [
                 html.Summary(
@@ -21,7 +22,6 @@ text_layout = html.Div(
             ],
             style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
         ),
-        html.Div(id="text-container", style={"marginBottom": "20"}),
         dcc.Input(
             id="input-text",
             type="text",
