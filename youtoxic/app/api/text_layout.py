@@ -40,6 +40,6 @@ text_layout = html.Div(
             values=["toxic"],
             style={"marginBottom": "10"},
         ),
-        html.Div([html.Button("Submit", id="button")], className="twelve columns"),
+        html.Div([html.Button("Submit", id="button", className="button-primary")], className="twelve columns"),
     ]
 )

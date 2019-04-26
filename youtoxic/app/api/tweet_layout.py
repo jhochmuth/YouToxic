@@ -98,6 +98,6 @@ tweet_layout = html.Div(
             className="row",
             style={"marginBottom": "20"},
         ),
-        html.Div([html.Button("Submit", id="button")], className="eleven columns"),
+        html.Div([html.Button("Submit", id="button", className="button-primary")], className="eleven columns"),
     ]
 )
