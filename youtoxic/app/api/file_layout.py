@@ -24,6 +24,8 @@ file_layout = html.Div(
             style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
         ),
         dcc.Loading(id="loading-1",
+                    type="cube",
+                    color="#00CC00",
                     children=html.Div(id="file-container",
                                       style={"marginBottom": "10"})),
         html.Div(
