@@ -9,10 +9,11 @@ cffi==1.12.2
 chardet==3.0.4
 Click==7.0
 cryptography==2.6.1
-dash==0.39.0
-dash-core-components==0.44.0
-dash-html-components==0.14.0
-dash-renderer==0.20.0
+dash
+dash-bootstrap-components
+dash-core-components
+dash-html-components
+dash-renderer
 dash-table==3.6.0
 decorator==4.4.0
 dominate==2.3.5

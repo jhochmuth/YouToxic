@@ -10,10 +10,6 @@ from youtoxic.app.utils.predictions import make_predictions_multiple
 def get_youtube_predictions(video_id, types, pipeline):
     comments, authors, times = get_top_level_comments(video_id)
 
-    comments = [comment for time, comment in sorted(zip(times, comments))]
-    authors = [author for time, author in sorted(zip(times, authors))]
-    times = sorted(times)
-
     if comments is None:
         return html.Div(
             "Error: No video with the specified id was found.",
@@ -25,6 +21,10 @@ def get_youtube_predictions(video_id, types, pipeline):
             "Error: A video matching the specified id was found, but it contained no comments.",
             style={"color": "rgb(255, 0, 0"},
         )
+
+    comments = [comment for time, comment in sorted(zip(times, comments))]
+    authors = [author for time, author in sorted(zip(times, authors))]
+    times = sorted(times)
 
     preds, judgements = make_predictions_multiple(comments, types, pipeline)
 
