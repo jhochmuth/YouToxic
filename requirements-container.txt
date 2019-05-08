@@ -3,11 +3,12 @@ dash==0.39.0
 dash-bootstrap-components
 dash-core-components==0.44.0
 dash-html-components==0.14.0
+fastai
 Flask==1.0.2
 Flask-Bootstrap==3.3.7
 google-api-python-client
-matplotlib
 Keras-Preprocessing==1.0.9
+matplotlib
 numpy==1.16.2
 pandas==0.24.2
 python-dateutil==2.8.0
