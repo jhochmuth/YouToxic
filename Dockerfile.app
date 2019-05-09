@@ -12,9 +12,13 @@ RUN rm -rf ./youtoxic/app/models
 RUN mkdir ./youtoxic/app/models
 
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/toxicity_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/toxicity_mappings.pkl youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/insult_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/insult_mappings.pkl youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/obscenity_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/obscenity_mappings.pkl youtoxic/app/models
 ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/identity_model.h5 youtoxic/app/models
+ADD https://github.com/jhochmuth/YouToxic/raw/Flask/Dash/youtoxic/app/models/identity_mappings.pkl youtoxic/app/models
 
 # Run setup of YouToxic
 RUN pip install -e .
