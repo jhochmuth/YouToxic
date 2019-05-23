@@ -11,7 +11,7 @@ dash_layout = html.Div(
         html.Div(
             [
                 html.H2("YouToxic", style={"color": "rgb(200, 200, 200)"}),
-                html.Img(src="assets/image-2.png"),
+                html.Img(src="assets/image.png"),
             ],
             style={"fontFamily": "arial black"},
             className="banner",
@@ -27,5 +27,10 @@ dash_layout = html.Div(
             ],
         ),
         html.Div(id="content"),
-    ]
+    ],
+    style={
+        "marginLeft": 10,
+        "marginRight": 10,
+        "marginBottom": 20,
+    }
 )

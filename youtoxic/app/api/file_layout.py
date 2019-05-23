@@ -8,26 +8,28 @@ import dash_html_components as html
 
 file_layout = html.Div(
     [
-        html.Details(
-            [
-                html.Summary(
-                    "Click here to view instructions.", style={"color": "rgb(0,0,0"}
-                ),
-                html.Div("– Select types of toxicity to analyze texts in file for."),
-                html.Div("– Upload a file."),
-                html.Div("– File must be in csv or xls format."),
-                html.Div(
-                    '– File must contain a column named "text" (case sensitive), which contains texts to analyze.',
-                    style={"marginBottom": "10"},
-                ),
-            ],
-            style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
+        html.Div(
+            html.Details(
+                [
+                    html.Summary(
+                        "Click here to view instructions.", style={"color": "rgb(0,0,0"}
+                    ),
+                    html.Div("– Select types of toxicity to analyze texts in file for."),
+                    html.Div("– Upload a file."),
+                    html.Div("– File must be in csv or xls format."),
+                    html.Div(
+                        '– File must contain a column named "text" (case sensitive), which contains texts to analyze.',
+                    ),
+                ],
+                style={"color": "rgb(175, 175, 175", "marginTop": 20},
+            ),
+            className="row",
         ),
         dcc.Loading(id="loading-1",
                     type="cube",
                     color="#00CC00",
                     children=html.Div(id="file-container",
-                                      style={"marginBottom": "10"})),
+                                      style={"marginBottom": 20})),
         html.Div(
             [
                 dcc.Checklist(
@@ -42,7 +44,7 @@ file_layout = html.Div(
                 )
             ],
             id="submit-field",
-            style={"marginBottom": "10"},
+            style={"marginBottom": 20},
         ),
         html.Div(
             dcc.Upload(
@@ -60,6 +62,5 @@ file_layout = html.Div(
                 },
             )
         ),
-        html.Br(),
     ]
 )

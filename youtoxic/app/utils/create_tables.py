@@ -149,9 +149,6 @@ def create_tweets_table(df, types):
         id="table",
         columns=table_columns,
         data=df.to_dict("rows"),
-        style_table={
-            "overflowY": "scroll",
-        },
         style_header={
             "fontWeight": "bold",
             "backgroundColor": "rgb(150,150,150)",
@@ -167,7 +164,6 @@ def create_tweets_table(df, types):
         css=[
             {
                 "selector": ".dash-cell div.dash-cell-value",
-                "overflow": "scroll",
             }
         ],
         merge_duplicate_headers=True,
@@ -213,7 +209,6 @@ def create_youtube_table(df, types):
         data=df.to_dict("rows"),
         columns=table_columns,
         id="table",
-        style_table={"border": "thin black solid"},
         style_header={
             "fontWeight": "bold",
             "backgroundColor": "rgb(150,150,150)",
@@ -229,7 +224,6 @@ def create_youtube_table(df, types):
         css=[
             {
                 "selector": ".dash-cell div.dash-cell-value",
-                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
             }
         ],
         merge_duplicate_headers=True,

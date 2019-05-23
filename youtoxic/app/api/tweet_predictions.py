@@ -82,8 +82,8 @@ def get_tweet_predictions(
             style={"color": "rgb(255, 0, 0"},
         )
 
-    times = [row[1].astimezone() for row in tweets]
-    texts = [row[2] for row in tweets]
+    times = list(reversed([row[1].astimezone() for row in tweets]))
+    texts = list(reversed([row[2] for row in tweets]))
     texts = preprocess_texts(texts)
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
     df = create_tweets_df(tweets, types, preds, judgements)
@@ -102,19 +102,20 @@ def get_tweet_predictions(
                     )
                 )
             ],
-            style={"marginBottom": "20"},
+            style={"marginBottom": 20},
+            className="row",
         )
 
     return html.Div(
         [
             html.Div(over_max_tweets_message),
             html.Div(children=[
-                html.Div(table, style={"overflow": "scroll", "height": 920}, className="six columns"),
-                html.Div(graph, className="six columns", style={"borderRadius": 25, "marginBottom": 20}),
-                html.Div(violin_plot, className="six columns", style={"borderRadius": 25}),
+                html.Div(table, className="six columns", style={"overflow": "scroll", "height": 920}),
+                html.Div(graph, className="six columns", style={"marginBottom": 20}),
+                html.Div(violin_plot, className="six columns"),
             ],
                 className="row",
-                style={"marginBottom": 30},
+                style={"marginBottom": 20},
             )
         ],
     )

@@ -35,9 +35,10 @@ def get_youtube_predictions(video_id, types, pipeline):
 
     return html.Div(
         [
-            html.Div(table, style={"overflowY": "scroll", "height": "500"}),
-            html.Div(graph),
-            html.Div(plot),
-            html.Br(),
-        ]
+            html.Div(table, className="six columns", style={"overflow": "scroll", "height": 920}),
+            html.Div(graph, className="six columns", style={"marginBottom": 20}),
+            html.Div(plot, className="six columns"),
+        ],
+        className="row",
+        style={"marginBottom": 20},
     )
