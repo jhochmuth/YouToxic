@@ -102,7 +102,7 @@ def get_tweet_predictions(
                     )
                 )
             ],
-            style={"marginBottom": "20"},
+            style={"margiBottom": "20"},
         )
 
     return html.Div(
@@ -110,10 +110,11 @@ def get_tweet_predictions(
             html.Div(over_max_tweets_message),
             html.Div(children=[
                 html.Div(table, style={"overflowY": "scroll", "height": "500"}, className="six columns"),
-                html.Div(graph, className="three columns"),
-                html.Div(violin_plot, className="three columns"),
+                html.Div(graph, className="six columns", style={"borderRadius": 25, "marginBottom": 30}),
+                html.Div(violin_plot, className="six columns", style={"borderRadius": 25}),
             ],
-                className="row"
+                className="row",
+                style={"marginBottom": 30},
             )
         ],
     )

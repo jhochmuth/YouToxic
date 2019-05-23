@@ -10,33 +10,34 @@ import dash_html_components as html
 
 tweet_layout = html.Div(
     [
-        html.Details(
-            [
-                html.Summary(
-                    "Click here to view instructions.", style={"color": "rgb(0,0,0"}
-                ),
-                html.Div(
-                    "– Enter Twitter username, maximum number of tweets to analyze."
-                ),
-                html.Div("– Select types of toxicity to analyze tweets for."),
-                html.Div(
-                    '– To select a date range, click "Limit by Date" option and make selections.'
-                ),
-                html.Div(
-                    '– If option "All Tweets" is selected, tweets analyzed will be the most recent.'
-                ),
-                html.Div(
-                    "– Due to limitations of Twitter, the maximum number of tweets to analyze is 3240.",
-                    style={"marginBottom": "10"},
-                ),
-            ],
-            style={"color": "rgb(175, 175, 175", "marginBottom": "20"},
+        html.Div(
+            html.Details(
+                [
+                    html.Summary(
+                        "Click here to view instructions.", style={"color": "rgb(0,0,0"}
+                    ),
+                    html.Div(
+                        "– Enter Twitter username, maximum number of tweets to analyze."
+                    ),
+                    html.Div("– Select types of toxicity to analyze tweets for."),
+                    html.Div(
+                        '– To select a date range, click "Limit by Date" option and make selections.'
+                    ),
+                    html.Div(
+                        '– If option "All Tweets" is selected, tweets analyzed will be the most recent.'
+                    ),
+                    html.Div(
+                        "– Due to limitations of Twitter, the maximum number of tweets to analyze is 3240.",
+                    ),
+                ],
+                style={"color": "rgb(175, 175, 175", "marginTop": 20, "marginBottom": 20},
+            ), className="row",
         ),
         dcc.Loading(id="loading-1",
                     type="cube",
                     color="#00CC00",
                     children=html.Div(id="tweet-container",
-                                      style={"bottomMargin": "20"})),
+                                      style={"marginBottom": "20"})),
         html.Div(
             [
                 html.Div(
@@ -50,7 +51,7 @@ tweet_layout = html.Div(
                         html.Div(dcc.Input(id="input-num", type="number", value=10)),
                         html.Br(),
                     ],
-                    className="three columns",
+                    className="two columns",
                 ),
                 html.Div(
                     [
@@ -94,12 +95,12 @@ tweet_layout = html.Div(
                             ]
                         ),
                     ],
-                    className="three columns",
+                    className="two columns",
                 ),
             ],
             className="row",
             style={"marginBottom": "20"},
         ),
-        html.Div([html.Button("Submit", id="button", className="button-primary")], className="eleven columns"),
+        html.Div([html.Button("Submit", id="button", className="button-primary")], className="row"),
     ]
 )

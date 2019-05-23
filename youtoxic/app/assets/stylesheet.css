@@ -18,3 +18,12 @@
     right: 10px;
     height: 75px;
 }
+
+body {
+    margin: 0;
+    background-color: lightgray;
+}
+
+._dash-undo-redo {
+  display: none;
+}
