@@ -297,7 +297,7 @@ def create_violin_plot(types, preds):
         type_ids.append("insult")
     if "Obscenity" in types:
         type_ids.append("obscene")
-    if "Identity hate" in types:
+    if "Prejudice" in types:
         type_ids.append("prejudice")
 
     data = []

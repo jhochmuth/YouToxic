@@ -1,6 +1,8 @@
 """Defines functions used for creating tables.
 
 """
+import dash_html_components as html
+
 import dash_table
 
 
@@ -147,7 +149,9 @@ def create_tweets_table(df, types):
         id="table",
         columns=table_columns,
         data=df.to_dict("rows"),
-        style_table={"border": "thin black solid"},
+        style_table={
+            "overflowY": "scroll",
+        },
         style_header={
             "fontWeight": "bold",
             "backgroundColor": "rgb(150,150,150)",
@@ -163,7 +167,7 @@ def create_tweets_table(df, types):
         css=[
             {
                 "selector": ".dash-cell div.dash-cell-value",
-                "rule": "display: inline; white-space: inherit; overflow: inherit; text-overflow: inherit;",
+                "overflow": "scroll",
             }
         ],
         merge_duplicate_headers=True,
