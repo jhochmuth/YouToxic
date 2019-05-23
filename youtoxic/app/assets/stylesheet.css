@@ -1,7 +1,7 @@
 .banner {
     height: 75px;
     margin: 0px -10px 10px;
-    background-image: url("background.jpeg");
+    background-image: url("banner_background.jpeg");
     border-radius: 2px;
 }
 

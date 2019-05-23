@@ -11,9 +11,8 @@ dash_layout = html.Div(
         html.Div(
             [
                 html.H2("YouToxic"),
-                html.Img(src="assets/image.png"),
+                html.Img(src="assets/logo.png"),
             ],
-            style={"fontFamily": "arial black"},
             className="banner",
         ),
         dcc.Tabs(
