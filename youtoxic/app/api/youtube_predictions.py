@@ -1,3 +1,5 @@
+import re
+
 import dash_html_components as html
 
 from youtoxic.app.services.youtube_comment_dumper import get_top_level_comments
@@ -8,6 +10,16 @@ from youtoxic.app.utils.predictions import make_predictions_multiple
 
 
 def get_youtube_predictions(video_id, types, pipeline):
+    if "youtube" in video_id:
+        try:
+            m = re.search("v=(\w+)&*", video_id)
+            video_id = m.group(1)
+        except AttributeError:
+            return html.Div(
+                "Error: Could not parse given URL.",
+                style={"color": "rgb(255, 0, 0"},
+            )
+
     comments, authors, times = get_top_level_comments(video_id)
 
     if comments is None:
