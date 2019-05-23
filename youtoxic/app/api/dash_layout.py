@@ -10,7 +10,7 @@ dash_layout = html.Div(
     [
         html.Div(
             [
-                html.H2("YouToxic", style={"color": "rgb(200, 200, 200)"}),
+                html.H2("YouToxic"),
                 html.Img(src="assets/image.png"),
             ],
             style={"fontFamily": "arial black"},
