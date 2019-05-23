@@ -29,7 +29,7 @@ file_layout = html.Div(
                     type="cube",
                     color="#00CC00",
                     children=html.Div(id="file-container",
-                                      style={"marginBottom": 20})),
+                                      style={"marginTop": 20, "marginBottom": 20})),
         html.Div(
             [
                 dcc.Checklist(

@@ -110,7 +110,7 @@ def get_tweet_predictions(
         [
             html.Div(over_max_tweets_message),
             html.Div(children=[
-                html.Div(table, className="six columns", style={"overflow": "scroll", "height": 920}),
+                html.Div(table, className="six columns", style={"overflow": "scroll", "height": 922}),
                 html.Div(graph, className="six columns", style={"marginBottom": 20}),
                 html.Div(violin_plot, className="six columns"),
             ],
