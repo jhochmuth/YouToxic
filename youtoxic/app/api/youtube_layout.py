@@ -19,7 +19,7 @@ youtube_layout = html.Div(
                     ),
                     html.Div("– Select types of toxicity to analyze comments for."),
                 ],
-                style={"color": "rgb(175, 175, 175", "marginTop": 20},
+                style={"color": "rgb(125, 125, 125", "marginTop": 20},
             ),
             className="row",
         ),

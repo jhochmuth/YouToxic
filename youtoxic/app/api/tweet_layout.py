@@ -30,7 +30,7 @@ tweet_layout = html.Div(
                         "– Due to limitations of Twitter, the maximum number of tweets to analyze is 3240.",
                     ),
                 ],
-                style={"color": "rgb(175, 175, 175", "marginTop": 20},
+                style={"color": "rgb(125, 125, 125", "marginTop": 20},
             ), className="row",
         ),
         dcc.Loading(id="loading-1",
