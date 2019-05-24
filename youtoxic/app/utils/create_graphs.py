@@ -82,7 +82,7 @@ def create_ratio_toxicity_graph(times, types, preds):
     if "toxic" in preds:
         y = list()
         toxic_tweets = 0
-        for total_tweets, pred in enumerate(preds["toxic"]):
+        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
             if pred > 0.5:
                 toxic_tweets += 1
             y.append(toxic_tweets / (total_tweets + 1))
@@ -91,7 +91,7 @@ def create_ratio_toxicity_graph(times, types, preds):
     if "insult" in preds:
         y = list()
         insult_tweets = 0
-        for total_tweets, pred in enumerate(preds["insult"]):
+        for total_tweets, pred in enumerate(reversed(preds["insult"])):
             if pred > 0.5:
                 insult_tweets += 1
             y.append(insult_tweets / (total_tweets + 1))
@@ -100,7 +100,7 @@ def create_ratio_toxicity_graph(times, types, preds):
     if "obscene" in preds:
         y = list()
         obscene_tweets = 0
-        for total_tweets, pred in enumerate(preds["obscene"]):
+        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
             if pred > 0.5:
                 obscene_tweets += 1
             y.append(obscene_tweets / (total_tweets + 1))
@@ -109,7 +109,7 @@ def create_ratio_toxicity_graph(times, types, preds):
     if "prejudice" in preds:
         y = list()
         prejudice_tweets = 0
-        for total_tweets, pred in enumerate(preds["prejudice"]):
+        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
             if pred > 0.5:
                 prejudice_tweets += 1
             y.append(prejudice_tweets / (total_tweets + 1))
@@ -120,7 +120,7 @@ def create_ratio_toxicity_graph(times, types, preds):
         figure={
             "data": [
                 {
-                    "x": times,
+                    "x": list(reversed(times)),
                     "y": y_values[t],
                     "name": t,
                     "line": dict(shape="spline"),
@@ -160,7 +160,7 @@ def create_average_toxicity_graph(times, types, preds):
     if "toxic" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(preds["toxic"]):
+        for total_tweets, pred in enumerate(reversed(preds["toxic"])):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Toxicity"] = y
@@ -168,7 +168,7 @@ def create_average_toxicity_graph(times, types, preds):
     if "insult" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(preds["insult"]):
+        for total_tweets, pred in enumerate(reversed(preds["insult"])):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Insult"] = y
@@ -176,7 +176,7 @@ def create_average_toxicity_graph(times, types, preds):
     if "obscene" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(preds["obscene"]):
+        for total_tweets, pred in enumerate(reversed(preds["obscene"])):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Obscenity"] = y
@@ -184,7 +184,7 @@ def create_average_toxicity_graph(times, types, preds):
     if "prejudice" in preds:
         y = list()
         total_preds = 0
-        for total_tweets, pred in enumerate(preds["prejudice"]):
+        for total_tweets, pred in enumerate(reversed(preds["prejudice"])):
             total_preds += pred
             y.append(total_preds / (total_tweets + 1))
         y_values["Prejudice"] = y
@@ -194,7 +194,7 @@ def create_average_toxicity_graph(times, types, preds):
         figure={
             "data": [
                 {
-                    "x": times,
+                    "x": list(reversed(times)),
                     "y": y_values[t],
                     "name": t,
                     "line": dict(shape="spline"),
@@ -326,7 +326,9 @@ def create_violin_plot(types, preds):
                 "yaxis": {
                     "zeroline": False,
                     "title": "Prediction",
-                }
+                },
+                #'plot_bgcolor': "black",
+                #'paper_bgcolor': "black",
             }
         }
     )

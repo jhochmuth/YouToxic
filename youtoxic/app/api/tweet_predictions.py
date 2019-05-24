@@ -82,12 +82,11 @@ def get_tweet_predictions(
             style={"color": "rgb(255, 0, 0"},
         )
 
-    times = list(reversed([row[1].astimezone() for row in tweets]))
-    texts = list(reversed([row[2] for row in tweets]))
+    times = [row[1].astimezone() for row in tweets]
+    texts = [row[2] for row in tweets]
     texts = preprocess_texts(texts)
     preds, judgements = make_predictions_multiple(texts, types, pipeline)
     df = create_tweets_df(tweets, types, preds, judgements)
-
     table = create_tweets_table(df, types)
     graph = create_average_toxicity_graph(times, types, preds)
     violin_plot = create_violin_plot(types, preds)
