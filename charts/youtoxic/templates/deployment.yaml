@@ -37,3 +37,8 @@ spec:
             secretKeyRef:
               name: youtoxic-secret
               key: ACCESS_SECRET
+        - name: YOUTUBE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: youtoxic-secret
+              key: YOUTUBE_KEY

@@ -158,7 +158,7 @@ def create_tweets_table(df, types):
             "textAlign": "left",
             "fontFamily": "optima",
             "border": "thin lightgrey solid",
-            "padding": 15,
+            "padding": 20,
         },
         style_data={"whiteSpace": "normal"},
         css=[
