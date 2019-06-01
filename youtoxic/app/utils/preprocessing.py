@@ -4,12 +4,12 @@
 
 
 def preprocess_text(text):
-    """Preprocesses a single text.
+    """Preprocesses a single tweet.
 
     Parameters
     ----------
     text : str
-        The text to preprocess.
+        The tweet to preprocess.
 
     Returns
     -------
@@ -26,12 +26,12 @@ def preprocess_text(text):
 
 
 def preprocess_texts(texts):
-    """Preprocesses multiple texts.
+    """Preprocesses multiple tweets.
 
     Parameters
     ----------
     texts : List
-        The texts to preprocess.
+        The tweets to preprocess.
 
     Returns
     -------

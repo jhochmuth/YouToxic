@@ -3,15 +3,12 @@
 """
 from fastai.text.transform import Tokenizer
 
-from keras_preprocessing.sequence import pad_sequences
-
 import numpy as np
 
 import torch
 from torch.autograd.variable import Variable
 
-from youtoxic.app.utils.feature_engineering import get_features, standardize_features
-from youtoxic.app.utils.functions import sigmoid, softmax
+from youtoxic.app.utils.functions import softmax
 from youtoxic.app.utils.load_files import load_mappings, load_model
 
 

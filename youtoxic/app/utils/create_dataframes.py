@@ -36,7 +36,7 @@ def create_tweets_df(tweets, types, preds, judgements):
     Parameters
     ----------
     tweets : list of lists
-        The list of tweets.
+        Contains the tweets. Each item in the list is a separate list with all information about the tweet.
     types : list of str
         The types of toxicity.
     preds : dict
@@ -76,6 +76,29 @@ def create_tweets_df(tweets, types, preds, judgements):
 
 
 def create_youtube_df(comments, authors, times, types, preds, judgements):
+    """Creates a DataFrame from youtube data.
+
+    Parameters
+    ----------
+    comments : list of str
+        A list containing the text of each comment.
+    authors : list of str
+        A list containing the author of each comment.
+    times : list of datetime
+        A list containing the date and time when each comment was posted.
+    types : list of str
+        The types of toxicity.
+    preds : dict
+        A dictionary that has lists of predictions mapped to the respective type of toxicity.
+    judgements : dict
+        A dictionary that has lists of judgements mapped to the respective type of toxicity.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame containing information about the tweets.
+
+    """
     df = pd.DataFrame()
 
     df["text"] = comments

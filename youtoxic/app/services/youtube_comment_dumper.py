@@ -24,7 +24,7 @@ def get_top_level_comments(video_id, get_replies=True):
     -------
     list of str or None
         The list containing the top-level comments.
-        It will be empty if there were no comments.
+        The list will be empty if there were no comments posted.
         None will be returned if no video was found with the specified id.
     list of str or None
         The list containing the authors of the comments.

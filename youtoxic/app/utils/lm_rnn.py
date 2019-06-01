@@ -1,4 +1,4 @@
-"""Contains implementation of the ULMFiT RNN model.
+"""Contains implementation of the ULMFiT RNN model. Code is taken from fastai library.
 
 """
 
