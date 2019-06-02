@@ -45,6 +45,7 @@ def get_tweets(screen_name, num_tweets=3240):
     -----
     Twitter only allows the most recent 3240 tweets to be collected.
     Retweets are excluded.
+    This function is a modified version of this code: https://gist.github.com/yanofsky/5436496.
 
     Parameters
     ----------
