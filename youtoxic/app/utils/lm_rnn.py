@@ -1,7 +1,6 @@
-"""Contains implementation of the ULMFiT RNN model. Code is taken from fastai library.
+"""Code for the ULMFiT RNN model. Copied from the fastai library to avoid unnecessary imports.
 
 """
-
 import contextlib
 import warnings
 

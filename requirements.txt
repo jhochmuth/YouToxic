@@ -9,10 +9,10 @@ cffi==1.12.2
 chardet==3.0.4
 Click==7.0
 cryptography==2.6.1
-dash
-dash-core-components
-dash-html-components
-dash-renderer
+dash==0.42.0
+dash-core-components==0.47.0
+dash-html-components==0.16.0
+dash-renderer==0.23.0
 dash-table==3.6.0
 decorator==4.4.0
 dominate==2.3.5
@@ -26,7 +26,7 @@ Flask-Compress==1.4.0
 Flask-Migrate==2.4.0
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
-google-api-python-client
+google-api-python-client==1.7.8
 idna==2.8
 ipython-genutils==0.2.0
 itsdangerous==1.1.0
@@ -35,7 +35,7 @@ Keras-Preprocessing==1.0.9
 Mako==1.0.7
 MarkupSafe==1.1.1
 mccabe==0.6.1
-mkl
+mkl==2019.1
 more-itertools==5.0.0
 nbformat==4.4.0
 numpy==1.16.2
