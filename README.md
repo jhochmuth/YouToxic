@@ -15,7 +15,7 @@ general toxicity, insults, obscenity, and prejudice/identity hate.
 ## Usage
 Visit the IP address specified above.
 
-If you are trying to run the application locally, you need to provide environment variables that contain credentials for the twitter API credentials and youtube API. Tweets and youtube comments cannot be collected unless you provide these. Predictions on text entered manually are still possible even without providing the credentials.
+If you are trying to run the application locally, you need to provide environment variables that contain credentials for the twitter API  and youtube API. Tweets and youtube comments cannot be collected unless you provide these. Predictions on text entered manually are still possible even without providing the credentials.
 
 These are the necessary environment variables:
 CONSUMER_KEY, CONSUMER_SECRET, ACCESS_KEY, ACCESS_SECRET, YOUTUBE_KEY
