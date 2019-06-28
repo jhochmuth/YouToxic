@@ -1,9 +1,8 @@
-#TODO Check if fastai can be removed
-
 Click==7.0
 dash==0.39.0
 dash-core-components==0.44.0
 dash-html-components==0.14.0
+fastai==1.0.51
 Flask==1.0.2
 Flask-Bootstrap==3.3.7
 google-api-python-client==1.7.8

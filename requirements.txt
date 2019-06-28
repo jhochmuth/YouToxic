@@ -17,6 +17,7 @@ dash-table==3.6.0
 decorator==4.4.0
 dominate==2.3.5
 entrypoints==0.3
+fastai==1.0.51
 flake8==3.7.7
 flake8-import-order==0.18.1
 flake8-polyfill==1.0.2
