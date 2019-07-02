@@ -1,3 +1,6 @@
+"""Defines configuration file for the application.
+
+"""
 import os
 
 

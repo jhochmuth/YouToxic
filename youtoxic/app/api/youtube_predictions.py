@@ -10,6 +10,22 @@ from youtoxic.app.utils.predictions import make_predictions_multiple
 
 
 def get_youtube_predictions(video_id, types, pipeline):
+    """Collects youtube comments, analyzes them, and creates a table and a line graph.
+
+    Parameters
+    ----------
+    video_id : str
+        Tweets will be collected from the video with this id or url.
+    types : list of str
+        Predictions will be made for these types of toxicity
+    pipeline : Pipeline
+        The pipeline object used to make predictions.
+
+    Returns
+    -------
+    html.Div
+        The html layout for the subsection of the page that contains results.
+    """
     if "youtube" in video_id:
         try:
             m = re.search("v=(\w+)&*", video_id)
