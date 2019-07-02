@@ -1,6 +1,7 @@
 """Contains implementation of the Pipeline object.
 
 """
+# TODO: Eliminate the need for the fastai import.
 from fastai.text.transform import Tokenizer
 
 import numpy as np
