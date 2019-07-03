@@ -22,6 +22,10 @@ CONSUMER_KEY, CONSUMER_SECRET, ACCESS_KEY, ACCESS_SECRET, YOUTUBE_KEY
 
 The first four variables are all for the twitter API. 
 
+You must also download the model and mappings files for each type of toxicity. These files can be downloaded [here](https://1drv.ms/u/s!AuFyq5aZW3rygd5DDrSeTjOea36u9A?e=vaU9Ps). Add them to the "youtoxic/app/models directory".
+
+These files are stored on Onedrive because they are too large for storage on Github and Git LFS has a 1 GB storage limit for free users.
+
 ## Documentation
 YouToxic uses [Sphinx](http://www.sphinx-doc.org/en/master/) to build the documentation.
 To build
