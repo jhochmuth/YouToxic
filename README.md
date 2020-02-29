@@ -1,6 +1,6 @@
 # YouToxic
 A Python web application that predicts the toxicity of text using Deep Learning.
-You can access the app at the following IP address: 104.154.107.241.
+App is no longer deployed on a cluster.
 
 ## Specifics
 The framework of the app was built primarily with [Dash by Plotly](https://dash.plot.ly).
