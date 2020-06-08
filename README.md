@@ -3,7 +3,7 @@ A Python web application that predicts the toxicity of text using Deep Learning.
 App is no longer deployed on a cluster.
 
 ## Demo
-[Link](https://drive.google.com/file/d/1jFQbD7Z7vWACuyPVuCjhzhv1HNqyOggG/view?usp=sharing)
+![Basic demo](basic_demo.gif)
 
 ## Specifics
 The framework of the app was built primarily with [Dash by Plotly](https://dash.plot.ly).
