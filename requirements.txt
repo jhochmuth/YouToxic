@@ -39,7 +39,7 @@ mccabe==0.6.1
 mkl==2019.1
 more-itertools==5.0.0
 nbformat==4.4.0
-numpy==1.16.2
+numpy==1.22.0
 oauthlib==3.0.1
 pandas==0.24.2
 pep8==1.7.1
